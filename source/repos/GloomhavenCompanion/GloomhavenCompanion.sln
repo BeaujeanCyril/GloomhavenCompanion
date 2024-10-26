@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloomhavenCompanion", "GloomhavenCompanion.csproj", "{60010BE3-3A47-40D3-8804-1D8B31E9D512}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloomhavenCompanion", "GloomhavenCompanion\GloomhavenCompanion.csproj", "{60010BE3-3A47-40D3-8804-1D8B31E9D512}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloomhavenCompanion.API", "..\GloomhavenCompanion.API\GloomhavenCompanion.API.csproj", "{B5561A93-C3EC-4F08-8FA4-CF1A5080AE0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloomhavenCompanion.API", "..\GloomhavenCompanion\GloomhavenCompanion.API\GloomhavenCompanion.API.csproj", "{B5561A93-C3EC-4F08-8FA4-CF1A5080AE0E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloomhavenCompanion.Data", "..\GloomhavenCompanion.Data\GloomhavenCompanion.Data.csproj", "{2463A4A5-942D-4E1A-9386-3DDAEB0236D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloomhavenCompanion.Data", "..\GloomhavenCompanion\GloomhavenCompanion.Data\GloomhavenCompanion.Data.csproj", "{2463A4A5-942D-4E1A-9386-3DDAEB0236D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
