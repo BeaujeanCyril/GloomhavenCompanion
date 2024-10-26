@@ -1,0 +1,52 @@
+﻿@page "/create-team"
+@inject AppState AppState // Injection de AppState
+@using System.ComponentModel.DataAnnotations
+@using GloomhavenCompanion.Model
+
+<h3>Créer une Équipe</h3>
+
+<!-- Formulaire pour créer une équipe -->
+<EditForm Model="teamModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label for="companyName" class="form-label">Nom de la Compagnie</label>
+        <InputText id="companyName" class="form-control" @bind-Value="teamModel.CompanyName" />
+        <ValidationMessage For="@(() => teamModel.CompanyName)" />
+    </div>
+    <div class="mb-3">
+        <label for="playerCount" class="form-label">Nombre de Joueurs</label>
+        <InputNumber id="playerCount" class="form-control" @bind-Value="teamModel.PlayerCount" />
+        <ValidationMessage For="@(() => teamModel.PlayerCount)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+</EditForm>
+
+@code {
+    private TeamModel teamModel = new TeamModel();
+
+    private void HandleValidSubmit()
+    {
+        // Crée une nouvelle équipe à partir du formulaire
+        var newTeam = new TeamViewModel
+        {
+            CompanyName = teamModel.CompanyName,
+        };
+
+        // Ajoute l’équipe à AppState
+        AppState.AddTeam(newTeam);
+
+        Console.WriteLine($"Équipe ajoutée: {newTeam.CompanyName} avec {newTeam.Players.Count} joueurs");
+
+        // Redirige vers une autre page ou afficher un message de succès
+    }
+
+    public class TeamModel
+    {
+        [Required(ErrorMessage = "Le nom de la compagnie est requis")]
+        public string CompanyName { get; set; }
+
+        [Required(ErrorMessage = "Le nombre de joueurs est requis")]
+        [Range(1, int.MaxValue, ErrorMessage = "Le nombre de joueurs doit être au moins de 1")]
+        public int PlayerCount { get; set; }
+    }
+}

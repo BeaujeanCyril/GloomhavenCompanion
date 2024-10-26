@@ -1,0 +1,134 @@
+﻿@page "/game"
+@rendermode InteractiveServer
+@inject AppState AppState
+
+<PageTitle>Partie en cours</PageTitle>
+
+
+
+<h1>Round @AppState.Round <button class="btn btn-primary" @onclick="NextRound">+</button></h1>
+
+<div class="centered-container">
+	<ul class="element-list">
+		@foreach (var element in AppState.Elements)
+		{
+			<li class="element-item" style="background-color: @(GetStateColor(element.State));">
+				<img src="@element.ImagePath" alt="@element.Name" class="element-image" />
+				<span class="element-description">
+					@GetStateDescription(element.State)
+				</span>
+				@if (element.State != 0)
+				{
+					<button class="btn btn-danger" @onclick="() => DecreaseElementState(element.Id)">
+						-
+					</button>
+				}
+				@if (element.State != 2)
+				{
+					<button class="btn btn-secondary" @onclick="() => SetElementStrong(element.Id)">
+						+
+					</button>
+				}
+			</li>
+		}
+	</ul>
+</div>
+
+@code {
+	private void NextRound()
+	{
+		AppState.NextRound();
+		ReduceAllElements();
+	}
+
+	private string GetStateDescription(int state)
+	{
+		return state switch
+		{
+			0 => "Inerte",
+			1 => "Faible",
+			2 => "Fort",
+			_ => "Inconnu" // Par sécurité, si jamais l'état est en dehors des limites
+		};
+	}
+
+	private void SetElementStrong(int id)
+	{
+		var element = AppState.Elements.FirstOrDefault(e => e.Id == id);
+		if (element != null)
+		{
+			if (element.State == 0 || element.State == 1)
+			{
+				element.State = 2; // Fort
+			}
+		}
+	}
+
+	private void DecreaseElementState(int id)
+	{
+		var element = AppState.Elements.FirstOrDefault(e => e.Id == id);
+		if (element != null)
+		{
+			if (element.State == 2) element.State = 1; // Faible
+			else if (element.State == 1) element.State = 0; // Inerte
+		}
+	}
+
+	public void ReduceAllElements()
+	{
+		foreach (var element in AppState.Elements)
+		{
+			if (element.State == 2) element.State = 1; // Diminue de 2 à 1
+			else if (element.State == 1) element.State = 0; // Diminue de 1 à 0
+		}
+	}
+
+	private string GetStateColor(int state)
+	{
+		return state switch
+		{
+			0 => "gray", // Couleur par défaut pour "Inerte"
+			1 => "orange", // Couleur pour "Faible"
+			2 => "red", // Couleur pour "Fort"
+			_ => "gray" // Par défaut si état inconnu
+		};
+	}
+}
+
+
+<style>
+	.centered-container {
+		display: flex;
+		justify-content: center; /* Centre horizontalement */
+		padding: 20px;
+	}
+
+	.element-list {
+		list-style: none; /* Supprime les puces */
+		padding: 0; /* Supprime le padding par défaut */
+		margin: 0; /* Supprime la marge par défaut */
+	}
+
+	.element-item {
+		display: flex; /* Utilise flexbox pour le contenu */
+		align-items: center; /* Centre verticalement le contenu */
+		justify-content: space-between; /* Espace entre le texte et les boutons */
+		width: 200px; /* Largeur fixe */
+		height: 70px; /* Hauteur fixe */
+		padding: 10px; /* Ajoute du padding interne */
+		margin: 10px; /* Ajoute de l'espacement entre les éléments */
+		border-radius: 5px; /* Coins arrondis */
+	}
+
+	.element-image {
+		width: 50px; /* Largeur de l'image */
+		height: 50px; /* Hauteur de l'image */
+		margin-right: 10px; /* Espacement à droite de l'image */
+	}
+
+	.element-description {
+		flex-grow: 1; /* Permet au texte de prendre de l'espace disponible */
+		text-align: center; /* Centre le texte */
+	}
+
+</style>
