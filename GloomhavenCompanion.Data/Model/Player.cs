@@ -1,78 +1,76 @@
-﻿namespace GloomhavenCompanion.API.Model
+﻿namespace GloomhavenCompanion.API.Model;
+public class Player
 {
-  public class Player
+  public string Name { get; set; }
+  public int Coins { get; set; } = 0;
+  public int Xp { get; set; } = 0;
+  public List<Card> Deck { get; set; } = [];
+
+  // Méthode pour mélanger le deck
+  public void ShuffleDeck()
   {
-    public string Name { get; set; }
-    public int Coins { get; set; } = 0;
-    public int Xp { get; set; } = 0;
-    public List<Card> Deck { get; set; } = [];
+    Random rng = new();
+    int n = Deck.Count;
 
-    // Méthode pour mélanger le deck
-    public void ShuffleDeck()
+    // Algorithme de Fisher-Yates pour mélanger le deck
+    for (int i = n - 1; i > 0; i--)
     {
-      Random rng = new();
-      int n = Deck.Count;
-
-      // Algorithme de Fisher-Yates pour mélanger le deck
-      for (int i = n - 1; i > 0; i--)
-      {
-        int j = rng.Next(0, i + 1);
-        // Échanger les cartes à l'index i et j
-        var temp = Deck[i];
-        Deck[i] = Deck[j];
-        Deck[j] = temp;
-      }
+      int j = rng.Next(0, i + 1);
+      // Échanger les cartes à l'index i et j
+      var temp = Deck[i];
+      Deck[i] = Deck[j];
+      Deck[j] = temp;
     }
+  }
 
-    // Méthode privée pour générer un ID unique
-    private int GenerateUniqueId()
+  // Méthode privée pour générer un ID unique
+  private int GenerateUniqueId()
+  {
+    return Deck.Any() ? Deck.Max(c => c.Id) + 1 : 1;
+  }
+
+  // Méthode pour ajouter une carte "Annulé" dans le deck
+  public void AddAnnulCard()
+  {
+    var annulCard = new Card
     {
-      return Deck.Any() ? Deck.Max(c => c.Id) + 1 : 1;
-    }
+      Id = GenerateUniqueId(),
+      Value = "Annulé",
+      IsUsed = false,
+      NeedShuffle = true
+    };
 
-    // Méthode pour ajouter une carte "Annulé" dans le deck
-    public void AddAnnulCard()
+    Deck.Add(annulCard);
+  }
+
+  // Méthode pour ajouter une carte "X2" dans le deck
+  public void AddX2Card()
+  {
+    var x2Card = new Card
     {
-      var annulCard = new Card
-      {
-        Id = GenerateUniqueId(),
-        Value = "Annulé",
-        IsUsed = false,
-        NeedShuffle = true
-      };
+      Id = GenerateUniqueId(),
+      Value = "X2",
+      IsUsed = false,
+      NeedShuffle = true
+    };
 
-      Deck.Add(annulCard);
-    }
+    Deck.Add(x2Card);
+  }
 
-    // Méthode pour ajouter une carte "X2" dans le deck
-    public void AddX2Card()
-    {
-      var x2Card = new Card
-      {
-        Id = GenerateUniqueId(),
-        Value = "X2",
-        IsUsed = false,
-        NeedShuffle = true
-      };
+  // Méthode pour afficher la première carte et la déplacer à la fin du deck
+  public string ShowAndMoveFirstCardToEnd()
+  {
+    if (Deck.Count == 0)
+      return "Le deck est vide.";
 
-      Deck.Add(x2Card);
-    }
+    // Récupérer la première carte
+    var firstCard = Deck.First();
 
-    // Méthode pour afficher la première carte et la déplacer à la fin du deck
-    public string ShowAndMoveFirstCardToEnd()
-    {
-      if (Deck.Count == 0)
-        return "Le deck est vide.";
+    // Retirer la carte du début et l'ajouter à la fin
+    Deck.RemoveAt(0);
+    Deck.Add(firstCard);
 
-      // Récupérer la première carte
-      var firstCard = Deck.First();
-
-      // Retirer la carte du début et l'ajouter à la fin
-      Deck.RemoveAt(0);
-      Deck.Add(firstCard);
-
-      // Retourner la valeur de la carte pour affichage
-      return firstCard.Value;
-    }
+    // Retourner la valeur de la carte pour affichage
+    return firstCard.Value;
   }
 }

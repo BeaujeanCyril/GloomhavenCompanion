@@ -19,7 +19,7 @@
 				</span>
 				@if (element.State != 0)
 				{
-					<button class="btn btn-danger" @onclick="() => DecreaseElementState(element.Id)">
+					<button class="btn btn-danger" @onclick="() => UseElement(element.Id)">
 						-
 					</button>
 				}
@@ -64,12 +64,12 @@
 		}
 	}
 
-	private void DecreaseElementState(int id)
+	private void UseElement(int id)
 	{
 		var element = AppState.Elements.FirstOrDefault(e => e.Id == id);
 		if (element != null)
 		{
-			if (element.State == 2) element.State = 1; // Faible
+			if (element.State == 2) element.State = 0; // Faible
 			else if (element.State == 1) element.State = 0; // Inerte
 		}
 	}
