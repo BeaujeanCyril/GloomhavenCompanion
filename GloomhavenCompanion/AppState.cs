@@ -11,15 +11,15 @@ public class AppState
   {
     Round = 0;
 
-    Elements = new List<ElementViewModel>
-        {
+    Elements =
+        [
             new() { Id = 1, Name = "Feu", ImagePath = "img/Elements/FirePicture.png" },
             new() { Id = 2, Name = "Ténèbre", ImagePath = "img/Elements/DarknessPicture.png" },
             new() { Id = 3, Name = "Terre", ImagePath = "img/Elements/EarthPicture.png" },
             new() { Id = 4, Name = "Vent", ImagePath = "img/Elements/WindPicture.png" },
             new() { Id = 5, Name = "Lumière", ImagePath = "img/Elements/LightPicture.png" },
             new() { Id = 6, Name = "Givre", ImagePath = "img/Elements/FrostPicture.png" }
-        };
+        ];
 
     Teams = []; // Initialise la liste des équipes
   }

@@ -1,25 +1,43 @@
 ﻿@inherits LayoutComponentBase
+@using MudBlazor
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<MudThemeProvider IsDarkMode="@_isDarkMode" DefaultScrollbar="true" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
-    <main>
-		<div class="top-row px-4">
-    
+<MudLayout>
+	<MudAppBar Elevation="1">
+		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="DrawerToggle" />
+		<MudImage Alt="GloomhavenLogo" Src="img\general\gh.png" Width="200" Height="100" />
+		<MudSpacer />
+		<MudButton OnClick="ToggleDarkMode">Changer le mode</MudButton>
+		<MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+	</MudAppBar>
+	<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+		<NavMenu />
+	</MudDrawer>
 
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+	<MudMainContent>
+		<MudContainer MaxWidth="MaxWidth.Medium">
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+			@Body
+		</MudContainer>
+	</MudMainContent>
+</MudLayout>
 
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
+@code {
+	private bool _drawerOpen = false;
+	private bool _isDarkMode = false; // True pour le mode sombre, false pour le mode clair.
+
+	void DrawerToggle()
+	{
+		_drawerOpen = !_drawerOpen;
+	}
+
+	void ToggleDarkMode()
+	{
+		_isDarkMode = !_isDarkMode; // Inverse le mode
+	}
+
+}

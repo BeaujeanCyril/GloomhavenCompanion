@@ -1,31 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-  <div class="container mx-auto">
-    <img src="img/General/gh.png" class="w-full" alt="Image Gloomhaven" />
-  </div>
-
-</div>
-
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="game">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Partie en cours
-            </NavLink>
-        </div>
-
-    <div class="nav-item px-3">
-      <NavLink class="nav-link" href="create-team">
-        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Nouvelle partie
-      </NavLink>
-    </div>
-    </nav>
-</div>
-
+﻿  <MudNavLink Href="/" Match="NavLinkMatch.All" Class="mud-navlink">
+    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+  </MudNavLink>
+  <MudNavLink Href="game" Class="mud-navlink">
+    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Partie en cours
+  </MudNavLink>
+  <MudNavLink Href="create-team" Class="mud-navlink">
+    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Nouvelle partie
+  </MudNavLink>
