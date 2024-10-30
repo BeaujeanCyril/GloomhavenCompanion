@@ -1,5 +1,5 @@
 using GloomhavenCompanion;
-using GloomhavenCompanion.Components;
+using GloomhavenCompanion.Views;
 
 var builder = WebApplication.CreateBuilder(args);
 

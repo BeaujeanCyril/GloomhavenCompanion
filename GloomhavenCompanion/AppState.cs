@@ -13,12 +13,12 @@ public class AppState
 
     Elements = new List<ElementViewModel>
         {
-            new() { Id = 1, Name = "Feu", ImagePath = "img/FirePicture.png" },
-            new() { Id = 2, Name = "Ténèbre", ImagePath = "img/DarknessPicture.png" },
-            new() { Id = 3, Name = "Terre", ImagePath = "img/EarthPicture.png" },
-            new() { Id = 4, Name = "Vent", ImagePath = "img/WindPicture.png" },
-            new() { Id = 5, Name = "Lumière", ImagePath = "img/LightPicture.png" },
-            new() { Id = 6, Name = "Givre", ImagePath = "img/FrostPicture.png" }
+            new() { Id = 1, Name = "Feu", ImagePath = "img/Elements/FirePicture.png" },
+            new() { Id = 2, Name = "Ténèbre", ImagePath = "img/Elements/DarknessPicture.png" },
+            new() { Id = 3, Name = "Terre", ImagePath = "img/Elements/EarthPicture.png" },
+            new() { Id = 4, Name = "Vent", ImagePath = "img/Elements/WindPicture.png" },
+            new() { Id = 5, Name = "Lumière", ImagePath = "img/Elements/LightPicture.png" },
+            new() { Id = 6, Name = "Givre", ImagePath = "img/Elements/FrostPicture.png" }
         };
 
     Teams = []; // Initialise la liste des équipes
