@@ -1,4 +1,17 @@
 ﻿@page "/"
 @using MudBlazor
 
+
+<MudThemeProvider IsDarkMode="@_isDarkMode" DefaultScrollbar="true" />
+<MudButton OnClick="@ToggleDarkMode">Changer le mode</MudButton>
 <PageTitle>Home</PageTitle>
+
+@code {
+  private bool _isDarkMode = false; // True pour le mode sombre, false pour le mode clair.
+
+  private void ToggleDarkMode()
+  {
+    _isDarkMode = !_isDarkMode; // Inverse le mode
+    InvokeAsync(StateHasChanged);
+  }
+}

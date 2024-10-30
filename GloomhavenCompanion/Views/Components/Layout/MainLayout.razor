@@ -15,7 +15,7 @@
 		<MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
 	</MudAppBar>
 	<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-		<NavMenu />
+        <NavMenu />
 	</MudDrawer>
 
 	<MudMainContent>
@@ -25,7 +25,7 @@
 		</MudContainer>
 	</MudMainContent>
 </MudLayout>
-
+    
 @code {
 	private bool _drawerOpen = false;
 	private bool _isDarkMode = false; // True pour le mode sombre, false pour le mode clair.
