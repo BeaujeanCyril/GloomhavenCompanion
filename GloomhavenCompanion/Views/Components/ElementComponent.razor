@@ -1,0 +1,23 @@
+﻿<MudGrid>
+  @foreach (var element in AppState.Elements)
+  {
+    <MudItem>
+      <ElementMolecule ImagePath="@element.ImagePath"
+                       Name="@element.Name"
+                       State="@element.State"
+                       OnUseElement="@(() => OnUseElement.InvokeAsync(element.Id))"
+                       OnSetElementStrong="@(() => OnSetElementStrong.InvokeAsync(element.Id))" />
+    </MudItem>
+  }
+</MudGrid>
+
+@code {
+  [Inject]
+  public AppState AppState { get; set; }
+
+  [Parameter]
+  public EventCallback<int> OnUseElement { get; set; }
+
+  [Parameter]
+  public EventCallback<int> OnSetElementStrong { get; set; }
+}

@@ -1,0 +1,7 @@
+﻿@using GloomhavenCompanion.ViewModels
+@code {
+    [Parameter]
+  public CardViewModel Card { get; set; }
+}
+
+    <img src="@Card.ImagePath" alt="@Card.Value" style="max-width: 100%; max-height: 80%; object-fit: contain;" />

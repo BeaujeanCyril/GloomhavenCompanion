@@ -1,4 +1,4 @@
-﻿namespace GloomhavenCompanion.API.Model
+﻿namespace GloomhavenCompanion.Data.Model
 {
   public class Team
   {

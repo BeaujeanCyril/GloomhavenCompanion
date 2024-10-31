@@ -1,70 +1,26 @@
-﻿@page "/game"
+﻿@page "/"
 @rendermode InteractiveServer
 @inject AppState AppState
 
 <PageTitle>Partie en cours</PageTitle>
 
-<h1>Round @AppState.Round <button class="btn btn-primary" @onclick="NextRound">+</button></h1>
+<MudGrid>
+  <MudItem xs="12">
+    <MudPaper class="p-4 mb-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex flex-column align-items-start">
+          <RoundComponent Round="@AppState.Round" OnNextRound="NextRound" />
+        </div>
+        <div class="d-flex">
+          <ElementComponent OnUseElement="@((id) => UseElement(id))"
+                            OnSetElementStrong="@((id) => SetElementStrong(id))" />
+        </div>
+      </div>
+    </MudPaper>
+  </MudItem>
 
-<div class="centered-container">
-	<ul class="element-list">
-		@foreach (var element in AppState.Elements)
-		{
-			<li class="element-item" style="background-color: @(GetStateColor(element.State));">
-				<img src="@element.ImagePath" alt="@element.Name" class="element-image" />
-				<span class="element-description">
-					@GetStateDescription(element.State)
-				</span>
-				@if (element.State != 0)
-				{
-					<button class="btn btn-danger" @onclick="() => UseElement(element.Id)">
-						-
-					</button>
-				}
-				@if (element.State != 2)
-				{
-					<button class="btn btn-secondary" @onclick="() => SetElementStrong(element.Id)">
-						+
-					</button>
-				}
-			</li>
-		}
-	</ul>
-</div>
+  <MudItem xs="12">
 
-<style>
-	.centered-container {
-		display: flex;
-		justify-content: center; /* Centre horizontalement */
-		padding: 20px;
-	}
-
-	.element-list {
-		list-style: none; /* Supprime les puces */
-		padding: 0; /* Supprime le padding par défaut */
-		margin: 0; /* Supprime la marge par défaut */
-	}
-
-	.element-item {
-		display: flex; /* Utilise flexbox pour le contenu */
-		align-items: center; /* Centre verticalement le contenu */
-		justify-content: space-between; /* Espace entre le texte et les boutons */
-		width: 200px; /* Largeur fixe */
-		height: 70px; /* Hauteur fixe */
-		padding: 10px; /* Ajoute du padding interne */
-		margin: 10px; /* Ajoute de l'espacement entre les éléments */
-		border-radius: 5px; /* Coins arrondis */
-	}
-
-	.element-image {
-		width: 50px; /* Largeur de l'image */
-		height: 50px; /* Hauteur de l'image */
-		margin-right: 10px; /* Espacement à droite de l'image */
-	}
-
-	.element-description {
-		flex-grow: 1; /* Permet au texte de prendre de l'espace disponible */
-		text-align: center; /* Centre le texte */
-	}
-
-</style>
+    <DeckComponent DeckName="MonsterDeck" />
+  </MudItem>
+</MudGrid>

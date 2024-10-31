@@ -1,0 +1,54 @@
+﻿<li class="element-item d-flex align-items-center" style="background-color: @(GetStateColor(State)); height: 80px;">
+  <div class="d-flex justify-content-between w-100 align-items-center h-100">
+    @if (State != 0)
+    {
+      <button class="btn large-button" @onclick="UseElement">-</button>
+    }
+    else
+    {
+      <div style="width: 30px;"></div> <!-- Espace pour le bouton gauche -->
+    }
+
+    <img src="@ImagePath" alt="@Name" class="element-image mx-auto" style="max-width: 50px; max-height: 50px;" />
+
+    @if (State != 2)
+    {
+      <button class="btn large-button" @onclick="SetElementStrong">+</button>
+    }
+    else
+    {
+      <div style="width: 30px;"></div> <!-- Espace pour le bouton droit -->
+    }
+  </div>
+</li>
+
+
+@code {
+  [Parameter]
+  public string ImagePath { get; set; }
+
+  [Parameter]
+  public string Name { get; set; }
+
+  [Parameter]
+  public int State { get; set; }
+
+  [Parameter]
+  public EventCallback OnUseElement { get; set; }
+
+  [Parameter]
+  public EventCallback OnSetElementStrong { get; set; }
+
+  private async Task UseElement() => await OnUseElement.InvokeAsync();
+
+  private async Task SetElementStrong() => await OnSetElementStrong.InvokeAsync();
+
+  private string GetStateColor(int state) =>
+      state switch
+      {
+        0 => "gray",
+        1 => "orange",
+        2 => "red",
+        _ => "gray"
+      };
+}

@@ -10,7 +10,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudServices();
 
 
-builder.Services.AddScoped<AppState>();
+builder.Services.AddSingleton<AppState>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

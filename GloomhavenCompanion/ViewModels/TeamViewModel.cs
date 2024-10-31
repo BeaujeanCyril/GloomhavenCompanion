@@ -1,4 +1,4 @@
-﻿namespace GloomhavenCompanion.Model
+﻿namespace GloomhavenCompanion.ViewModels
 {
   public class TeamViewModel
   {

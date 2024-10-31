@@ -7,9 +7,9 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-	<MudAppBar Elevation="1">
+	<MudAppBar Dense="true" Elevation="1">
 		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="DrawerToggle" />
-		<MudImage Alt="GloomhavenLogo" Src="img\general\gh.png" Width="200" Height="100" />
+		<MudImage Alt="GloomhavenLogo" Src="img\general\gh.png" Width="200" Height="100" />  Companion
 		<MudSpacer />
 		<MudButton OnClick="ToggleDarkMode">Changer le mode</MudButton>
 		<MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
@@ -19,8 +19,7 @@
 	</MudDrawer>
 
 	<MudMainContent>
-		<MudContainer MaxWidth="MaxWidth.Medium">
-
+		<MudContainer MaxWidth="MaxWidth.ExtraLarge" Style="margin-top: 20px;">
 			@Body
 		</MudContainer>
 	</MudMainContent>
