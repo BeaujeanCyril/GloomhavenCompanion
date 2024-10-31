@@ -52,6 +52,22 @@
 		}
 		StateHasChanged();
 	}
+
+	private async Task AddAnnulCard()
+	{
+		CurrentPlayer.Deck.AddAnnulCard();
+		CurrentPlayer.Deck.ShuffleDeck();
+		StateHasChanged();
+
+	}
+
+	private async Task AddBenedictionCard()
+	{
+		CurrentPlayer.Deck.AddX2Card();
+		CurrentPlayer.Deck.ShuffleDeck();
+		StateHasChanged();
+
+	}
 }
 
 <MudContainer>
@@ -63,6 +79,8 @@
 				<CardMolecule Card="@(showingBackCard ? new CardViewModel { ImagePath = BackCardImagePath, Value = "" } : currentCard)" />
 @* 				<MudButton Color="Color.Primary" @onclick="ShowBackCardThenShuffleAsync">Mélanger</MudButton>
  *@				<MudButton Color="Color.Secondary" @onclick="ShowNextCardAsync">Carte suivante</MudButton>
+							<MudButton Color="Color.Secondary" @onclick="AddAnnulCard">Ajout annuler</MudButton>
+							<MudButton Color="Color.Secondary" @onclick="AddBenedictionCard">Ajout bénédiction</MudButton>
 			}
 			else
 			{
@@ -70,7 +88,7 @@
 			}
 		</MudPaper>
 	</MudGrid>
-@* 	<MudGrid>
+ 	<MudGrid>
 		@foreach (var card in SelectedDeck.CardsList)
 		{
 			<MudItem xs="6" sm="4" md="3" lg="2">
@@ -82,6 +100,6 @@
 			</MudItem>
 		}
 	</MudGrid>
- *@
+ 
 
 </MudContainer>

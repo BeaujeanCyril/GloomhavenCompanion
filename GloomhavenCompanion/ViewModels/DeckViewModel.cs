@@ -35,7 +35,8 @@
 			{
 				Id = GenerateUniqueId(),
 				Value = "Annulé",
-				NeedShuffle = true
+				NeedShuffle = false,
+				ImagePath = $@"\img\DeckModifier\Monsters\gh-am-mm-01.png"
 			};
 
 			CardsList.Add(annulCard);
@@ -47,8 +48,9 @@
 			var x2Card = new CardViewModel
 			{
 				Id = GenerateUniqueId(),
-				Value = "X2",
-				NeedShuffle = true
+				Value = "x2",
+				NeedShuffle = false,
+				ImagePath = $@"\img\DeckModifier\Monsters\BenedictionCard.png"
 			};
 
 			CardsList.Add(x2Card);
