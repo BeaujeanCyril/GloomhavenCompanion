@@ -29,7 +29,7 @@
 			}
 		</MudPaper>
 	</MudGrid>
-	<MudGrid>
+@* 	<MudGrid>
 		@foreach (var card in SelectedDeck.CardsList)
 		{
 			<MudItem xs="6" sm="4" md="3" lg="2">
@@ -41,7 +41,7 @@
 			</MudItem>
 		}
 	</MudGrid>
-
+ *@
 
 </MudContainer>
 
@@ -118,7 +118,6 @@
 		CurrentPlayer.Deck.AddAnnulCard();
 		CurrentPlayer.Deck.ShuffleDeck();
 		StateHasChanged();
-
 	}
 
 	private async Task AddBenedictionCard()
@@ -126,6 +125,5 @@
 		CurrentPlayer.Deck.AddX2Card();
 		CurrentPlayer.Deck.ShuffleDeck();
 		StateHasChanged();
-
 	}
 }

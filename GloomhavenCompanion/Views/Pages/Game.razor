@@ -3,12 +3,7 @@
 @inject AppState AppState
 
 <PageTitle>Partie en cours</PageTitle>
-@foreach (var deck in AppState.Decks)
-{
-	<MudItem xs="12">
-		<DeckComponent DeckName=@deck.Name />
-	</MudItem>
-}
+
 <MudGrid>
 	<MudItem xs="12">
 		<MudPaper class="p-4 mb-4">
@@ -23,5 +18,10 @@
 			</div>
 		</MudPaper>
 	</MudItem>
-
+	@foreach (var deck in AppState.Decks)
+	{
+		<MudItem xs="12">
+			<DeckComponent DeckName=@deck.Name />
+		</MudItem>
+	}
 </MudGrid>

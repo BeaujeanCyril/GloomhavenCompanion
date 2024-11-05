@@ -68,7 +68,7 @@ public class AppState
 		if (!MonsterDeck.IsShuffled)
 		{
 			MonsterDeck.ShuffleDeck();
-MonsterDeck.IsShuffled = true;
+			MonsterDeck.IsShuffled = true;
 		}
 		Decks.Add(MonsterDeck);
 	}
