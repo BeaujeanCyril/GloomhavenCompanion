@@ -2,6 +2,49 @@
 @using GloomhavenCompanion.ViewModels
 @inject AppState AppState
 
+
+<MudContainer>
+	<MudGrid Class="text-align: center">
+		<MudPaper Class="p-2 m-2" Style="height: 270px; text-align: center;">
+			<h2>@SelectedDeck.Name</h2>
+			@if (SelectedDeck?.CardsList != null && SelectedDeck.CardsList.Any())
+			{
+				<CardMolecule Card="@(showingBackCard ? new CardViewModel { ImagePath = BackCardImagePath, Value = "" } : currentCard)" />
+				@*<MudButton Color="Color.Primary" @onclick="ShowBackCardThenShuffleAsync">Mélanger</MudButton>*@
+				<MudButton Color="Color.Secondary" @onclick="ShowNextCardAsync">Carte suivante / </MudButton>
+				@if (DeckName != "MonsterDeck")
+				{
+					<MudButton Color="Color.Secondary" @onclick="AddBenedictionCard">
+						<img src="img\DeckModifier\Monsters\BenedictionCard.png" alt="Ajout bénédiction" style="width: 50px; height: 30px;" />
+					</MudButton>
+				}
+				<MudButton Color="Color.Secondary" @onclick="AddAnnulCard">
+					<img src="img\DeckModifier\Monsters\gh-am-mm-01.png" alt="Ajout annuler" style="width: 50px; height: 30px;" />
+				</MudButton>
+
+			}
+			else
+			{
+				<p>Aucune carte disponible dans le deck.</p>
+			}
+		</MudPaper>
+	</MudGrid>
+	<MudGrid>
+		@foreach (var card in SelectedDeck.CardsList)
+		{
+			<MudItem xs="6" sm="4" md="3" lg="2">
+				<MudPaper Class="p-2 m-2" Style="height: 150px; text-align: center;">
+					<img src="@card.ImagePath" alt="@card.Value" style="max-width: 100%; max-height: 80%; object-fit: contain;" />
+					<h3>@card.Value</h3>
+					<p>Need Shuffle: @card.NeedShuffle</p>
+				</MudPaper>
+			</MudItem>
+		}
+	</MudGrid>
+
+
+</MudContainer>
+
 @code {
 	[Parameter]
 	public string DeckName { get; set; }
@@ -13,19 +56,36 @@
 	private const string BackCardImagePath = "img/DeckModifier/Monsters/gh-am-m-back.png";
 	private CardViewModel currentCard;
 
+
 	protected override void OnParametersSet()
 	{
+		// Récupérer le deck sélectionné
 		SelectedDeck = AppState.Decks.FirstOrDefault(deck => deck.Name.Equals(DeckName, StringComparison.OrdinalIgnoreCase));
-		CurrentPlayer = AppState.CurrentPlayer;
-		CurrentPlayer.Deck.ShuffleDeck();
 
-		currentCard = new CardViewModel { ImagePath = BackCardImagePath };
+		CurrentPlayer = AppState.CurrentPlayer;
+		// Si le deck existe et que la carte est visible, on affiche la première carte
+		if (SelectedDeck != null && SelectedDeck.IsShowingBackCard)
+		{
+			currentCard = SelectedDeck.CardsList.FirstOrDefault(); // On affiche la première carte
+		}
+		else
+		{
+			currentCard = new CardViewModel { ImagePath = BackCardImagePath }; // Afficher la carte de dos par défaut
+		}
 	}
+
 
 	private async Task ShowBackCardThenShuffleAsync()
 	{
 		currentCard = new CardViewModel { ImagePath = BackCardImagePath };
 		CurrentPlayer.Deck.ShuffleDeck();
+		showingBackCard = !showingBackCard;
+		StateHasChanged();
+	}
+
+	private async Task ShowBackCardAsync()
+	{
+		currentCard = new CardViewModel { ImagePath = BackCardImagePath };
 		showingBackCard = !showingBackCard;
 		StateHasChanged();
 	}
@@ -46,7 +106,7 @@
 		}
 		CurrentPlayer.Deck.ShowAndMoveFirstCardToEnd();
 		showingBackCard = false;
-		if(currentCard.NeedShuffle == true)
+		if (currentCard.NeedShuffle == true)
 		{
 			CurrentPlayer.Deck.ShuffleDeck();
 		}
@@ -69,37 +129,3 @@
 
 	}
 }
-
-<MudContainer>
-	<MudGrid Class="text-align: center">
-		<MudPaper Class="p-2 m-2" Style="height: 200px; text-align: center;">
-			<h2>@SelectedDeck.Name</h2>
-			@if (SelectedDeck?.CardsList != null && SelectedDeck.CardsList.Any())
-			{
-				<CardMolecule Card="@(showingBackCard ? new CardViewModel { ImagePath = BackCardImagePath, Value = "" } : currentCard)" />
-@* 				<MudButton Color="Color.Primary" @onclick="ShowBackCardThenShuffleAsync">Mélanger</MudButton>
- *@				<MudButton Color="Color.Secondary" @onclick="ShowNextCardAsync">Carte suivante</MudButton>
-							<MudButton Color="Color.Secondary" @onclick="AddAnnulCard">Ajout annuler</MudButton>
-							<MudButton Color="Color.Secondary" @onclick="AddBenedictionCard">Ajout bénédiction</MudButton>
-			}
-			else
-			{
-				<p>Aucune carte disponible dans le deck.</p>
-			}
-		</MudPaper>
-	</MudGrid>
- 	<MudGrid>
-		@foreach (var card in SelectedDeck.CardsList)
-		{
-			<MudItem xs="6" sm="4" md="3" lg="2">
-				<MudPaper Class="p-2 m-2" Style="height: 150px; text-align: center;">
-					<img src="@card.ImagePath" alt="@card.Value" style="max-width: 100%; max-height: 80%; object-fit: contain;" />
-					<h3>@card.Value</h3>
-					<p>Need Shuffle: @card.NeedShuffle</p>
-				</MudPaper>
-			</MudItem>
-		}
-	</MudGrid>
- 
-
-</MudContainer>

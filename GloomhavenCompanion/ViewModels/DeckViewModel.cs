@@ -5,7 +5,8 @@
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public List<CardViewModel> CardsList { get; set; } = [];
-
+		public bool IsShowingBackCard { get; set; } // Pour savoir si on montre le dos de la carte
+		public bool IsShuffled { get; set; } = false;
 		public void ShuffleDeck()
 		{
 			Random rng = new();

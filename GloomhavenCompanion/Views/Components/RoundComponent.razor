@@ -1,10 +1,14 @@
-﻿<MudPaper Class="p-4 mb-4 rounded-0 border-0 mb-3" Elevation="0" Style="height: 80px; width: 150px;">
+﻿@using Radzen.Blazor
+
+<MudPaper Class="p-4 mb-4 rounded-0 border-0 mb-3" Elevation="0" Style="height: 80px; width: 150px;">
   <!-- Ajustez ces dimensions -->
   <div class="d-flex flex-column align-items-center justify-content-center h-100">
     <h1 class="display-6 m-0" style="white-space: nowrap;">Round @Round</h1>
-    <MudButton Color="Color.Primary" @onclick="NextRound" Size="Size.Large" Style="font-size: 2rem; min-width: 60px; height: 60px;">
+@*     <MudButton Color="Color.Dark" @onclick="NextRound" Size="Size.Large" Style="font-size: 2rem; min-width: 60px; height: 60px;">
       +
-    </MudButton>
+    </MudButton> *@
+    <Radzen.Blazor.RadzenButton IconColor="Color.Dark" Click="NextRound" Style="font-size: 2rem; min-width: 60px; height: 60px;">
+      +</Radzen.Blazor.RadzenButton>
   </div>
 </MudPaper>
 

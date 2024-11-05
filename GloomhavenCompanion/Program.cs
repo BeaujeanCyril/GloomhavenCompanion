@@ -1,4 +1,5 @@
 using GloomhavenCompanion;
+using GloomhavenCompanion.Services;
 using GloomhavenCompanion.Views;
 using MudBlazor.Services;
 
@@ -8,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 		.AddInteractiveServerComponents();
 builder.Services.AddMudServices();
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<CookieService>();
 
 builder.Services.AddSingleton<AppState>();
 var app = builder.Build();
