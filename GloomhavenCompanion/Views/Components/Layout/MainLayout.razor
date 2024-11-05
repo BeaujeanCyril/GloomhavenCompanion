@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @using MudBlazor
+@inject AppState AppState
+
 
 <MudThemeProvider IsDarkMode="@_isDarkMode" Theme="MyCustomTheme" DefaultScrollbar="true" />
 <MudPopoverProvider />
@@ -12,7 +14,7 @@
 		<MudSpacer />
 		<MudSwitch @bind-Value="_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool"/>
 
-		<MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+		<MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" OnClick=@OnShowPopup />
 	</MudAppBar>
 	<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="5" MiniWidth="200" Width="12%" Height="25%" Overlay="false">
         <NavMenu />
@@ -24,15 +26,37 @@
 		</MudContainer>
 	</MudMainContent>
 </MudLayout>
+
+@if (showPopup)
+{
+	<MudPopover Open="@showPopup">
+		<MudPaper Class="p-">
+			<MudGrid>
+				@foreach (var card in AppState.CurrentPlayer.Deck.CardsList)
+				{
+					<MudItem xs="15">
+						<img src="@card.ImagePath" alt="Card image" style="width: 50px; height: 30px;" />
+					</MudItem>
+				}
+			</MudGrid>
+		</MudPaper>
+	</MudPopover>
+}
     
 @code {
 	private bool _drawerOpen = false;
 	private bool _isDarkMode = false; // True pour le mode sombre, false pour le mode clair.
+	private bool showPopup = false;
 
+	void OnShowPopup()
+	{
+		showPopup = !showPopup;
+	}
 	void DrawerToggle()
 	{
 		_drawerOpen = !_drawerOpen;
 	}
+
 
 	private readonly MudTheme MyCustomTheme = new MudTheme()
 		{
