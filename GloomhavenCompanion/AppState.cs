@@ -11,6 +11,8 @@ public class AppState
 	public PlayerViewModel CurrentPlayer { get; set; }
 	public TeamViewModel CurrentTeam { get; set; }
 
+	public event Action OnRoundChanged;
+
 	public AppState()
 	{
 		Round = 1;
@@ -36,9 +38,11 @@ public class AppState
 	#endregion Element
 
 	#region Round
+
 	public void NextRound()
 	{
 		Round++;
+		OnRoundChanged?.Invoke();
 	}
 	#endregion Round
 

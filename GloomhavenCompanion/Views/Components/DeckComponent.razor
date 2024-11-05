@@ -56,6 +56,11 @@
 	private const string BackCardImagePath = "img/DeckModifier/Monsters/gh-am-m-back.png";
 	private CardViewModel currentCard;
 
+	protected override void OnInitialized()
+	{
+		AppState.OnRoundChanged += HideCardBack; // Abonnement à l’événement
+		base.OnInitialized();
+	}
 
 	protected override void OnParametersSet()
 	{
@@ -74,6 +79,17 @@
 		}
 	}
 
+	private void HideCardBack()
+	{
+		showingBackCard = true;
+		currentCard = new CardViewModel { ImagePath = BackCardImagePath };
+		InvokeAsync(StateHasChanged); // Utiliser InvokeAsync pour assurer le bon rafraîchissement
+	}
+
+	public void Dispose()
+	{
+		AppState.OnRoundChanged -= HideCardBack; // Se désabonner pour éviter les fuites de mémoire
+	}
 
 	private async Task ShowBackCardThenShuffleAsync()
 	{
