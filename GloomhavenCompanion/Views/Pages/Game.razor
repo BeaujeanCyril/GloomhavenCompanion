@@ -4,35 +4,53 @@
 
 <PageTitle>Partie en cours</PageTitle>
 <MudGrid>
-	<MudItem xs="12">
-		<MudGrid>
-			<MudItem xs="12" md="2">
-				<MudPaper class="p-4 mb-4">
-					<RoundComponent Round="@AppState.Round" OnNextRound="NextRound" />
-				</MudPaper>
-			</MudItem>
-			<MudItem xs="12" md="10" class="d-flex justify-content-end">
-				<MudPaper class="p-4 mb-4">
-					<ElementComponent OnUseElement="@((id) => UseElement(id))"
-														OnSetElementStrong="@((id) => SetElementStrong(id))" />
-				</MudPaper>
-			</MudItem>
-		</MudGrid>
-	</MudItem>
-	<MudItem xs="12">
-		<MudPaper class="p-4 mb-4">
-			<MudGrid Justify="Justify.Center">
-				<!-- Centre le contenu horizontalement -->
-				@foreach (var deck in AppState.Decks)
-				{
-					<MudItem xs="12" sm="6" md="4" lg="3" Class="d-flex justify-content-center">
-						<!-- Centre chaque élément -->
-						<DeckComponent DeckName=@deck.Name />
-					</MudItem>
+  <MudItem xs="12">
+    <MudGrid>
+      <MudItem xs="12" md="2">
+        <MudPaper class="p-4 mb-4">
+          <RoundComponent Round="@AppState.Round" OnNextRound="NextRound" />
+        </MudPaper>
+      </MudItem>
+      <MudItem xs="12" md="10" class="d-flex justify-content-end">
+        <MudPaper class="p-4 mb-4">
+          <ElementComponent OnUseElement="@((id) => UseElement(id))" OnSetElementStrong="@((id) => SetElementStrong(id))" />
+        </MudPaper>
+      </MudItem>
+    </MudGrid>
+  </MudItem>
+  <MudItem xs="12">
+    <MudGrid Justify="Justify.SpaceBetween">
 
-				}
-			</MudGrid>
-		</MudPaper>
-	</MudItem>
 
+      <!-- Section pour le deck de monstres -->
+      <MudItem xs="12" md="6">
+        <!-- Ajusté à md="8" -->
+        <MudPaper class="p-4 mb-4">
+          <MudGrid Justify="Justify.Center">
+            @foreach (var deck in AppState.Decks)
+            {
+              <MudItem Class="d-flex justify-content-center">
+                <DeckComponent DeckName=@deck.Name />
+              </MudItem>
+            }
+          </MudGrid>
+        </MudPaper>
+      </MudItem>
+
+      <!-- Section pour les joueurs -->
+      <MudItem xs="12" md="4">
+        <!-- Ajusté à md="4" -->
+        <MudPaper class="p-4 mb-4">
+          <MudGrid Justify="Justify.SpaceBetween">
+            @foreach (var player in AppState.CurrentTeam.Players)
+            {
+              <MudItem xs="12" sm="6" md="4" lg="3" Class="d-flex justify-content-center">
+                <PlayerComponent Player=@player />
+              </MudItem>
+            }
+          </MudGrid>
+        </MudPaper>
+      </MudItem>
+    </MudGrid>
+  </MudItem>
 </MudGrid>

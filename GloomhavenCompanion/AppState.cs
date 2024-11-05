@@ -4,8 +4,8 @@ namespace GloomhavenCompanion;
 public class AppState
 {
 	public List<ElementViewModel> Elements { get; private set; }
-	public int Round { get; private set; }
-	public List<TeamViewModel> Teams { get; private set; }
+	public int Round { get; private set; } = 1;
+	public List<TeamViewModel> Teams { get; private set; } = [];
 	public List<DeckViewModel> Decks { get; set; } = [];
 	public DeckViewModel MonsterDeck { get; set; }
 	public PlayerViewModel CurrentPlayer { get; set; }
@@ -15,12 +15,25 @@ public class AppState
 
 	public AppState()
 	{
-		Round = 1;
-		Teams = [];
 		GenerateElements();
 		CreateDeck("MonsterDeck");
 		CurrentPlayer = new PlayerViewModel() { Name = "Monster", Deck = MonsterDeck };
+
+		Teams.Add(new TeamViewModel
+		{
+			CompanyName = "LA compagnie",
+			Id = 1,
+      Players =
+        [
+            new PlayerViewModel { Name = "Thomas"},
+						new PlayerViewModel { Name = "Cyril"},
+						new PlayerViewModel { Name = "Loïc" }
+				]
+		});
+
+		CurrentTeam = Teams.FirstOrDefault();
 	}
+
 
 	#region Element
 	private void GenerateElements()

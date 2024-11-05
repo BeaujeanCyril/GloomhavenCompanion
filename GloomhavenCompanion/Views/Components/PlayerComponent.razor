@@ -1,0 +1,33 @@
+﻿@using GloomhavenCompanion.ViewModels
+
+
+<MudPaper class="p-4 mb-4">
+  <h4>@Player.Name</h4>
+  <MudNumericField @bind-Value="Player.Xp"
+                   Label="XP"
+                   Immediate="true"
+                   OnValueChanged="OnXPChanged" />
+  <MudNumericField @bind-Value="Player.Coins"
+                   Label="PO"
+                   Immediate="true"
+                   OnValueChanged="OnGoldChanged" />
+</MudPaper>
+
+
+@code {
+  [Parameter] public PlayerViewModel Player { get; set; }
+
+  private void OnXPChanged(int newValue)
+  {
+    Player.Xp = newValue;
+    // Mettez à jour l'AppState si nécessaire
+    // AppState.UpdatePlayer(Player);
+  }
+
+  private void OnGoldChanged(int newValue)
+  {
+    Player.Coins = newValue;
+    // Mettez à jour l'AppState si nécessaire
+    // AppState.UpdatePlayer(Player);
+  }
+}

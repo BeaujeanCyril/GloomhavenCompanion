@@ -1,52 +1,104 @@
 ﻿@page "/create-team"
-@inject AppState AppState // Injection de AppState
+@inject AppState AppState
 @using System.ComponentModel.DataAnnotations
 @using GloomhavenCompanion.ViewModels
+@inject ISnackbar Snackbar
 
 <h3>Créer une Équipe</h3>
 
-<!-- Formulaire pour créer une équipe -->
-<EditForm Model="teamModel" OnValidSubmit="HandleValidSubmit">
+@if (!showPlayerForm)
+{
+  <EditForm Model="teamModel" OnValidSubmit="ShowPlayerForm">
     <DataAnnotationsValidator />
     <div class="mb-3">
-        <label for="companyName" class="form-label">Nom de la Compagnie</label>
-        <InputText id="companyName" class="form-control" @bind-Value="teamModel.CompanyName" />
-        <ValidationMessage For="@(() => teamModel.CompanyName)" />
+      <MudTextField @bind-Value="teamModel.CompanyName"
+                    Label="Nom de la compagnie"
+                    Variant="Variant.Outlined" />
+      <ValidationMessage For="@(() => teamModel.CompanyName)" />
     </div>
     <div class="mb-3">
-        <label for="playerCount" class="form-label">Nombre de Joueurs</label>
-        <InputNumber id="playerCount" class="form-control" @bind-Value="teamModel.PlayerCount" />
-        <ValidationMessage For="@(() => teamModel.PlayerCount)" />
+      <MudNumericField @bind-Value="teamModel.PlayerCount"
+                       Label="Nombre de joueurs"
+                       Variant="Variant.Text"
+                       Min="1" Max="4" />
+      <ValidationMessage For="@(() => teamModel.PlayerCount)" />
     </div>
-    <button type="submit" class="btn btn-primary">Enregistrer</button>
-</EditForm>
+
+    <button type="submit" class="btn btn-primary">Continuer</button>
+  </EditForm>
+}
+else
+{
+  <EditForm Model="playerModel" OnValidSubmit="HandlePlayerNamesSubmit">
+    <DataAnnotationsValidator />
+    @for (int i = 0; i < teamModel.PlayerCount; i++)
+    {
+      <MudTextField @bind-Value="playerModel.PlayerNames[i]"
+                    Label="@($"Nom du joueur {i + 1}")"
+                    Variant="Variant.Outlined"
+                    Required="true"
+                    RequiredError="Le nom du joueur est requis" />
+      <ValidationMessage For="@(() => playerModel.PlayerNames[i])" />
+    }
+
+    <button type="submit" class="btn btn-primary">Créer</button>
+  </EditForm>
+}
 
 @code {
-    private TeamModel teamModel = new TeamModel();
+  private TeamModelValidator teamModel = new TeamModelValidator();
+  private PlayerModelValidator playerModel = new PlayerModelValidator();
+  private bool showPlayerForm = false;
 
-    private void HandleValidSubmit()
+  private void ShowPlayerForm()
+  {
+    playerModel.PlayerNames = new List<string>(new string[teamModel.PlayerCount]);
+    showPlayerForm = true;
+  }
+
+private void HandlePlayerNamesSubmit()
+{
+    // Vérifiez que tous les noms de joueurs sont valides
+    if (!playerModel.IsValid)
     {
-        // Crée une nouvelle équipe à partir du formulaire
-        var newTeam = new TeamViewModel
+        Snackbar.Add("Veuillez ajouter tous les noms de joueurs.", Severity.Warning);
+        return;
+    }
+
+    List<PlayerViewModel> players = new List<PlayerViewModel>();
+
+    for (int i = 0; i < teamModel.PlayerCount; i++)
+    {
+        string playerName = playerModel.PlayerNames[i];
+        players.Add(new PlayerViewModel
         {
-            CompanyName = teamModel.CompanyName,
-        };
-
-        // Ajoute l’équipe à AppState
-        AppState.AddTeam(newTeam);
-
-        Console.WriteLine($"Équipe ajoutée: {newTeam.CompanyName} avec {newTeam.Players.Count} joueurs");
-
-        // Redirige vers une autre page ou afficher un message de succès
+            Name = playerName,
+            Deck = new DeckViewModel { Name = $"Deck de {playerName}" }
+        });
     }
 
-    public class TeamModel
+    var newTeam = new TeamViewModel
     {
-        [Required(ErrorMessage = "Le nom de la compagnie est requis")]
-        public string CompanyName { get; set; }
+        CompanyName = teamModel.CompanyName,
+        Players = players
+    };
+    AppState.AddTeam(newTeam);
+    Snackbar.Add($"Équipe ajoutée: {newTeam.CompanyName} avec {newTeam.Players.Count} joueurs");
+}
 
-        [Required(ErrorMessage = "Le nombre de joueurs est requis")]
-        [Range(1, int.MaxValue, ErrorMessage = "Le nombre de joueurs doit être au moins de 1")]
-        public int PlayerCount { get; set; }
-    }
+
+  public class TeamModelValidator
+  {
+    [Required(ErrorMessage = "Le nom de la compagnie est requis")]
+    public string CompanyName { get; set; }
+
+    [Range(1, 4, ErrorMessage = "Le nombre de joueurs doit être entre 1 et 4")]
+    public int PlayerCount { get; set; } = 1;
+  }
+
+  public class PlayerModelValidator
+  {
+    public List<string> PlayerNames { get; set; } = new List<string> { "", "", "", "" }; // 4 champs pour 4 joueurs
+    public bool IsValid => PlayerNames.All(name => !string.IsNullOrWhiteSpace(name));
+  }
 }
