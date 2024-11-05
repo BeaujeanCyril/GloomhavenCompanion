@@ -1,21 +1,23 @@
 ﻿@using Radzen.Blazor
+@using GloomhavenCompanion.ViewModels
+@inject AppState AppState
 
-<div class="d-flex flex-column align-items-center justify-content-center h-20">
-	<h1 class="display-6 m-0" style="white-space: nowrap;">Round @Round</h1>
-	@*     <MudButton Color="Color.Dark" @onclick="NextRound" Size="Size.Large" Style="font-size: 2rem; min-width: 60px; height: 60px;">
-	+
-	</MudButton> *@
+<div class="d-flex flex-column align-items-center justify-content-center h-20" >
+	<h1 class="display-6 m-0" style="white-space: nowrap;">Round @Round.RoundNumber</h1>
+
 	<Radzen.Blazor.RadzenButton IconColor="Color.Dark"
 															Click="NextRound"
 															Style="font-size: 2rem; min-width: 60px; height: 60px; background-color: transparent; color: inherit; border: none;">
 		+
 	</Radzen.Blazor.RadzenButton>
+
 </div>
+
 
 
 @code {
 	[Parameter]
-	public int Round { get; set; }
+	public RoundViewModel Round { get; set; }
 
 	[Parameter]
 	public EventCallback OnNextRound { get; set; }
@@ -24,6 +26,7 @@
 	{
 		await OnNextRound.InvokeAsync();
 	}
+
 }
 
 <style>

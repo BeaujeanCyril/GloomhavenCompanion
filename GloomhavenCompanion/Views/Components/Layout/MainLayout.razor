@@ -1,20 +1,20 @@
 ﻿@inherits LayoutComponentBase
 @using MudBlazor
 
-<MudThemeProvider IsDarkMode="@_isDarkMode" DefaultScrollbar="true" />
+<MudThemeProvider IsDarkMode="@_isDarkMode" Theme="MyCustomTheme" DefaultScrollbar="true" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
-
 <MudLayout>
 	<MudAppBar Color=Color.Dark Dense="true" Elevation="1">
 		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="DrawerToggle" />
 		<MudImage Alt="GloomhavenLogo" Src="img\general\gh.png" Width="200" Height="100" />  Companion
 		<MudSpacer />
-		<MudButton OnClick="ToggleDarkMode">Changer le mode</MudButton>
+		<MudSwitch @bind-Value="_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool"/>
+
 		<MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
 	</MudAppBar>
-	<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+	<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="5" MiniWidth="200" Width="12%" Height="25%" Overlay="false">
         <NavMenu />
 	</MudDrawer>
 
@@ -34,9 +34,24 @@
 		_drawerOpen = !_drawerOpen;
 	}
 
-	void ToggleDarkMode()
-	{
-		_isDarkMode = !_isDarkMode; // Inverse le mode
-	}
+	private readonly MudTheme MyCustomTheme = new MudTheme()
+		{
+			PaletteLight = new PaletteLight()
+			{
+				Primary = Colors.Blue.Default,
+				Secondary = Colors.Green.Accent4,
+				AppbarBackground = Colors.Red.Default,
+			},
+			PaletteDark = new PaletteDark()
+			{
+				Primary = Colors.Blue.Lighten1,
+				AppbarBackground = Colors.Red.Darken1
+			},
 
+			LayoutProperties = new LayoutProperties()
+			{
+				DrawerWidthLeft = "260px",
+				DrawerWidthRight = "300px"
+			}
+		};
 }

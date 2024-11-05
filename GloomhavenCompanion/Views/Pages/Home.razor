@@ -1,6 +1,9 @@
 ﻿@page "/home"
 @using MudBlazor
 @inject IJSRuntime JS
+@using GloomhavenCompanion.ViewModels
+@inject AppState AppState
+
 
 <MudThemeProvider IsDarkMode="@_isDarkMode" DefaultScrollbar="true" />
 <PageTitle>Home</PageTitle>
@@ -16,7 +19,27 @@
       Dark Mode
     </MudButton>
   </MudItem>
+  <MudItem xs="12" sm="6" md="4">
+    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.History" OnClick="TogglePopup">
+     Stats
+    </MudButton>
+  </MudItem>
 </MudGrid>
+
+
+
+<MudPopover Open="@showPopup">
+  <MudPaper Class="p-4">
+    <MudGrid>
+      @foreach (var round in AppState.CurrentGame.Rounds)
+      {
+        <MudItem xs="12">
+          Round @round.RoundNumber: @round.DateTime
+        </MudItem>
+      }
+    </MudGrid>
+  </MudPaper>
+</MudPopover>
 
 <style>
   .my-button {
@@ -27,6 +50,12 @@
 </style>
 
 @code {
+  private bool showPopup = false;
+
+  private void TogglePopup()
+  {
+    showPopup = !showPopup;
+  }
   private bool _isDarkMode = false;
 
   private void OpenPdf()

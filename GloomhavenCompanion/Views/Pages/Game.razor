@@ -8,7 +8,7 @@
     <MudGrid>
       <MudItem xs="12" md="2">
         <MudPaper class="p-4 mb-4">
-          <RoundComponent Round="@AppState.Round" OnNextRound="NextRound" />
+          <RoundComponent Round="@AppState.CurrentGame.CurrentRound()" OnNextRound="NextRound" />
         </MudPaper>
       </MudItem>
       <MudItem xs="12" md="10" class="d-flex justify-content-end">

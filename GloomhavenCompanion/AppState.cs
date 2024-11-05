@@ -4,7 +4,6 @@ namespace GloomhavenCompanion;
 public class AppState
 {
 	public List<ElementViewModel> Elements { get; private set; }
-	public int Round { get; private set; } = 1;
 	public List<TeamViewModel> Teams { get; private set; } = [];
 	public List<DeckViewModel> Decks { get; set; } = [];
 	public DeckViewModel MonsterDeck { get; set; }
@@ -12,9 +11,14 @@ public class AppState
 	public TeamViewModel CurrentTeam { get; set; }
 
 	public event Action OnRoundChanged;
+	public GameViewModel CurrentGame { get; set; }
 
 	public AppState()
 	{
+		
+		CurrentGame = new GameViewModel();
+		CurrentGame.AddNewRound();
+
 		GenerateElements();
 		CreateDeck("MonsterDeck");
 		CurrentPlayer = new PlayerViewModel() { Name = "Monster", Deck = MonsterDeck };
@@ -54,7 +58,7 @@ public class AppState
 
 	public void NextRound()
 	{
-		Round++;
+		CurrentGame.AddNewRound();
 		OnRoundChanged?.Invoke();
 	}
 	#endregion Round
@@ -74,11 +78,30 @@ public class AppState
 		CurrentTeam.RemovePlayer(player);
 	}
 
-	#endregion Team
+  public void UpdatePlayer(PlayerViewModel player)
+  {
+    // Vérifier si l'équipe actuelle est définie
+    if (CurrentTeam != null)
+    {
+      // Trouver le joueur dans la liste des joueurs de l'équipe actuelle
+      var existingPlayer = CurrentTeam.Players.FirstOrDefault(p => p.Name == player.Name);
 
-	#region Deck
+      // Si le joueur existe, mettre à jour ses valeurs
+      if (existingPlayer != null)
+      {
+        existingPlayer.Xp = player.Xp;
+        existingPlayer.Coins = player.Coins;
+        existingPlayer.HealthPoints = player.HealthPoints;
+      }
+    }
+  }
 
-	public void CreateDeck(string name)
+
+  #endregion Team
+
+  #region Deck
+
+  public void CreateDeck(string name)
 	{
 		MonsterDeck = new DeckViewModel { Id = GenerateDeckId(), Name = name };
 		InitializeDeckCards(MonsterDeck);

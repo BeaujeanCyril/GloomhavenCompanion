@@ -25,4 +25,9 @@
     <None Include="Views\Components\RoundComponent.razor" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\img\Effects\" />
+  </ItemGroup>
+
 </Project>
