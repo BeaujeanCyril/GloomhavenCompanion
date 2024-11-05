@@ -1,54 +1,52 @@
 ﻿@page "/deck"
 @using GloomhavenCompanion.ViewModels
 @inject AppState AppState
+@inject ISnackbar Snackbar
 
-
-<MudContainer>
 	<MudGrid Class="text-align: center">
-		<MudPaper Class="p-2 m-2" Style="height: 270px; text-align: center;">
+		<MudPaper Class="p-2 m-2" Style="height: 270px; text-align: center;" @onmouseover="() => showPopup = true" @onmouseout="() => showPopup = false">
 			<h2>@SelectedDeck.Name</h2>
 			@if (SelectedDeck?.CardsList != null && SelectedDeck.CardsList.Any())
 			{
 				<CardMolecule Card="@(showingBackCard ? new CardViewModel { ImagePath = BackCardImagePath, Value = "" } : currentCard)" />
-				@*<MudButton Color="Color.Primary" @onclick="ShowBackCardThenShuffleAsync">Mélanger</MudButton>*@
-				<MudButton Color="Color.Secondary" @onclick="ShowNextCardAsync">Carte suivante / </MudButton>
+				<MudButton Color="Color.Secondary" @onclick="ShowNextCardAsync">Carte suivante</MudButton>
 				@if (DeckName != "MonsterDeck")
 				{
 					<MudButton Color="Color.Secondary" @onclick="AddBenedictionCard">
-						<img src="img\DeckModifier\Monsters\BenedictionCard.png" alt="Ajout bénédiction" style="width: 50px; height: 30px;" />
+						<img src="img/DeckModifier/Monsters/BenedictionCard.png" alt="Ajout bénédiction" style="width: 50px; height: 30px;" />
 					</MudButton>
 				}
 				<MudButton Color="Color.Secondary" @onclick="AddAnnulCard">
-					<img src="img\DeckModifier\Monsters\gh-am-mm-01.png" alt="Ajout annuler" style="width: 50px; height: 30px;" />
+					<img src="img/DeckModifier/Monsters/gh-am-mm-01.png" alt="Ajout annuler" style="width: 50px; height: 30px;" />
 				</MudButton>
-
 			}
 			else
 			{
 				<p>Aucune carte disponible dans le deck.</p>
 			}
+
+			@if (SelectedDeck.CardsHistoric.Count != 0)
+			{
+				<MudPopover Open="@showPopup">
+					<MudPaper Class="p-">
+						<MudGrid>
+							@foreach (var card in SelectedDeck.CardsHistoric.TakeLast(5))
+							{
+								<MudItem xs="15">
+									<img src="@card.ImagePath" alt="Card image" style="width: 50px; height: 30px;" />
+								</MudItem>
+							}
+						</MudGrid>
+					</MudPaper>
+				</MudPopover>
+			}
 		</MudPaper>
 	</MudGrid>
-@* 	<MudGrid>
-		@foreach (var card in SelectedDeck.CardsList)
-		{
-			<MudItem xs="6" sm="4" md="3" lg="2">
-				<MudPaper Class="p-2 m-2" Style="height: 150px; text-align: center;">
-					<img src="@card.ImagePath" alt="@card.Value" style="max-width: 100%; max-height: 80%; object-fit: contain;" />
-					<h3>@card.Value</h3>
-					<p>Need Shuffle: @card.NeedShuffle</p>
-				</MudPaper>
-			</MudItem>
-		}
-	</MudGrid>
- *@
-
-</MudContainer>
 
 @code {
 	[Parameter]
 	public string DeckName { get; set; }
-
+	private bool showPopup = false;
 	protected DeckViewModel SelectedDeck { get; set; }
 	protected PlayerViewModel CurrentPlayer { get; set; }
 
@@ -133,6 +131,7 @@
 	{
 		CurrentPlayer.Deck.AddAnnulCard();
 		CurrentPlayer.Deck.ShuffleDeck();
+		Snackbar.Add("Carte annulée ajoutée au deck" + CurrentPlayer.Name + "!", Severity.Success);
 		StateHasChanged();
 	}
 
@@ -140,6 +139,8 @@
 	{
 		CurrentPlayer.Deck.AddX2Card();
 		CurrentPlayer.Deck.ShuffleDeck();
+		Snackbar.Add("Carte bénédiction ajoutée au deck" + CurrentPlayer.Name + "!", Severity.Success);
+
 		StateHasChanged();
 	}
 }

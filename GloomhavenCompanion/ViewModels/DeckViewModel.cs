@@ -2,6 +2,7 @@
 {
 	public class DeckViewModel
 	{
+		public List<CardViewModel> CardsHistoric { get; set; } = [];
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public List<CardViewModel> CardsList { get; set; } = [];
@@ -65,7 +66,7 @@
 
 			// Récupérer la première carte
 			var firstCard = CardsList.First();
-
+			CardsHistoric.Add(firstCard);
 			// Retirer la carte du début et l'ajouter à la fin
 			CardsList.RemoveAt(0);
 			CardsList.Add(firstCard);

@@ -84,7 +84,7 @@ public class AppState
 		foreach (var number in imageNumbers)
 		{
 			bool NeedShuffle = false;
-			var imagePath = $@"\img\DeckModifier\Monsters\gh-am-m-{number:D2}.png"; // Format 2 chiffres
+			var imagePath = $@"/img/DeckModifier/Monsters/gh-am-m-{number:D2}.png"; // Format 2 chiffres
 			if (number == 19 || number == 20)
 			{
 				NeedShuffle = true;

@@ -3,25 +3,36 @@
 @inject AppState AppState
 
 <PageTitle>Partie en cours</PageTitle>
-
 <MudGrid>
 	<MudItem xs="12">
-		<MudPaper class="p-4 mb-4">
-			<div class="d-flex justify-content-between align-items-center">
-				<div class="d-flex flex-column align-items-start">
+		<MudGrid>
+			<MudItem xs="12" md="2">
+				<MudPaper class="p-4 mb-4">
 					<RoundComponent Round="@AppState.Round" OnNextRound="NextRound" />
-				</div>
-				<div class="d-flex">
+				</MudPaper>
+			</MudItem>
+			<MudItem xs="12" md="10" class="d-flex justify-content-end">
+				<MudPaper class="p-4 mb-4">
 					<ElementComponent OnUseElement="@((id) => UseElement(id))"
 														OnSetElementStrong="@((id) => SetElementStrong(id))" />
-				</div>
-			</div>
+				</MudPaper>
+			</MudItem>
+		</MudGrid>
+	</MudItem>
+	<MudItem xs="12">
+		<MudPaper class="p-4 mb-4">
+			<MudGrid Justify="Justify.Center">
+				<!-- Centre le contenu horizontalement -->
+				@foreach (var deck in AppState.Decks)
+				{
+					<MudItem xs="12" sm="6" md="4" lg="3" Class="d-flex justify-content-center">
+						<!-- Centre chaque élément -->
+						<DeckComponent DeckName=@deck.Name />
+					</MudItem>
+
+				}
+			</MudGrid>
 		</MudPaper>
 	</MudItem>
-	@foreach (var deck in AppState.Decks)
-	{
-		<MudItem xs="12">
-			<DeckComponent DeckName=@deck.Name />
-		</MudItem>
-	}
+
 </MudGrid>

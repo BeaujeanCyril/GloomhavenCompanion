@@ -3,6 +3,7 @@ namespace GloomhavenCompanion.Views.Pages
 {
 	public partial class Game
 	{
+
 		private void NextRound()
 		{
 			AppState.NextRound();
@@ -12,7 +13,7 @@ namespace GloomhavenCompanion.Views.Pages
 
 		private void HideAllModificatorCards()
 		{
-			
+
 		}
 
 		private void SetElementStrong(int id)
