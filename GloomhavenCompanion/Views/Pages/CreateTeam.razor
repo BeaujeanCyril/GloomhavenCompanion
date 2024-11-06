@@ -3,89 +3,95 @@
 @using System.ComponentModel.DataAnnotations
 @using GloomhavenCompanion.ViewModels
 @inject ISnackbar Snackbar
+@inject NavigationManager Navigation
 
 <h3>Créer une Équipe</h3>
 
-@if (!showPlayerForm)
-{
-  <EditForm Model="teamModel" OnValidSubmit="ShowPlayerForm">
-    <DataAnnotationsValidator />
-    <div class="mb-3">
-      <MudTextField @bind-Value="teamModel.CompanyName"
-                    Label="Nom de la compagnie"
-                    Variant="Variant.Outlined" />
-      <ValidationMessage For="@(() => teamModel.CompanyName)" />
-    </div>
-    <div class="mb-3">
-      <MudNumericField @bind-Value="teamModel.PlayerCount"
-                       Label="Nombre de joueurs"
-                       Variant="Variant.Text"
-                       Min="1" Max="4" />
-      <ValidationMessage For="@(() => teamModel.PlayerCount)" />
-    </div>
+<EditForm Model="teamModel" OnValidSubmit="HandleFormSubmit">
+  <DataAnnotationsValidator />
 
-    <button type="submit" class="btn btn-primary">Continuer</button>
-  </EditForm>
-}
-else
-{
-  <EditForm Model="playerModel" OnValidSubmit="HandlePlayerNamesSubmit">
-    <DataAnnotationsValidator />
-    @for (int i = 0; i < teamModel.PlayerCount; i++)
-    {
-      <MudTextField @bind-Value="playerModel.PlayerNames[i]"
-                    Label="@($"Nom du joueur {i + 1}")"
-                    Variant="Variant.Outlined"
-                    Required="true"
-                    RequiredError="Le nom du joueur est requis" />
-      <ValidationMessage For="@(() => playerModel.PlayerNames[i])" />
-    }
+  <!-- Nom de la compagnie -->
+  <div class="mb-3">
+    <MudTextField @bind-Value="teamModel.CompanyName"
+                  Label="Nom de la compagnie"
+                  Variant="Variant.Outlined" />
+    <ValidationMessage For="@(() => teamModel.CompanyName)" />
+  </div>
 
-    <button type="submit" class="btn btn-primary">Créer</button>
-  </EditForm>
-}
+
+  <!-- Noms des joueurs -->
+  <div class="mb-3">
+    <MudTextField @bind-Value="playerModel.PlayerNames[0]"
+                  Label="Nom du joueur 1"
+                  Variant="Variant.Outlined"
+             />
+    <ValidationMessage For="@(() => playerModel.PlayerNames[0])" />
+  </div>
+
+  <div class="mb-3">
+    <MudTextField @bind-Value="playerModel.PlayerNames[1]"
+                  Label="Nom du joueur 2"
+                  Variant="Variant.Outlined"
+      />
+    <ValidationMessage For="@(() => playerModel.PlayerNames[1])" />
+  </div>
+
+  <div class="mb-3">
+    <MudTextField @bind-Value="playerModel.PlayerNames[2]"
+                  Label="Nom du joueur 3"
+                  Variant="Variant.Outlined"
+                />
+    <ValidationMessage For="@(() => playerModel.PlayerNames[2])" />
+  </div>
+
+  <div class="mb-3">
+    <MudTextField @bind-Value="playerModel.PlayerNames[3]"
+                  Label="Nom du joueur 4"
+                  Variant="Variant.Outlined"
+                  />
+    <ValidationMessage For="@(() => playerModel.PlayerNames[3])" />
+  </div>
+
+  <button type="submit" class="btn btn-primary">Créer</button>
+</EditForm>
 
 @code {
   private TeamModelValidator teamModel = new TeamModelValidator();
   private PlayerModelValidator playerModel = new PlayerModelValidator();
-  private bool showPlayerForm = false;
 
-  private void ShowPlayerForm()
+  private void HandleFormSubmit()
   {
-    playerModel.PlayerNames = new List<string>(new string[teamModel.PlayerCount]);
-    showPlayerForm = true;
-  }
+    // Créer une liste de joueurs en excluant les champs vides
+    var players = new List<PlayerViewModel>();
 
-private void HandlePlayerNamesSubmit()
-{
-    // Vérifiez que tous les noms de joueurs sont valides
-    if (!playerModel.IsValid)
+    foreach (var playerName in playerModel.PlayerNames.Where(name => !string.IsNullOrWhiteSpace(name)))
     {
-        Snackbar.Add("Veuillez ajouter tous les noms de joueurs.", Severity.Warning);
-        return;
-    }
-
-    List<PlayerViewModel> players = new List<PlayerViewModel>();
-
-    for (int i = 0; i < teamModel.PlayerCount; i++)
-    {
-        string playerName = playerModel.PlayerNames[i];
-        players.Add(new PlayerViewModel
+      players.Add(new PlayerViewModel
         {
-            Name = playerName,
-            Deck = new DeckViewModel { Name = $"Deck de {playerName}" }
+          Name = playerName,
+          Deck = new DeckViewModel { Name = $"Deck de {playerName}" }
         });
     }
 
-    var newTeam = new TeamViewModel
+    // Si aucun joueur n'est renseigné, afficher un message d'erreur
+    if (players.Count == 0)
     {
+      Snackbar.Add("Veuillez renseigner au moins un joueur.", Severity.Warning);
+      return;
+    }
+
+    // Créer l'équipe avec les joueurs valides
+    var newTeam = new TeamViewModel
+      {
         CompanyName = teamModel.CompanyName,
         Players = players
-    };
-    AppState.AddTeam(newTeam);
-    Snackbar.Add($"Équipe ajoutée: {newTeam.CompanyName} avec {newTeam.Players.Count} joueurs");
-}
+      };
 
+    AppState.AddTeam(newTeam);
+
+    Snackbar.Add($"Équipe ajoutée : {newTeam.CompanyName} avec {newTeam.Players.Count} joueurs", Severity.Success);
+    Navigation.NavigateTo("/game");
+  }
 
   public class TeamModelValidator
   {
@@ -99,6 +105,5 @@ private void HandlePlayerNamesSubmit()
   public class PlayerModelValidator
   {
     public List<string> PlayerNames { get; set; } = new List<string> { "", "", "", "" }; // 4 champs pour 4 joueurs
-    public bool IsValid => PlayerNames.All(name => !string.IsNullOrWhiteSpace(name));
   }
 }

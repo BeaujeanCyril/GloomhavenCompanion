@@ -1,4 +1,4 @@
-﻿@page "/home"
+﻿@page "/"
 @using MudBlazor
 @inject IJSRuntime JS
 @using GloomhavenCompanion.ViewModels
@@ -15,16 +15,30 @@
     </MudButton>
   </MudItem>
   <MudItem xs="12" sm="6" md="4">
-    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" OnClick="@ToggleDarkMode">
+    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.DarkMode" OnClick="@ToggleDarkMode">
       Dark Mode
     </MudButton>
   </MudItem>
+
+  <MudItem xs="12">
+    <MudDivider />
+  </MudItem>  <MudItem xs="12" sm="6" md="4">
+    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.AddCircle" OnClick="@(() => NavigateToCreateTeam())">
+      Nouvelle partie
+    </MudButton>
+  </MudItem>
   <MudItem xs="12" sm="6" md="4">
-    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.History" OnClick="TogglePopup">
-     Stats
+    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.VideogameAsset" OnClick="@(() => NavigateToResumeGame())">
+      Partie en cours
+    </MudButton>
+  </MudItem>
+  <MudItem xs="12" sm="6" md="4">
+    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.QueryStats" OnClick="TogglePopup">
+      Stats
     </MudButton>
   </MudItem>
 </MudGrid>
+
 
 
 
@@ -50,6 +64,20 @@
 </style>
 
 @code {
+  [Inject] NavigationManager Navigation { get; set; }
+
+  private void NavigateToCreateTeam()
+  {
+    Navigation.NavigateTo("create-team");
+  }
+
+  
+  private void NavigateToResumeGame()
+  {
+    Navigation.NavigateTo("game");
+  }
+
+
   private bool showPopup = false;
 
   private void TogglePopup()

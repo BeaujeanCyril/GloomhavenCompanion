@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @using MudBlazor
 @inject AppState AppState
-
+@inject NavigationManager Navigation
 
 <MudThemeProvider IsDarkMode="@_isDarkMode" Theme="MyCustomTheme" DefaultScrollbar="true" />
 <MudPopoverProvider />
@@ -9,16 +9,16 @@
 <MudSnackbarProvider />
 <MudLayout>
 	<MudAppBar Color=Color.Dark Dense="true" Elevation="1">
-		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="DrawerToggle" />
+		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="NavigateToHome" />
 		<MudImage Alt="GloomhavenLogo" Src="img\general\gh.png" Width="200" Height="100" />  Companion
 		<MudSpacer />
 		<MudSwitch @bind-Value="_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool"/>
 
 		<MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" OnClick=@OnShowPopup />
 	</MudAppBar>
-	<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="5" MiniWidth="200" Width="12%" Height="25%" Overlay="false">
+@* 	<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="5" MiniWidth="200" Width="12%" Height="25%" Overlay="false">
         <NavMenu />
-	</MudDrawer>
+	</MudDrawer> *@
 
 	<MudMainContent>
 		<MudContainer MaxWidth="MaxWidth.ExtraLarge" Style="margin-top: 20px;">
@@ -48,6 +48,11 @@
 	private bool _isDarkMode = false; // True pour le mode sombre, false pour le mode clair.
 	private bool showPopup = false;
 
+
+	private void NavigateToHome()
+	{
+		Navigation.NavigateTo("/");
+	}
 	void OnShowPopup()
 	{
 		showPopup = !showPopup;
