@@ -1,57 +1,101 @@
 ﻿@using GloomhavenCompanion.ViewModels
 @inject AppState AppState
 
-<MudPaper class="p-2 mb-2">
-  <h3>@Player.Name (Max HP: @Player.HealthPointsMax)</h3>
+<div style="position: relative; display: inline-block;  transform-origin: top left;">
+	<!-- Boutons HP + et HP - sur une ligne -->
+	<div style="position: absolute; top: 20%; left: 6%;  color: whitesmoke; display: flex; flex-direction:column; gap: 30px;">
+		<MudButton OnClick="IncreaseHP" Size="Size.Large" Color="Color.Dark" Style="width: 40px; height: 30px; font-size: 50px;">+</MudButton>
+		<MudButton OnClick="DecreaseHP" Size="Size.Large" Color="Color.Dark" Style="width: 40px; height: 30px; font-size: 50px;">-</MudButton>
+	</div>
+	<div style="position: absolute; top: 20%; left: 6%; font-size: 20px; color: whitesmoke; font-weight: bold; width: 300px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0;">
+		@Player.Name (Max HP: @Player.HealthPointsMax)
+	</div>
 
-  <MudNumericField T="int"
-                   Value="@Player.HealthPoints"
-                   ValueChanged="OnHPChanged"
-                   Label="HP"
-                   Immediate="true"
-                   Min="0" />
+	<img src="img\General\Dials.png" alt="Description de l'image" />
 
-  <MudNumericField T="int"
-                   Value="@Player.Xp"
-                   ValueChanged="OnXPChanged"
-                   Label="XP"
-                   Immediate="true"
-                   Min="0" />
+	<div style="position: absolute; top: 40%; left: 34%; font-size: 20px; background-color: black; color: whitesmoke; font-weight: bold; width: 40px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0;">
+		@Player.HealthPoints
+	</div>
 
-  <MudNumericField T="int"
-                   Value="@Player.Coins"
-                   ValueChanged="OnGoldChanged"
-                   Label="PO"
-                   Immediate="true"
-                   Min="0" />
-</MudPaper>
+	<div style="position: absolute; top: 40%; left: 54%; font-size: 20px; background-color: black; color: whitesmoke; font-weight: bold; width: 40px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0;">
+		@Player.Xp
+	</div>
+
+	<div style="position: absolute; top: 65%; left: 5%; font-size: 20px; color: whitesmoke; font-weight: bold; width: 300px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0;">
+	Max HP: @Player.HealthPointsMax
+	</div>
+
+		<!-- Boutons XP + et XP - sur une ligne -->
+	<div style="position: absolute; top: 20%; left: 76%;  color: whitesmoke; display: flex; flex-direction:column; gap: 30px;">
+		<MudButton OnClick="IncreaseXP" Size="Size.Large" Color="Color.Secondary" Style="width: 40px; height: 30px; font-size: 50px;">+</MudButton>
+		<MudButton OnClick="DecreaseXP" Size="Size.Large" Color="Color.Secondary" Style="width: 40px; height: 30px; font-size: 50px;">-</MudButton>
+	</div>
+</div>
 
 
 
 @code {
-  [Parameter] public PlayerViewModel Player { get; set; }
+	[Parameter] public PlayerViewModel Player { get; set; }
 
-  [Parameter] public EventCallback OnPlayerUpdated { get; set; }
+	[Parameter] public EventCallback OnPlayerUpdated { get; set; }
 
-  private void OnXPChanged(int newValue)
-  {
-    Player.Xp = newValue;
-    AppState.UpdatePlayer(Player);
-    OnPlayerUpdated.InvokeAsync(); // Notifier TeamsList
-  }
+	private void OnXPChanged(int newValue)
+	{
+		Player.Xp = newValue;
+		AppState.UpdatePlayer(Player);
+		OnPlayerUpdated.InvokeAsync(); // Notifier TeamsList
+	}
 
-  private void OnGoldChanged(int newValue)
-  {
-    Player.Coins = newValue;
-    AppState.UpdatePlayer(Player);
-    OnPlayerUpdated.InvokeAsync();
-  }
+	private void OnGoldChanged(int newValue)
+	{
+		Player.Coins = newValue;
+		AppState.UpdatePlayer(Player);
+		OnPlayerUpdated.InvokeAsync();
+	}
 
-  private void OnHPChanged(int newValue)
-  {
-    Player.HealthPoints = newValue;
-    AppState.UpdatePlayer(Player);
-    OnPlayerUpdated.InvokeAsync();
-  }
+	private void OnHPChanged(int newValue)
+	{
+		Player.HealthPoints = newValue;
+		AppState.UpdatePlayer(Player);
+		OnPlayerUpdated.InvokeAsync();
+	}
 
+	// Méthodes pour augmenter et diminuer les HP
+	private void IncreaseHP()
+	{
+		if (Player.HealthPoints < Player.HealthPointsMax)
+		{
+			Player.HealthPoints++;
+			AppState.UpdatePlayer(Player);
+			OnPlayerUpdated.InvokeAsync();
+		}
+	}
+
+	private void DecreaseHP()
+	{
+		if (Player.HealthPoints > 0)
+		{
+			Player.HealthPoints--;
+			AppState.UpdatePlayer(Player);
+			OnPlayerUpdated.InvokeAsync();
+		}
+	}
+
+	// Méthodes pour augmenter et diminuer les XP
+	private void IncreaseXP()
+	{
+		Player.Xp++;
+		AppState.UpdatePlayer(Player);
+		OnPlayerUpdated.InvokeAsync();
+	}
+
+	private void DecreaseXP()
+	{
+		if (Player.Xp > 0)
+		{
+			Player.Xp--;
+			AppState.UpdatePlayer(Player);
+			OnPlayerUpdated.InvokeAsync();
+		}
+	}
 }

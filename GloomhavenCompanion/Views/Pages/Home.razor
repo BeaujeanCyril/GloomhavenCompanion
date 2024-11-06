@@ -4,11 +4,10 @@
 @using GloomhavenCompanion.ViewModels
 @inject AppState AppState
 
-
 <MudThemeProvider IsDarkMode="@_isDarkMode" DefaultScrollbar="true" />
 <PageTitle>Home</PageTitle>
 
-<MudGrid>
+<MudGrid Justify="Justify.Center">
   <MudItem xs="12" sm="6" md="4">
     <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.PictureAsPdf" OnClick="OpenPdf">
       Règles
@@ -43,10 +42,6 @@
   </MudItem>
 </MudGrid>
 
-
-
-
-
 <style>
   .my-button {
     width: 100%;
@@ -72,7 +67,6 @@
   {
     Navigation.NavigateTo("game");
   }
-
 
   private bool _isDarkMode = false;
 
