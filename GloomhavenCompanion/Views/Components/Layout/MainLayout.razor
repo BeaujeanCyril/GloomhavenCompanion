@@ -2,6 +2,7 @@
 @using MudBlazor
 @inject AppState AppState
 @inject NavigationManager Navigation
+@inject AppStateService AppStateService
 
 <MudThemeProvider IsDarkMode="@_isDarkMode" Theme="MyCustomTheme" DefaultScrollbar="true" />
 <MudPopoverProvider />
@@ -47,6 +48,7 @@
 	private bool _drawerOpen = false;
 	private bool _isDarkMode = false; // True pour le mode sombre, false pour le mode clair.
 	private bool showPopup = false;
+
 
 
 	private void NavigateToHome()

@@ -59,7 +59,7 @@
   private TeamModelValidator teamModel = new TeamModelValidator();
   private PlayerModelValidator playerModel = new PlayerModelValidator();
 
-  private void HandleFormSubmit()
+  private async void HandleFormSubmit()
   {
     // Créer une liste de joueurs en excluant les champs vides
     var players = new List<PlayerViewModel>();
@@ -87,10 +87,10 @@
         Players = players
       };
 
-    AppState.AddTeam(newTeam);
+    await AppState.AddTeam(newTeam);
 
     Snackbar.Add($"Équipe ajoutée : {newTeam.CompanyName} avec {newTeam.Players.Count} joueurs", Severity.Success);
-    Navigation.NavigateTo("/game");
+    Navigation.NavigateTo("/teamslist");
   }
 
   public class TeamModelValidator

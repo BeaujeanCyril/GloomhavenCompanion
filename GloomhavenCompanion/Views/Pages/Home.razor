@@ -37,6 +37,11 @@
       Stats
     </MudButton>
   </MudItem>
+  <MudItem xs="12" sm="6" md="4">
+    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.QueryStats" OnClick="@(()=>NavigateToTeamsList())">
+      Liste des compagnies
+    </MudButton>
+  </MudItem>
 </MudGrid>
 
 
@@ -71,7 +76,11 @@
     Navigation.NavigateTo("create-team");
   }
 
-  
+  private void NavigateToTeamsList()
+  {
+    Navigation.NavigateTo("teamslist");
+  }
+
   private void NavigateToResumeGame()
   {
     Navigation.NavigateTo("game");

@@ -1,3 +1,5 @@
+using Blazored.LocalStorage;
+using Blazored.LocalStorage.StorageOptions;
 using GloomhavenCompanion;
 using GloomhavenCompanion.Services;
 using GloomhavenCompanion.Views;
@@ -11,8 +13,15 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudServices();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<CookieService>();
+builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddSingleton<AppState>();
+builder.Services.AddScoped<IAppStateStorage, LocalStorageAppStateStorage>(); // Pour utiliser localStorage
+
+builder.Services.AddScoped<AppStateService>();
+builder.Services.AddScoped<AppStateInitializer>(); // Ajouter l'initialisateur
+builder.Services.AddScoped<AppState>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

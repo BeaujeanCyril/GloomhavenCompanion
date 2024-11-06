@@ -1,0 +1,62 @@
+﻿@page "/teamslist"
+
+@inject AppState AppState
+@inject NavigationManager NavigationManager
+@using GloomhavenCompanion.ViewModels
+<PageTitle>Teams List</PageTitle>
+
+@if (AppState.Teams == null || AppState.Teams.Count == 0)
+{
+	<p>Aucune compagnie existante</p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Nom de la compagnie</th>
+				<th>Aventuriers</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var team in AppState.Teams)
+			{
+				<tr>
+					<td>@team.CompanyName</td>
+					<td>
+						@if (team.Players != null && team.Players.Any())
+						{
+							<ul>
+								@foreach (var player in team.Players)
+								{
+									<li>@player.Name</li>
+								}
+							</ul>
+						}
+						else
+						{
+							<p>No players</p>
+						}
+					</td>
+					<td>
+						<button class="btn btn-primary" @onclick="() => SetCurrentTeamAndNavigate(team)">Jouer</button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+@code {
+	protected override async Task OnInitializedAsync()
+	{
+		await AppState.LoadTeamsAsync();
+	}
+
+	private void SetCurrentTeamAndNavigate(TeamViewModel team)
+	{
+		AppState.CurrentTeam = team;
+		NavigationManager.NavigateTo("/game");
+	}
+}
