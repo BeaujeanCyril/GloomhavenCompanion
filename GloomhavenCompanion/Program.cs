@@ -1,7 +1,5 @@
 using Blazored.LocalStorage;
-using Blazored.LocalStorage.StorageOptions;
 using GloomhavenCompanion;
-using GloomhavenCompanion.Services;
 using GloomhavenCompanion.Views;
 using MudBlazor.Services;
 
@@ -12,7 +10,6 @@ builder.Services.AddRazorComponents()
 		.AddInteractiveServerComponents();
 builder.Services.AddMudServices();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddScoped<CookieService>();
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<IAppStateStorage, LocalStorageAppStateStorage>(); // Pour utiliser localStorage
