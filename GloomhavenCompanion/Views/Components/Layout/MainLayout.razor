@@ -3,8 +3,8 @@
 @inject AppState AppState
 @inject NavigationManager Navigation
 @inject AppStateService AppStateService
-
 <MudThemeProvider IsDarkMode="@_isDarkMode" Theme="MyCustomTheme" DefaultScrollbar="true" />
+
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -22,9 +22,10 @@
 	</MudDrawer> *@
 
 	<MudMainContent>
-		<MudContainer MaxWidth="MaxWidth.ExtraLarge" Style="margin-top: 20px;">
+		<MudContainer Style="margin-top: 10px; padding: 10px;">
 			@Body
 		</MudContainer>
+
 	</MudMainContent>
 </MudLayout>
 
@@ -45,25 +46,18 @@
 }
     
 @code {
+
+
 	private bool _drawerOpen = false;
 	private bool _isDarkMode = false; // True pour le mode sombre, false pour le mode clair.
 	private bool showPopup = false;
 
 
-
-	private void NavigateToHome()
+	private void ToggleDarkMode()
 	{
-		Navigation.NavigateTo("/");
+		_isDarkMode = !_isDarkMode;
+		InvokeAsync(StateHasChanged);
 	}
-	void OnShowPopup()
-	{
-		showPopup = !showPopup;
-	}
-	void DrawerToggle()
-	{
-		_drawerOpen = !_drawerOpen;
-	}
-
 
 	private readonly MudTheme MyCustomTheme = new MudTheme()
 		{
@@ -85,4 +79,20 @@
 				DrawerWidthRight = "300px"
 			}
 		};
+
+	private void NavigateToHome()
+	{
+		Navigation.NavigateTo("/");
+	}
+	void OnShowPopup()
+	{
+		showPopup = !showPopup;
+	}
+	void DrawerToggle()
+	{
+		_drawerOpen = !_drawerOpen;
+	}
+
+
+
 }

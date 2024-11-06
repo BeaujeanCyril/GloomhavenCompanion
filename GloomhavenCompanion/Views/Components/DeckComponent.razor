@@ -3,45 +3,50 @@
 @inject AppState AppState
 @inject ISnackbar Snackbar
 
-	<MudGrid Class="text-align: center">
-		<MudPaper Class="p-2 m-2" Style="height: 270px; text-align: center;" @onmouseover="() => showPopup = true" @onmouseout="() => showPopup = false">
-			<h2>@SelectedDeck.Name</h2>
-			@if (SelectedDeck?.CardsList != null && SelectedDeck.CardsList.Any())
+<MudGrid Class="text-align: center">
+	<MudPaper Class="p-2 m-2" Style="height: 270px; text-align: center;" @onmouseover="() => showPopup = true" @onmouseout="() => showPopup = false">
+		<h2>@SelectedDeck.Name</h2>
+		@if (SelectedDeck?.CardsList != null && SelectedDeck.CardsList.Any())
+		{
+			<CardMolecule Card="@(showingBackCard ? new CardViewModel { ImagePath = BackCardImagePath, Value = "" } : currentCard)" />
+			<MudButton Color="Color.Primary"
+								 @onclick="ShowNextCardAsync"
+								 Style="border: 2px solid groove; background-color: gray; color: white; font-size: 16px; padding: 10px 10px 10px 20px; margin-top: 2px; border-radius: 8px; transition: background-color 0.3s ease;">
+				Suivant
+			</MudButton>
+			@if (DeckName != "MonsterDeck")
 			{
-				<CardMolecule Card="@(showingBackCard ? new CardViewModel { ImagePath = BackCardImagePath, Value = "" } : currentCard)" />
-				<MudButton Color="Color.Secondary" @onclick="ShowNextCardAsync">Carte suivante</MudButton>
-				@if (DeckName != "MonsterDeck")
-				{
-					<MudButton Color="Color.Secondary" @onclick="AddBenedictionCard">
-						<img src="img/DeckModifier/Monsters/BenedictionCard.png" alt="Ajout bénédiction" style="width: 50px; height: 30px;" />
-					</MudButton>
-				}
-				<MudButton Color="Color.Secondary" @onclick="AddAnnulCard">
-					<img src="img/DeckModifier/Monsters/gh-am-mm-01.png" alt="Ajout annuler" style="width: 50px; height: 30px;" />
+				<MudButton Color="Color.Secondary" @onclick="AddBenedictionCard">
+					<img src="img/DeckModifier/Monsters/BenedictionCard.png" alt="Ajout bénédiction" style="width: 50px; height: 30px;" />
 				</MudButton>
 			}
-			else
-			{
-				<p>Aucune carte disponible dans le deck.</p>
-			}
+				<MudButton Color="Color.Secondary" @onclick="AddAnnulCard">
+				<img src="img/DeckModifier/Monsters/gh-am-mm-01.png" alt="Ajout annuler" style="width: 60px; height: 40px;" />
+			</MudButton>
+		}
+		else
+		{
+			<p>Aucune carte disponible dans le deck.</p>
+		}
 
-			@if (SelectedDeck.CardsHistoric.Count != 0)
-			{
-				<MudPopover Open="@showPopup">
-					<MudPaper Class="p-">
-						<MudGrid>
-							@foreach (var card in SelectedDeck.CardsHistoric.TakeLast(5))
-							{
-								<MudItem xs="15">
-									<img src="@card.ImagePath" alt="Card image" style="width: 50px; height: 30px;" />
-								</MudItem>
-							}
-						</MudGrid>
-					</MudPaper>
-				</MudPopover>
-			}
-		</MudPaper>
-	</MudGrid>
+		@if (SelectedDeck.CardsHistoric.Count != 0)
+		{
+			<MudPopover Open="@showPopup">
+				<MudPaper Class="p-">
+					<MudGrid>
+						@foreach (var card in SelectedDeck.CardsHistoric.TakeLast(5))
+						{
+							<MudItem xs="15">
+								<img src="@card.ImagePath" alt="Card image" style="width: 50px; height: 30px;" />
+							</MudItem>
+						}
+					</MudGrid>
+				</MudPaper>
+			</MudPopover>
+		}
+	</MudPaper>
+</MudGrid>
+
 
 @code {
 	[Parameter]

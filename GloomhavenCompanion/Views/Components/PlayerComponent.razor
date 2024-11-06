@@ -9,8 +9,8 @@
 	</div>
 
 	<!-- Nom du joueur, avec pointer-events: none pour que ce div ne bloque pas les clics -->
-	<div style="position: absolute; top: 20%; left: 3%; font-size: 20px; color: whitesmoke; font-weight: bold; width: 300px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0; pointer-events: none;">
-		@Player.Name (Max HP: @Player.HealthPointsMax)
+	<div style="position: absolute; top: 20%; left: 4%; font-size: 16px; color: whitesmoke; font-weight: bold; width: 300px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0; pointer-events: none;">
+		@Player.Name (@Player.HealthPointsMax HP Max)
 	</div>
 
 	<img src="img\General\Dials.png" alt="Description de l'image" />
@@ -31,8 +31,9 @@
 	<!-- Boutons Coin + et - sur une ligne -->
 
 	<div style="position: absolute; top: 65%; left: 28%; color: whitesmoke; display: flex; flex-direction:row; gap: 30px; z-index: 2;">
-		<MudButton OnClick="IncreaseCoin" Size="Size.Large" Color="Color.Dark" Style="width: 40px; height: 30px; font-size: 50px;">+</MudButton>
 		<MudButton OnClick="DecreaseCoin" Size="Size.Large" Color="Color.Dark" Style="width: 40px; height: 30px; font-size: 50px;">-</MudButton>
+		<MudButton OnClick="IncreaseCoin" Size="Size.Large" Color="Color.Dark" Style="width: 40px; height: 30px; font-size: 50px;">+</MudButton>
+
 	</div>
 
 	<div style="position: absolute; top: 67%; left: 47%; font-size: 20px; background-color: black; color: whitesmoke; font-weight: bold; width: 30px; height: 25px; text-align: center; line-height: 23px; border-radius: 8px; padding: 0;">
