@@ -14,6 +14,12 @@ public class AppState
 	public event Action OnRoundChanged;
 	public GameViewModel CurrentGame { get; set; }
 	private readonly IAppStateStorage _appStateStorage;
+
+	public event Action OnChange;
+
+	private void NotifyStateChanged() => OnChange?.Invoke();
+
+
 	public AppState(IAppStateStorage appStateStorage)
 	{
 		_appStateStorage = appStateStorage;
@@ -110,6 +116,9 @@ public class AppState
 				existingPlayer.Xp = player.Xp;
 				existingPlayer.Coins = player.Coins;
 				existingPlayer.HealthPoints = player.HealthPoints;
+				_appStateStorage.SaveTeamsAsync(Teams);
+
+        NotifyStateChanged(); // Notifier les abonnés
 			}
 		}
 	}

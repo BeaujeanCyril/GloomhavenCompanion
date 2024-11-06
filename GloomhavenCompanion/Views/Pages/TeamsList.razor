@@ -3,7 +3,8 @@
 @inject AppState AppState
 @inject NavigationManager NavigationManager
 @using GloomhavenCompanion.ViewModels
-<PageTitle>Teams List</PageTitle>
+
+<PageTitle>Liste des équipes</PageTitle>
 
 @if (AppState.Teams == null || AppState.Teams.Count == 0)
 {
@@ -27,16 +28,31 @@ else
 					<td>
 						@if (team.Players != null && team.Players.Any())
 						{
-							<ul>
-								@foreach (var player in team.Players)
-								{
-									<li>@player.Name</li>
-								}
-							</ul>
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Nom</th>
+										<th>XP</th>
+										<th>PO</th>
+										<th>HP</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var player in team.Players)
+									{
+										<tr>
+											<td>@player.Name</td>
+											<td>@player.Xp</td>
+											<td>@player.Coins</td>
+											<td>@player.HealthPoints</td>
+										</tr>
+									}
+								</tbody>
+							</table>
 						}
 						else
 						{
-							<p>No players</p>
+							<p>Pas de joueurs</p>
 						}
 					</td>
 					<td>
@@ -49,9 +65,26 @@ else
 }
 
 @code {
+
+	protected override void OnInitialized()
+	{
+		AppState.OnChange += StateHasChanged;
+	}
+
+	public void Dispose()
+	{
+		AppState.OnChange -= StateHasChanged; // Désabonner pour éviter les fuites de mémoire
+	}
+
+
 	protected override async Task OnInitializedAsync()
 	{
 		await AppState.LoadTeamsAsync();
+	}
+
+	private void RefreshTeamsList()
+	{
+		StateHasChanged();
 	}
 
 	private void SetCurrentTeamAndNavigate(TeamViewModel team)

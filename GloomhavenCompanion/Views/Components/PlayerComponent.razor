@@ -3,39 +3,55 @@
 
 <MudPaper class="p-2 mb-2">
   <h3>@Player.Name</h3>
-  <MudNumericField @bind-Value="Player.HealthPoints"
+
+  <MudNumericField T="int"
+                   Value="@Player.HealthPoints"
+                   ValueChanged="OnHPChanged"
                    Label="HP"
                    Immediate="true"
-                   OnValueChanged="OnHPChanged" />
-  <MudNumericField @bind-Value="Player.Xp"
+                   Min="0" />
+
+  <MudNumericField T="int"
+                   Value="@Player.Xp"
+                   ValueChanged="OnXPChanged"
                    Label="XP"
                    Immediate="true"
-                   OnValueChanged="OnXPChanged" />
-  <MudNumericField @bind-Value="Player.Coins"
+                   Min="0" />
+
+  <MudNumericField T="int"
+                   Value="@Player.Coins"
+                   ValueChanged="OnGoldChanged"
                    Label="PO"
                    Immediate="true"
-                   OnValueChanged="OnGoldChanged" />
+                   Min="0" />
 </MudPaper>
+
 
 
 @code {
   [Parameter] public PlayerViewModel Player { get; set; }
 
+  [Parameter] public EventCallback OnPlayerUpdated { get; set; }
+
   private void OnXPChanged(int newValue)
   {
     Player.Xp = newValue;
     AppState.UpdatePlayer(Player);
+    OnPlayerUpdated.InvokeAsync(); // Notifier TeamsList
   }
 
   private void OnGoldChanged(int newValue)
   {
     Player.Coins = newValue;
     AppState.UpdatePlayer(Player);
+    OnPlayerUpdated.InvokeAsync();
   }
 
   private void OnHPChanged(int newValue)
   {
     Player.HealthPoints = newValue;
     AppState.UpdatePlayer(Player);
+    OnPlayerUpdated.InvokeAsync();
   }
+
 }
