@@ -2,7 +2,13 @@
 public partial class Game
 {
 
-    private void NextRound()
+	private bool showPopup = false;
+
+	private void TogglePopup()
+	{
+		showPopup = !showPopup;
+	}
+	private void NextRound()
     {
         AppState.NextRound();
         ReduceAllElements();

@@ -2,7 +2,7 @@
 @inject AppState AppState
 
 <MudPaper class="p-2 mb-2">
-  <h3>@Player.Name</h3>
+  <h3>@Player.Name (Max HP: @Player.HealthPointsMax)</h3>
 
   <MudNumericField T="int"
                    Value="@Player.HealthPoints"

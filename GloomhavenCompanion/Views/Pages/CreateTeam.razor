@@ -17,43 +17,61 @@
                   Variant="Variant.Outlined" />
     <ValidationMessage For="@(() => teamModel.CompanyName)" />
   </div>
-
-
+  <MudGrid>
   <!-- Noms des joueurs -->
+  <MudItem>
   <div class="mb-3">
     <MudTextField @bind-Value="playerModel.PlayerNames[0]"
                   Label="Nom du joueur 1"
-                  Variant="Variant.Outlined"
-             />
+                  Variant="Variant.Outlined" />
+    <MudNumericField @bind-Value="playerModel.HealthPointsMax[0]"
+                     Label="HP Max (Joueur 1)"
+                     Variant="Variant.Outlined"
+                     Min="1" />
     <ValidationMessage For="@(() => playerModel.PlayerNames[0])" />
   </div>
+    </MudItem>
 
+      <MudItem>
   <div class="mb-3">
     <MudTextField @bind-Value="playerModel.PlayerNames[1]"
                   Label="Nom du joueur 2"
-                  Variant="Variant.Outlined"
-      />
+                  Variant="Variant.Outlined" />
+    <MudNumericField @bind-Value="playerModel.HealthPointsMax[1]"
+                     Label="HP Max (Joueur 2)"
+                     Variant="Variant.Outlined"
+                     Min="1" />
     <ValidationMessage For="@(() => playerModel.PlayerNames[1])" />
   </div>
-
+    </MudItem>
+    <MudItem>
   <div class="mb-3">
     <MudTextField @bind-Value="playerModel.PlayerNames[2]"
                   Label="Nom du joueur 3"
-                  Variant="Variant.Outlined"
-                />
+                  Variant="Variant.Outlined" />
+    <MudNumericField @bind-Value="playerModel.HealthPointsMax[2]"
+                     Label="HP Max (Joueur 3)"
+                     Variant="Variant.Outlined"
+                     Min="1" />
     <ValidationMessage For="@(() => playerModel.PlayerNames[2])" />
   </div>
-
+    </MudItem>
+    <MudItem>
   <div class="mb-3">
     <MudTextField @bind-Value="playerModel.PlayerNames[3]"
                   Label="Nom du joueur 4"
-                  Variant="Variant.Outlined"
-                  />
+                  Variant="Variant.Outlined" />
+    <MudNumericField @bind-Value="playerModel.HealthPointsMax[3]"
+                     Label="HP Max (Joueur 4)"
+                     Variant="Variant.Outlined"
+                     Min="1" />
     <ValidationMessage For="@(() => playerModel.PlayerNames[3])" />
   </div>
-
+    </MudItem>
+  </MudGrid>
   <button type="submit" class="btn btn-primary">Créer</button>
 </EditForm>
+
 
 @code {
   private TeamModelValidator teamModel = new TeamModelValidator();
@@ -64,13 +82,17 @@
     // Créer une liste de joueurs en excluant les champs vides
     var players = new List<PlayerViewModel>();
 
-    foreach (var playerName in playerModel.PlayerNames.Where(name => !string.IsNullOrWhiteSpace(name)))
+    for (int i = 0; i < playerModel.PlayerNames.Count; i++)
     {
-      players.Add(new PlayerViewModel
-        {
-          Name = playerName,
-          Deck = new DeckViewModel { Name = $"Deck de {playerName}" }
-        });
+      if (!string.IsNullOrWhiteSpace(playerModel.PlayerNames[i]))
+      {
+        players.Add(new PlayerViewModel
+          {
+            Name = playerModel.PlayerNames[i],
+            HealthPointsMax = playerModel.HealthPointsMax[i], // Ajout des HP Max
+            Deck = new DeckViewModel { Name = $"Deck de {playerModel.PlayerNames[i]}" }
+          });
+      }
     }
 
     // Si aucun joueur n'est renseigné, afficher un message d'erreur
@@ -105,5 +127,6 @@
   public class PlayerModelValidator
   {
     public List<string> PlayerNames { get; set; } = new List<string> { "", "", "", "" }; // 4 champs pour 4 joueurs
+    public List<int> HealthPointsMax { get; set; } = new List<int> { 0, 0, 0, 0 }; // Ajout des HP Max pour chaque joueur
   }
 }

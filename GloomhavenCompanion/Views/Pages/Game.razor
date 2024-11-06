@@ -18,11 +18,12 @@
 			</MudItem>
 		</MudGrid>
 	</MudItem>
+
 	<MudItem xs="12">
 		<MudGrid Justify="Justify.SpaceBetween">
 
 			<!-- Section pour le deck de monstres -->
-			<MudItem xs="12" md="6">
+			<MudItem xs="12" md="4">
 				<!-- Ajusté à md="8" -->
 				<MudPaper class="p-4 mb-4">
 					<MudGrid Justify="Justify.Center">
@@ -38,13 +39,13 @@
 
 			<!-- Section pour les joueurs -->
 			@if (AppState.CurrentTeam != null && AppState.CurrentTeam.Players.Count > 0) { 
-			<MudItem xs="12" md="4">
+			<MudItem xs="12" md="8">
 				<!-- Ajusté à md="4" -->
-				<MudPaper class="p-4 mb-4">
+				<MudPaper Class="p-4 mb-4">
 					<MudGrid Justify="Justify.SpaceBetween">
 						@foreach (var player in AppState.CurrentTeam.Players)
 						{
-							<MudItem xs="12" sm="6" md="4" lg="3" Class="d-flex justify-content-center">
+							<MudItem Class="d-flex justify-content-center">
 								<PlayerComponent Player=@player />
 							</MudItem>
 						}
@@ -54,4 +55,23 @@
 			}
 		</MudGrid>
 	</MudItem>
+	<MudItem xs="12" sm="6" md="4">
+		<MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.QueryStats" OnClick="TogglePopup">
+			Stats
+		</MudButton>
+	</MudItem>
 </MudGrid>
+
+<MudPopover Open="@showPopup">
+	<MudPaper Class="p-4">
+		<MudGrid>
+			@foreach (var round in AppState.CurrentGame.Rounds)
+			{
+				<MudItem xs="12">
+					Round @round.RoundNumber: @round.DateTime
+				</MudItem>
+			}
+		</MudGrid>
+	</MudPaper>
+</MudPopover>
+
