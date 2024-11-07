@@ -13,20 +13,20 @@ public class LocalStorageAppStateStorage : IAppStateStorage
 		_localStorageService = localStorageService;
 	}
 
-	public async Task SaveTeamsAsync(List<TeamViewModel> teams)
+	public async Task SaveCampaignsAsync(List<CampainViewModel> teams)
 	{
 		var serializedTeams = JsonSerializer.Serialize(teams);
 		await _localStorageService.SetItemAsync("Teams", serializedTeams);
 	}
 
-	public async Task<List<TeamViewModel>> LoadTeamsAsync()
+	public async Task<List<CampainViewModel>> LoadCampaignsAsync()
 	{
 		var savedTeamsJson = await _localStorageService.GetItemAsync<string>("Teams");
 		if (string.IsNullOrEmpty(savedTeamsJson))
 		{
-			return new List<TeamViewModel>(); // Retourne une liste vide si aucun état n'est trouvé
+			return new List<CampainViewModel>(); // Retourne une liste vide si aucun état n'est trouvé
 		}
 
-		return JsonSerializer.Deserialize<List<TeamViewModel>>(savedTeamsJson);
+		return JsonSerializer.Deserialize<List<CampainViewModel>>(savedTeamsJson);
 	}
 }

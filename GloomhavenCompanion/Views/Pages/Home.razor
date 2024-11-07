@@ -18,22 +18,30 @@
   <MudItem xs="12">
     <MudDivider />
   </MudItem>  <MudItem xs="12" sm="6" md="4">
-    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.AddCircle" OnClick="@(() => NavigateToCreateTeam())">
-      Nouvelle partie
+    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.AddCircle" OnClick="@(() => NavigateToCreateCampaign())">
+      Nouvelle campagne
     </MudButton>
   </MudItem>
-  @if (AppState.CurrentTeam != null)
+  @if (AppState.CurrentCampaign != null)
   {
     <MudItem xs="12" sm="6" md="4">
       <MudButton Class="my-button" Color="Color.Info" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.VideogameAsset" OnClick="@(() => NavigateToResumeGame())">
-        Partie en cours
+        Scénario en cours
+      </MudButton>
+    </MudItem>
+
+    <MudItem xs="12">
+      <MudDivider />
+    </MudItem>  <MudItem xs="12" sm="6" md="4">
+      <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.AddCircle" OnClick="@(() => NavigateToScenariosList())">
+        Liste des scénarios
       </MudButton>
     </MudItem>
   }
 
   <MudItem xs="12" sm="6" md="4">
-    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.VideogameAsset" OnClick="@(()=>NavigateToTeamsList())">
-     Charger une partie
+    <MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.VideogameAsset" OnClick="@(()=>NavigateToCampaignsList())">
+     Charger une campagne
     </MudButton>
   </MudItem>
 </MudGrid>
@@ -49,19 +57,24 @@
 @code {
   [Inject] NavigationManager Navigation { get; set; }
 
-  private void NavigateToCreateTeam()
+  private void NavigateToCreateCampaign()
   {
-    Navigation.NavigateTo("create-team");
+    Navigation.NavigateTo("create-campaign");
   }
 
-  private void NavigateToTeamsList()
+  private void NavigateToScenariosList()
   {
-    Navigation.NavigateTo("teamslist");
+    Navigation.NavigateTo("scenarios");
+  }
+  private void NavigateToCampaignsList()
+  {
+    Navigation.NavigateTo("campaingslist");
   }
 
   private void NavigateToResumeGame()
   {
-    Navigation.NavigateTo("game");
+    
+    Navigation.NavigateTo("game/" + AppState.CurrentScenario.Id);
   }
 
   private void OpenPdf()

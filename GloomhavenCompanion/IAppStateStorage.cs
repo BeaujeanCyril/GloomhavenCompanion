@@ -4,8 +4,8 @@ namespace GloomhavenCompanion
 {
 	public interface IAppStateStorage
 	{
-		Task SaveTeamsAsync(List<TeamViewModel> teams);
-		Task<List<TeamViewModel>> LoadTeamsAsync();
+		Task SaveCampaignsAsync(List<CampainViewModel> campaigns);
+		Task<List<CampainViewModel>> LoadCampaignsAsync();
 	}
 
 }

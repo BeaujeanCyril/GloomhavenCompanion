@@ -1,6 +1,6 @@
 ﻿namespace GloomhavenCompanion.Data.Model
 {
-  public class Team
+  public class Campaign
   {
     public int Id { get; set; }
     public string CompanyName { get; set; }

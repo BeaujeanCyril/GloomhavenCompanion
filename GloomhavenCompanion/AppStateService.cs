@@ -13,14 +13,14 @@ public class AppStateService
 	}
 
 	// Sauvegarder les équipes dans le stockage
-	public async Task SaveTeamsAsync(List<TeamViewModel> teams)
+	public async Task SaveTeamsAsync(List<CampainViewModel> teams)
 	{
-		await _appStateStorage.SaveTeamsAsync(teams);
+		await _appStateStorage.SaveCampaignsAsync(teams);
 	}
 
 	// Charger les équipes depuis le stockage
-	public async Task<List<TeamViewModel>> LoadTeamsAsync()
+	public async Task<List<CampainViewModel>> LoadTeamsAsync()
 	{
-		return await _appStateStorage.LoadTeamsAsync();
+		return await _appStateStorage.LoadCampaignsAsync();
 	}
 }

@@ -1,7 +1,9 @@
-﻿namespace GloomhavenCompanion.Views.Pages;
+﻿using Microsoft.AspNetCore.Components;
+
+namespace GloomhavenCompanion.Views.Pages;
 public partial class Game
 {
-
+	[Parameter] public int ScenarioId { get; set; }  // Le paramètre passé dans l'URL
 	private bool showPopup = false;
 
 	private void TogglePopup()

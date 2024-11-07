@@ -1,4 +1,4 @@
-﻿@page "/create-team"
+﻿@page "/create-campaign"
 @inject AppState AppState
 @using System.ComponentModel.DataAnnotations
 @using GloomhavenCompanion.ViewModels
@@ -7,15 +7,15 @@
 
 <h3>Créer une Équipe</h3>
 
-<EditForm Model="teamModel" OnValidSubmit="HandleFormSubmit">
+<EditForm Model="CampaignModel" OnValidSubmit="HandleFormSubmit">
   <DataAnnotationsValidator />
 
   <!-- Nom de la compagnie -->
   <div class="mb-3">
-    <MudTextField @bind-Value="teamModel.CompanyName"
+    <MudTextField @bind-Value="CampaignModel.CompanyName"
                   Label="Nom de la compagnie"
                   Variant="Variant.Outlined" />
-    <ValidationMessage For="@(() => teamModel.CompanyName)" />
+    <ValidationMessage For="@(() => CampaignModel.CompanyName)" />
   </div>
   <MudGrid>
   <!-- Noms des joueurs -->
@@ -74,7 +74,7 @@
 
 
 @code {
-  private TeamModelValidator teamModel = new TeamModelValidator();
+  private CampaignModelValidator CampaignModel = new CampaignModelValidator();
   private PlayerModelValidator playerModel = new PlayerModelValidator();
 
   private async void HandleFormSubmit()
@@ -103,19 +103,19 @@
     }
 
     // Créer l'équipe avec les joueurs valides
-    var newTeam = new TeamViewModel
+    var newCampaign = new CampainViewModel
       {
-        CompanyName = teamModel.CompanyName,
+        CompanyName = CampaignModel.CompanyName,
         Players = players
       };
 
-    await AppState.AddTeam(newTeam);
+    await AppState.AddCampaign(newCampaign);
 
-    Snackbar.Add($"Équipe ajoutée : {newTeam.CompanyName} avec {newTeam.Players.Count} joueurs", Severity.Success);
-    Navigation.NavigateTo("/teamslist");
+    Snackbar.Add($"Équipe ajoutée : {newCampaign.CompanyName} avec {newCampaign.Players.Count} joueurs", Severity.Success);
+    Navigation.NavigateTo("/campaingslist");
   }
 
-  public class TeamModelValidator
+  public class CampaignModelValidator
   {
     [Required(ErrorMessage = "Le nom de la compagnie est requis")]
     public string CompanyName { get; set; }

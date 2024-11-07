@@ -1,9 +1,8 @@
-﻿@page "/Game"
+﻿@page "/game/{scenarioId:int}"
 @rendermode InteractiveServer
 @inject AppState AppState
 
-<PageTitle>Partie en cours</PageTitle>
-
+<PageTitle>Jeu - Scénario @AppState.CurrentScenario?.Name</PageTitle>
 <MudGrid Style="background-color:gray">
 	<MudItem xs="12">
 		<MudGrid>
@@ -39,11 +38,11 @@
 			</MudItem>
 
 			<!-- Section pour les joueurs -->
-			@if (AppState.CurrentTeam != null && AppState.CurrentTeam.Players.Count > 0) {
+			@if (AppState.CurrentCampaign != null && AppState.CurrentCampaign.Players.Count > 0) {
 				<MudItem md="8">
 					<MudPaper Class="p-4 mb-4">
 						<MudGrid Justify="Justify.FlexStart">
-							@foreach (var player in AppState.CurrentTeam.Players)
+							@foreach (var player in AppState.CurrentCampaign.Players)
 							{
 								<MudItem xs="6" sm="6" md="6" lg="6" Style="display: flex; justify-content: center;">
 									<PlayerComponent Player=@player />

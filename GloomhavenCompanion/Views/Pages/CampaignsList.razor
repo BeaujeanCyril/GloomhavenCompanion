@@ -1,4 +1,4 @@
-﻿@page "/teamslist"
+﻿@page "/campaingslist"
 
 @inject AppState AppState
 @inject NavigationManager NavigationManager
@@ -6,9 +6,15 @@
 
 <PageTitle>Liste des équipes</PageTitle>
 
-@if (AppState.Teams == null || AppState.Teams.Count == 0)
+@if (AppState.Campaigns == null || AppState.Campaigns.Count == 0)
 {
-	<p>Aucune compagnie existante</p>
+	<MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center">
+		<MudItem>
+			<MudText Align="Align.Center">Aucun groupe de héros n'a encore répondu à l'appel…</MudText>
+			<MudButton Class="my-2" Variant="Variant.Filled" Size="Size.Large" OnClick="() => CreateNewCampaignNavigate()">Soyez les premiers!</MudButton>
+		</MudItem>
+	</MudGrid>
+
 }
 else
 {
@@ -21,7 +27,7 @@ else
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var team in AppState.Teams)
+			@foreach (var team in AppState.Campaigns)
 			{
 				<tr>
 					<td>@team.CompanyName</td>
@@ -81,7 +87,7 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		await AppState.LoadTeamsAsync();
+		await AppState.LoadCampaignsAsync();
 	}
 
 	private void RefreshTeamsList()
@@ -89,9 +95,14 @@ else
 		StateHasChanged();
 	}
 
-	private void SetCurrentTeamAndNavigate(TeamViewModel team)
+	private void SetCurrentTeamAndNavigate(CampainViewModel ChoseCampaign)
 	{
-		AppState.CurrentTeam = team;
-		NavigationManager.NavigateTo("/game");
+		AppState.CurrentCampaign = ChoseCampaign;
+		NavigationManager.NavigateTo("/scenarios");
+	}
+
+	private void CreateNewCampaignNavigate()
+	{
+		NavigationManager.NavigateTo("/create-campaign");
 	}
 }
