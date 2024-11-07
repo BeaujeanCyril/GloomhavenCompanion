@@ -49,14 +49,14 @@
 
 
 @code {
-	[Parameter] public PlayerViewModel Player { get; set; }
+	[Parameter] public PlayerGameViewModel Player { get; set; }
 
 	[Parameter] public EventCallback OnPlayerUpdated { get; set; }
 
 	private void OnGoldChanged(int newValue)
 	{
 		Player.Coins = newValue;
-		AppState.UpdatePlayer(Player);
+		AppState.UpdatePlayerDuringGame(Player);
 		OnPlayerUpdated.InvokeAsync();
 	}
 
@@ -66,7 +66,7 @@
 		if (Player.HealthPoints < Player.HealthPointsMax)
 		{
 			Player.HealthPoints++;
-			AppState.UpdatePlayer(Player);
+			AppState.UpdatePlayerDuringGame(Player);
 			OnPlayerUpdated.InvokeAsync();
 		}
 	}
@@ -76,7 +76,7 @@
 		if(Player.Coins > 0)
 		{
 			Player.Coins--;
-			AppState.UpdatePlayer(Player);
+			AppState.UpdatePlayerDuringGame(Player);
 			OnPlayerUpdated.InvokeAsync();
 		}
 	}
@@ -85,7 +85,7 @@
 	{
 
 			Player.Coins++;
-			AppState.UpdatePlayer(Player);
+		AppState.UpdatePlayerDuringGame(Player);
 			OnPlayerUpdated.InvokeAsync();
 		
 	}
@@ -95,7 +95,7 @@
 		if (Player.HealthPoints > 0)
 		{
 			Player.HealthPoints--;
-			AppState.UpdatePlayer(Player);
+			AppState.UpdatePlayerDuringGame(Player);
 			OnPlayerUpdated.InvokeAsync();
 		}
 	}
@@ -104,7 +104,7 @@
 	private void IncreaseXP()
 	{
 		Player.Xp++;
-		AppState.UpdatePlayer(Player);
+		AppState.UpdatePlayerDuringGame(Player);
 		OnPlayerUpdated.InvokeAsync();
 	}
 
@@ -113,7 +113,7 @@
 		if (Player.Xp > 0)
 		{
 			Player.Xp--;
-			AppState.UpdatePlayer(Player);
+			AppState.UpdatePlayerDuringGame(Player);
 			OnPlayerUpdated.InvokeAsync();
 		}
 	}

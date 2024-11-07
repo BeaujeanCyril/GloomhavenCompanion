@@ -3,212 +3,247 @@ namespace GloomhavenCompanion;
 
 public class AppState
 {
-  public List<ElementViewModel> Elements { get; private set; }
-  public List<CampainViewModel> Campaigns { get; private set; } = [];
-  public List<DeckViewModel> Decks { get; set; } = [];
-  public DeckViewModel MonsterDeck { get; set; }
-  public PlayerViewModel CurrentPlayer { get; set; }
-  public CampainViewModel CurrentCampaign { get; set; }
-  public ScenarioViewModel CurrentScenario { get; set; } 
+	public List<ElementViewModel> Elements { get; private set; }
+	public List<CampaignViewModel> Campaigns { get; private set; } = [];
 
-  public event Action OnRoundChanged;
-  public GameViewModel CurrentGame { get; set; }
-  private readonly IAppStateStorage _appStateStorage;
+	public List<DeckViewModel> Decks { get; set; } = [];
+	public DeckViewModel MonsterDeck { get; set; }
+	public PlayerViewModel CurrentPlayer { get; set; }
+	public CampaignViewModel CurrentCampaign { get; set; }
+	public ScenarioViewModel CurrentScenario { get; set; }
+	public event Action OnRoundChanged;
+	public GameViewModel CurrentGame { get; set; }
+	public List<CampaignSummary> CampainSummary { get; private set; }
 
-  public event Action OnChange;
+	private readonly IAppStateStorage _appStateStorage;
+	public event Action OnChange;
+	private void NotifyStateChanged() => OnChange?.Invoke();
 
-  private void NotifyStateChanged() => OnChange?.Invoke();
+	public AppState(IAppStateStorage appStateStorage)
+	{
+		_appStateStorage = appStateStorage;
+		// CurrentGame = new GameViewModel();
+		// CurrentGame.AddNewRound();
+		GenerateElements();
+		CreateDeck("MonsterDeck");
+		CurrentPlayer = new PlayerViewModel() { Name = "Monster", Deck = MonsterDeck };
+	}
 
 
-  public AppState(IAppStateStorage appStateStorage)
-  {
-    _appStateStorage = appStateStorage;
+	#region Element
+	private void GenerateElements()
+	{
+		Elements =
+				[
+						new() { Id = 1, Name = "Feu", ImagePath = "img/Elements/FirePicture.png" },
+						new() { Id = 2, Name = "Ténèbre", ImagePath = "img/Elements/DarknessPicture.png" },
+						new() { Id = 3, Name = "Terre", ImagePath = "img/Elements/EarthPicture.png" },
+						new() { Id = 4, Name = "Vent", ImagePath = "img/Elements/WindPicture.png" },
+						new() { Id = 5, Name = "Lumière", ImagePath = "img/Elements/LightPicture.png" },
+						new() { Id = 6, Name = "Givre", ImagePath = "img/Elements/FrostPicture.png" }
+				];
+	}
+	#endregion Element
 
-    CurrentGame = new GameViewModel();
-    CurrentGame.AddNewRound();
+	#region Round
 
-    GenerateElements();
-    CreateDeck("MonsterDeck");
-    CurrentPlayer = new PlayerViewModel() { Name = "Monster", Deck = MonsterDeck };
+	public void NextRound()
+	{
+		CurrentGame.AddNewRound();
+		OnRoundChanged?.Invoke();
+	}
+	#endregion Round
 
-    /*Teams.Add(new TeamViewModel
+	#region Campaign
+	public async Task AddCampaign(CampaignViewModel NewCampaign)
+	{
+		NewCampaign.Scenarios = GenerateScenarios();
+		Campaigns.Add(NewCampaign);
+
+		CurrentCampaign = NewCampaign;
+		await _appStateStorage.SaveCampaignAsync(NewCampaign);
+	}
+
+	public async Task LoadCampaignSummariesAsync()
+	{
+		CampainSummary = await _appStateStorage.LoadAllCampaignNamesAsync();
+				//Campaigns = await _appStateStorage.LoadCampaignsAsync();
+		//CurrentCampaign = Campaigns[0];
+	}
+
+	public async Task LoadCampaignByCampaignSummaryAsync(CampaignSummary campaign)
+	{
+		CurrentCampaign = await _appStateStorage.LoadCampaignByCampaignSummary(campaign.CompanyName);
+		//Campaigns = await _appStateStorage.LoadCampaignsAsync();
+		//CurrentCampaign = Campaigns[0];
+	}
+
+
+
+	#endregion
+
+	#region Player
+	public void AddPlayer(PlayerViewModel player)
+	{
+		CurrentCampaign.AddPlayer(player);
+	}
+	public void RemovePlayer(PlayerViewModel player)
+	{
+		CurrentCampaign.RemovePlayer(player);
+	}
+
+	public void UpdatePlayerAfterGame(PlayerViewModel player)
+	{
+		if (CurrentCampaign != null)
 		{
-			CompanyName = "LA compagnie",
-			Id = 1,
-      Players =
-        [
-            new PlayerViewModel { Name = "Thomas"},
-						new PlayerViewModel { Name = "Cyril"},
-						new PlayerViewModel { Name = "Loïc" }
-				]
-		});*/
+			var existingPlayer = CurrentCampaign.Players.FirstOrDefault(p => p.Name == player.Name);
+			if (existingPlayer != null)
+			{
+				existingPlayer.Xp = player.Xp;
+				existingPlayer.Coins = player.Coins;
+				_appStateStorage.SaveCampaignsAsync(Campaigns);
+				NotifyStateChanged(); // Notifier les abonnés
+			}
+		}
+	}
 
-    CurrentCampaign = Campaigns.FirstOrDefault();
-  }
+	public async Task UpdatePlayerDuringGame(PlayerGameViewModel player)
+	{
+		if (CurrentCampaign != null && CurrentScenario != null)
+		{
+			// Localiser le jeu dans le scénario de la campagne actuelle
+			var scenario = CurrentCampaign.Scenarios.FirstOrDefault(s => s.Key == CurrentScenario.Id);
+			if (scenario.Value != null && scenario.Value.Game != null)
+			{
+				// Localiser le joueur à mettre à jour dans le jeu
+				var existingPlayer = scenario.Value.Game.Players.FirstOrDefault(p => p.Name == player.Name);
+				if (existingPlayer != null)
+				{
+					// Mettre à jour les propriétés du joueur
+					existingPlayer.Xp = player.Xp;
+					existingPlayer.Coins = player.Coins;
+					existingPlayer.HealthPoints = player.HealthPoints;
 
-  private Dictionary<int, ScenarioViewModel> GenerateScenarios()
-  {
-    Dictionary<int, ScenarioViewModel> Scenarios = [];
-    string folderPath = @"C:\Users\cybea\source\repos\GloomhavenCompanion\GloomhavenCompanion\wwwroot\img\Scenarios";
+					// Sauvegarder l'état de la campagne complète, incluant les modifications de Game
+					await _appStateStorage.SaveCampaignsAsync(Campaigns);
 
-    if (Directory.Exists(folderPath))
-    {
-      foreach (string filePath in Directory.GetFiles(folderPath, "gh-*.png"))
-      {
-        string fileName = Path.GetFileNameWithoutExtension(filePath); // ex: "gh-11-12"
-        string[] parts = fileName.Split('-'); // Sépare les parties de "gh-11-12"
+					// Notifier les abonnés des changements
+					NotifyStateChanged();
+				}
+			}
+		}
+	}
 
-        if (parts.Length > 1 && parts[0] == "gh")
-        {
-          // Gestion des scénarios multiples dans un même fichier, ex: "gh-11-12"
-          string[] scenarioNumbers = parts[1].Split('_');
-          foreach (var numberString in scenarioNumbers)
-          {
-            if (int.TryParse(numberString, out int scenarioId))
-            {
-              Scenarios.Add(scenarioId, new ScenarioViewModel
-              {
-                Id = scenarioId,
-                Name = $"Scenario {scenarioId}",
-                ImagePath = $"img/Scenarios/{Path.GetFileName(filePath)}"
-              });
-            }
-          }
-        }
-      }
-    }
-    else
-    {
-      Console.WriteLine("Le dossier des images de scénario n'existe pas.");
-    }
-    return Scenarios;
+	#endregion Player
 
-  }
+	#region Deck
 
+	public void CreateDeck(string name)
+	{
+		MonsterDeck = new DeckViewModel { Id = GenerateDeckId(), Name = name };
+		InitializeDeckCards(MonsterDeck);
+		if (!MonsterDeck.IsShuffled)
+		{
+			MonsterDeck.ShuffleDeck();
+			MonsterDeck.IsShuffled = true;
+		}
+		Decks.Add(MonsterDeck);
+	}
 
+	private void InitializeDeckCards(DeckViewModel deck)
+	{
+		var imageNumbers = Enumerable.Range(1, 20).ToList(); // Générez une liste de 1 à 20
 
-  public async Task LoadLocalStorage()
-  {
-    await LoadCampaignsAsync();
+		foreach (var number in imageNumbers)
+		{
+			bool NeedShuffle = false;
+			var imagePath = $@"/img/DeckModifier/Monsters/gh-am-m-{number:D2}.png"; // Format 2 chiffres
+			if (number == 19 || number == 20)
+			{
+				NeedShuffle = true;
+			}
+			deck.CardsList.Add(new CardViewModel
+			{
+				Id = number, // Utilise le numéro comme ID
+				Value = $"Card {number}", // La valeur peut être personnalisée selon tes besoins
+				ImagePath = imagePath, // Chemin dynamique de l'image
+				NeedShuffle = NeedShuffle
+			});
+		}
+	}
 
-  }
+	private int GenerateDeckId()
+	{
+		// Logique pour générer un ID unique pour le deck
+		return Decks.Count + 1; // Exemple simple d'ID
+	}
+	#endregion Deck
 
+	#region Scenario
+	private Dictionary<int, ScenarioViewModel> GenerateScenarios()
+	{
+		Dictionary<int, ScenarioViewModel> Scenarios = [];
+		string folderPath = @"C:\Users\cybea\source\repos\GloomhavenCompanion\GloomhavenCompanion\wwwroot\img\Scenarios";
 
+		if (Directory.Exists(folderPath))
+		{
+			foreach (string filePath in Directory.GetFiles(folderPath, "gh-*.png"))
+			{
+				string fileName = Path.GetFileNameWithoutExtension(filePath); // ex: "gh-11-12"
+				string[] parts = fileName.Split('-'); // Sépare "gh" et "11-12" (ou plus)
 
-  #region Element
-  private void GenerateElements()
-  {
-    Elements =
-        [
-            new() { Id = 1, Name = "Feu", ImagePath = "img/Elements/FirePicture.png" },
-            new() { Id = 2, Name = "Ténèbre", ImagePath = "img/Elements/DarknessPicture.png" },
-            new() { Id = 3, Name = "Terre", ImagePath = "img/Elements/EarthPicture.png" },
-            new() { Id = 4, Name = "Vent", ImagePath = "img/Elements/WindPicture.png" },
-            new() { Id = 5, Name = "Lumière", ImagePath = "img/Elements/LightPicture.png" },
-            new() { Id = 6, Name = "Givre", ImagePath = "img/Elements/FrostPicture.png" }
-        ];
-  }
-  #endregion Element
-
-  #region Round
-
-  public void NextRound()
-  {
-    CurrentGame.AddNewRound();
-    OnRoundChanged?.Invoke();
-  }
-  #endregion Round
-
-  #region Team
-  public async Task AddCampaign(CampainViewModel NewCampaign)
-  {
-    NewCampaign.Scenarios = GenerateScenarios();
-    Campaigns.Add(NewCampaign);
-
-    CurrentCampaign = NewCampaign;
-    await _appStateStorage.SaveCampaignsAsync(Campaigns);
-  }
-  // Charger les équipes depuis le storage
-  public async Task LoadCampaignsAsync()
-  {
-    Campaigns = await _appStateStorage.LoadCampaignsAsync();
-  }
-  #endregion
-
-  #region Player
-  public void AddPlayer(PlayerViewModel player)
-  {
-    CurrentCampaign.AddPlayer(player);
-  }
-  public void RemovePlayer(PlayerViewModel player)
-  {
-    CurrentCampaign.RemovePlayer(player);
-  }
-
-  public void UpdatePlayer(PlayerViewModel player)
-  {
-    // Vérifier si l'équipe actuelle est définie
-    if (CurrentCampaign != null)
-    {
-      // Trouver le joueur dans la liste des joueurs de l'équipe actuelle
-      var existingPlayer = CurrentCampaign.Players.FirstOrDefault(p => p.Name == player.Name);
-
-      // Si le joueur existe, mettre à jour ses valeurs
-      if (existingPlayer != null)
-      {
-        existingPlayer.Xp = player.Xp;
-        existingPlayer.Coins = player.Coins;
-        existingPlayer.HealthPoints = player.HealthPoints;
-        _appStateStorage.SaveCampaignsAsync(Campaigns);
-
-        NotifyStateChanged(); // Notifier les abonnés
-      }
-    }
-  }
+				if (parts.Length > 1 && parts[0] == "gh")
+				{
+					// Boucle sur chaque scénario à partir de l'index 1
+					for (int i = 1; i < parts.Length; i++)
+					{
+						if (int.TryParse(parts[i], out int scenarioId))
+						{
+							// Ajoute chaque scénario avec la même image
+							if (!Scenarios.ContainsKey(scenarioId))
+							{
+								Scenarios.Add(scenarioId, new ScenarioViewModel
+								{
+									Id = scenarioId,
+									Name = $"Scenario {scenarioId}",
+									ImagePath = $"img/Scenarios/{Path.GetFileName(filePath)}",
+								});
+							}
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			Console.WriteLine("Le dossier des images de scénario n'existe pas.");
+		}
+		return Scenarios;
+	}
 
 
-  #endregion Player
+	public ScenarioViewModel LoadScenario(int scenarioId)
+	{
+		if (CurrentCampaign != null)
+		{
+			if (CurrentCampaign.Scenarios.ContainsKey(scenarioId))
+			{
+				CurrentScenario = CurrentCampaign.Scenarios[scenarioId];
+				if (CurrentScenario.Game != null)
+				{
+					CurrentGame = CurrentScenario.Game;
+				}
+				else
+				{
+					CurrentGame = new GameViewModel();
+					CurrentGame.InitializePlayersForGame(CurrentCampaign.Players);
+					CurrentScenario.Game = CurrentGame;
+					return CurrentCampaign.Scenarios[scenarioId];
+				}
+			}
+		}
+		return new ScenarioViewModel();
+	}
 
-  #region Deck
-
-  public void CreateDeck(string name)
-  {
-    MonsterDeck = new DeckViewModel { Id = GenerateDeckId(), Name = name };
-    InitializeDeckCards(MonsterDeck);
-    if (!MonsterDeck.IsShuffled)
-    {
-      MonsterDeck.ShuffleDeck();
-      MonsterDeck.IsShuffled = true;
-    }
-    Decks.Add(MonsterDeck);
-  }
-
-  private void InitializeDeckCards(DeckViewModel deck)
-  {
-    var imageNumbers = Enumerable.Range(1, 20).ToList(); // Générez une liste de 1 à 20
-
-    foreach (var number in imageNumbers)
-    {
-      bool NeedShuffle = false;
-      var imagePath = $@"/img/DeckModifier/Monsters/gh-am-m-{number:D2}.png"; // Format 2 chiffres
-      if (number == 19 || number == 20)
-      {
-        NeedShuffle = true;
-      }
-      deck.CardsList.Add(new CardViewModel
-      {
-        Id = number, // Utilise le numéro comme ID
-        Value = $"Card {number}", // La valeur peut être personnalisée selon tes besoins
-        ImagePath = imagePath, // Chemin dynamique de l'image
-        NeedShuffle = NeedShuffle
-      });
-    }
-  }
-
-  private int GenerateDeckId()
-  {
-    // Logique pour générer un ID unique pour le deck
-    return Decks.Count + 1; // Exemple simple d'ID
-  }
-  #endregion Deck
+	#endregion
 }

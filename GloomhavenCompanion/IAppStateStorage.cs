@@ -4,8 +4,11 @@ namespace GloomhavenCompanion
 {
 	public interface IAppStateStorage
 	{
-		Task SaveCampaignsAsync(List<CampainViewModel> campaigns);
-		Task<List<CampainViewModel>> LoadCampaignsAsync();
+		Task SaveCampaignsAsync(List<CampaignViewModel> campaigns);
+		Task SaveCampaignAsync(CampaignViewModel campaign);
+		Task<List<CampaignSummary>> LoadAllCampaignNamesAsync();
+		Task<CampaignViewModel> LoadCampaignByCampaignSummary(string companyName);
+		Task<List<CampaignViewModel>> LoadCampaignsAsync();
 	}
 
 }

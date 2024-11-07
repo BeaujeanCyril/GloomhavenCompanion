@@ -15,7 +15,6 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IAppStateStorage, LocalStorageAppStateStorage>(); // Pour utiliser localStorage
 
 builder.Services.AddScoped<AppStateService>();
-builder.Services.AddScoped<AppStateInitializer>(); // Ajouter l'initialisateur
 builder.Services.AddScoped<AppState>();
 
 

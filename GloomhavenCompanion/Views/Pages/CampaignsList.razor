@@ -6,7 +6,7 @@
 
 <PageTitle>Liste des équipes</PageTitle>
 
-@if (AppState.Campaigns == null || AppState.Campaigns.Count == 0)
+@if (AppState.CampainSummary == null || AppState.CampainSummary.Count == 0)
 {
 	<MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center">
 		<MudItem>
@@ -27,7 +27,7 @@ else
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var team in AppState.Campaigns)
+			@foreach (var team in AppState.CampainSummary)
 			{
 				<tr>
 					<td>@team.CompanyName</td>
@@ -41,7 +41,6 @@ else
 										<th>XP</th>
 										<th>PO</th>
 										<th>HP</th>
-										<th>Max HP</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -51,7 +50,6 @@ else
 											<td>@player.Name</td>
 											<td>@player.Xp</td>
 											<td>@player.Coins</td>
-											<td>@player.HealthPoints</td>
 											<td>@player.HealthPointsMax</td>
 										</tr>
 									}
@@ -87,7 +85,7 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		await AppState.LoadCampaignsAsync();
+		await AppState.LoadCampaignSummariesAsync();
 	}
 
 	private void RefreshTeamsList()
@@ -95,9 +93,10 @@ else
 		StateHasChanged();
 	}
 
-	private void SetCurrentTeamAndNavigate(CampainViewModel ChoseCampaign)
+	private void SetCurrentTeamAndNavigate(CampaignSummary ChosenCampaign)
 	{
-		AppState.CurrentCampaign = ChoseCampaign;
+		AppState.LoadCampaignByCampaignSummaryAsync(ChosenCampaign);
+		//	AppState.CurrentCampaign = ChoseCampaign;
 		NavigationManager.NavigateTo("/scenarios");
 	}
 

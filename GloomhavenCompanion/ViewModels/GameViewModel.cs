@@ -1,21 +1,31 @@
-﻿namespace GloomhavenCompanion.ViewModels
+﻿namespace GloomhavenCompanion.ViewModels;
+public class GameViewModel
 {
-	public class GameViewModel
+	public DateTime DateTimeStarted { get; set; } = DateTime.Now;
+	public List<PlayerGameViewModel> Players { get; set; } = [];
+	public List<RoundViewModel> Rounds { get; set; } = [];
+
+
+	public void AddNewRound()
 	{
-		public DateTime DateTimeStarted { get; set; } = DateTime.Now;
-		public List<RoundViewModel> Rounds { get; set; }= new List<RoundViewModel>();
-
-		public void AddNewRound()
+		Rounds.Add(new RoundViewModel
 		{
-			Rounds.Add(new RoundViewModel
-			{
-				RoundNumber = Rounds.Count + 1,
-				DateTime = DateTime.Now
-			});
-		}
+			RoundNumber = Rounds.Count + 1,
+			DateTime = DateTime.Now
+		});
+	}
 
-		public RoundViewModel CurrentRound(){
-			return Rounds.Last();
+	public RoundViewModel CurrentRound()
+	{
+		if (Rounds.Count == 0)
+		{
+			Rounds.Add(new RoundViewModel { RoundNumber = 1 });
 		}
+		return Rounds.Last();
+	}
+
+	public void InitializePlayersForGame(List<PlayerViewModel> globalPlayers)
+	{
+		Players = globalPlayers.Select(p => new PlayerGameViewModel(p)).ToList();
 	}
 }

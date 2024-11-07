@@ -29,7 +29,7 @@
 			<MudItem md="9">
 				<MudPaper Class="p-4">
 					<MudGrid>
-						@foreach (var player in AppState.CurrentCampaign.Players)
+						@foreach (var player in AppState.CurrentGame.Players)
 						{
 							<MudItem xs="6" sm="6" md="6" lg="6" Style="display: flex; ">
 								<PlayerComponent Player=@player />

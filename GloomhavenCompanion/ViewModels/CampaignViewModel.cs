@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 namespace GloomhavenCompanion.ViewModels;
 
-public class CampainViewModel
+public class CampaignViewModel
 {
   public int Id { get; set; }
 
