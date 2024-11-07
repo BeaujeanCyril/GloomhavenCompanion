@@ -3,64 +3,48 @@
 @inject AppState AppState
 
 <PageTitle>Jeu - Scénario @AppState.CurrentScenario?.Name</PageTitle>
-<MudGrid Style="background-color:gray">
-	<MudItem xs="12">
-		<MudGrid>
-			<MudItem xs="12" md="2">
-				<MudPaper class="p-4 mb-4">
-					<RoundComponent Round="@AppState.CurrentGame.CurrentRound()" OnNextRound="NextRound" />
-				</MudPaper>
-			</MudItem>
-			<MudItem xs="12" md="10" class="d-flex justify-content-end">
-				<MudPaper class="p-4 mb-4">
-					<ElementComponent OnUseElement="@((id) => UseElement(id))" OnSetElementStrong="@((id) => SetElementStrong(id))" />
-				</MudPaper>
-			</MudItem>
-		</MudGrid>
-	</MudItem>
+<MudGrid Style="background-color:gray;">
+	<MudGrid Class="mt-sm-1 d-flex justify-content-between" Style="margin-left: 6px; margin-right:10px">
+		<MudItem xs="12" md="2">
+			<MudPaper Class="p-4 mb-2">
+				<RoundComponent Round="@AppState.CurrentGame.CurrentRound()" OnNextRound="NextRound" />
+			</MudPaper>
+		</MudItem>
+		<MudItem xs="12" md="10" Class="d-flex justify-content-end">
+			<MudPaper Class="p-4 mb-2">
+				<ElementComponent OnUseElement="@((id) => UseElement(id))" OnSetElementStrong="@((id) => SetElementStrong(id))" />
+			</MudPaper>
+		</MudItem>
+	</MudGrid>
 
-	<MudItem xs="12">
-		<MudGrid Justify="Justify.SpaceBetween">
-
-			<!-- Section pour le deck de monstres -->
-			<MudItem xs="12" md="4">
-				<!-- Ajusté à md="8" -->
-				<MudPaper class="p-4 mb-4">
-					<MudGrid Justify="Justify.Center">
-						@foreach (var deck in AppState.Decks)
+	<MudGrid Style="margin-left: 22px; margin-top: 1px; margin-right:10px;">
+		<MudItem md="3">
+			@foreach (var deck in AppState.Decks)
+			{
+				<DeckComponent DeckName=@deck.Name />
+			}
+		</MudItem>
+		@if (AppState.CurrentCampaign != null && AppState.CurrentCampaign.Players.Count > 0)
+		{
+			<MudItem md="9">
+				<MudPaper Class="p-4">
+					<MudGrid>
+						@foreach (var player in AppState.CurrentCampaign.Players)
 						{
-							<MudItem Class="d-flex justify-content-center">
-								<DeckComponent DeckName=@deck.Name />
+							<MudItem xs="6" sm="6" md="6" lg="6" Style="display: flex; ">
+								<PlayerComponent Player=@player />
 							</MudItem>
 						}
 					</MudGrid>
 				</MudPaper>
 			</MudItem>
-
-			<!-- Section pour les joueurs -->
-			@if (AppState.CurrentCampaign != null && AppState.CurrentCampaign.Players.Count > 0) {
-				<MudItem md="8">
-					<MudPaper Class="p-4 mb-4">
-						<MudGrid Justify="Justify.FlexStart">
-							@foreach (var player in AppState.CurrentCampaign.Players)
-							{
-								<MudItem xs="6" sm="6" md="6" lg="6" Style="display: flex; justify-content: center;">
-									<PlayerComponent Player=@player />
-								</MudItem>
-							}
-						</MudGrid>
-					</MudPaper>
-				</MudItem>
-
-
-			}
-		</MudGrid>
-	</MudItem>
-	<MudItem xs="12" sm="6" md="4">
-		<MudButton Class="my-button" Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.QueryStats" OnClick="TogglePopup">
-			Stats
-		</MudButton>
-	</MudItem>
+		}
+	</MudGrid>
+			<MudItem md="1">
+			<MudPaper>
+				<MudButton Class="my-button" Size="Size.Large" StartIcon="@Icons.Material.Filled.QueryStats" OnClick="TogglePopup" />
+			</MudPaper>
+		</MudItem>
 </MudGrid>
 
 <MudPopover Open="@showPopup">
@@ -75,4 +59,3 @@
 		</MudGrid>
 	</MudPaper>
 </MudPopover>
-
