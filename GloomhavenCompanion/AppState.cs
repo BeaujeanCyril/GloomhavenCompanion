@@ -182,8 +182,9 @@ public class AppState
 	#region Scenario
 	private Dictionary<int, ScenarioViewModel> GenerateScenarios()
 	{
+		string folderPath = Path.Combine("wwwroot", "img", "Scenarios");
+
 		Dictionary<int, ScenarioViewModel> Scenarios = [];
-		string folderPath = @"C:\Users\cybea\source\repos\GloomhavenCompanion\GloomhavenCompanion\wwwroot\img\Scenarios";
 
 		if (Directory.Exists(folderPath))
 		{
