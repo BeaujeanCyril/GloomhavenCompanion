@@ -1,23 +1,30 @@
-﻿@page "/game/{scenarioId:int}"
+﻿@page "/game"
 @rendermode InteractiveServer
 @inject AppState AppState
 
-<PageTitle>Jeu - Scénario @AppState.CurrentScenario?.Name</PageTitle>
+<PageTitle>Jeu - Scénario @(AppState.CurrentScenario?.Name ?? "Scénario non chargé")</PageTitle>
 <MudGrid Style="background-color:gray;">
-	<MudGrid Class="mt-sm-1 d-flex justify-content-between" Style="margin-left: 6px; margin-right:10px">
-		<MudItem xs="12" md="2">
-			<MudPaper Class="p-4 mb-2">
+	<MudGrid Class="mt-sm-1 d-flex" Style="margin-left: 6px; ">
+		<!-- Image -->
+		<MudItem xs="12" md="2" Class="d-flex">
+			<img src="@AppState.CurrentScenario.ImagePath" alt="Description de l'image" style="width: 120px; height:110px;" />
+		</MudItem>
+		<!-- RoundComponent -->
+		<MudItem xs="12" md="1" Class="d-flex">
+			<MudPaper>
 				<RoundComponent Round="@AppState.CurrentGame.CurrentRound()" OnNextRound="NextRound" />
 			</MudPaper>
 		</MudItem>
-		<MudItem xs="12" md="10" Class="d-flex justify-content-end">
+		<!-- ElementComponent -->
+		<MudItem xs="12" md="9" Class="d-flex justify-content-end">
 			<MudPaper Class="p-4 mb-2">
 				<ElementComponent OnUseElement="@((id) => UseElement(id))" OnSetElementStrong="@((id) => SetElementStrong(id))" />
 			</MudPaper>
 		</MudItem>
 	</MudGrid>
 
-	<MudGrid Style="margin-left: 22px; margin-top: 1px; margin-right:10px;">
+
+	<MudGrid Style="margin-left: 22px; margin-top: 4px; margin-right:10px;">
 		<MudItem md="3">
 			@foreach (var deck in AppState.Decks)
 			{
@@ -41,8 +48,8 @@
 		}
 	</MudGrid>
 			<MudItem md="1">
-			<MudPaper>
-				<MudButton Class="my-button" Size="Size.Large" StartIcon="@Icons.Material.Filled.QueryStats" OnClick="TogglePopup" />
+		<MudPaper>
+			<MudButton Class="my-button" Size="Size.Large" StartIcon="@Icons.Material.Filled.QueryStats" OnClick="TogglePopup" />
 			</MudPaper>
 		</MudItem>
 </MudGrid>
@@ -59,3 +66,4 @@
 		</MudGrid>
 	</MudPaper>
 </MudPopover>
+

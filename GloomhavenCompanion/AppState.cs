@@ -223,8 +223,9 @@ public class AppState
 	}
 
 
-	public ScenarioViewModel LoadScenario(int scenarioId)
+	public async Task LoadScenario(int scenarioId)
 	{
+		// Logique existante...
 		if (CurrentCampaign != null)
 		{
 			if (CurrentCampaign.Scenarios.ContainsKey(scenarioId))
@@ -239,12 +240,13 @@ public class AppState
 					CurrentGame = new GameViewModel();
 					CurrentGame.InitializePlayersForGame(CurrentCampaign.Players);
 					CurrentScenario.Game = CurrentGame;
-					return CurrentCampaign.Scenarios[scenarioId];
 				}
 			}
 		}
-		return new ScenarioViewModel();
+		// Tu peux ajouter un délai ou un appel asynchrone ici si nécessaire
+		await Task.CompletedTask; // Cela permet de respecter la signature async sans réellement être asynchrone
 	}
+
 
 	#endregion
 }

@@ -29,7 +29,7 @@
 @code {
 	private async Task NavigateToGame(int scenarioId)
 	{
-		var scenarioLoaded = AppState.LoadScenario(scenarioId);
-			Navigation.NavigateTo($"/game/{scenarioId}");
+	await AppState.LoadScenario(scenarioId);
+			Navigation.NavigateTo("/game/");
 	}
 }
