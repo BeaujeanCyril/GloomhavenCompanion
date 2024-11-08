@@ -1,4 +1,4 @@
-﻿using GloomhavenCompanion.API.Model;
+﻿using GloomhavenCompanion.Data.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace GloomhavenCompanion.API.Data;
@@ -10,6 +10,5 @@ public GloomhavenCompanionDbContext(DbContextOptions<GloomhavenCompanionDbContex
 {
 }
 
-public DbSet<Player> Players { get; set; }
-public DbSet<Team> Teams { get; set; }
+public DbSet<Card> Players { get; set; }
 }

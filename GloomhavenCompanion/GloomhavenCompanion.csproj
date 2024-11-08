@@ -31,4 +31,9 @@
     <Folder Include="wwwroot\img\Effects\" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <ProjectReference Include="..\GloomhavenCompanion.Infrastructure\GloomhavenCompanion.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

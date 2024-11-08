@@ -1,39 +1,52 @@
 using Blazored.LocalStorage;
 using GloomhavenCompanion;
 using GloomhavenCompanion.Views;
+using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
+using GloomhavenCompanion.Infrastructure; // Assure-toi que ce namespace est correct et qu'il inclut le DbContext
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Ajouter des services à l'application
 builder.Services.AddRazorComponents()
 		.AddInteractiveServerComponents();
-builder.Services.AddMudServices();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddScoped<IAppStateStorage, LocalStorageAppStateStorage>(); // Pour utiliser localStorage
+builder.Services.AddMudServices(); // MudBlazor pour les composants UI
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // Accès au contexte HTTP
+builder.Services.AddBlazoredLocalStorage(); // Pour utiliser localStorage
+
+// Enregistrer ton service personnalisé pour l'état de l'application
+builder.Services.AddScoped<IAppStateStorage, LocalStorageAppStateStorage>();
+
+// Enregistrer les services de l'application
 builder.Services.AddScoped<AppStateService>();
 builder.Services.AddScoped<AppState>();
 
+// Configuration de la connexion à la base de données avec Entity Framework Core et MySQL
+builder.Services.AddDbContext<GloomhavenCompanionDbContext>(options =>
+		options.UseMySql(
+				builder.Configuration.GetConnectionString("GloomhavenConnection"), // Vérifie que la clé existe dans appsettings.json
+						new MySqlServerVersion(new Version(8, 0, 23))
+		));
 
+// Construire l'application
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configurer le pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
 	app.UseExceptionHandler("/Error", createScopeForErrors: true);
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+app.UseHttpsRedirection(); // Redirection vers HTTPS
+app.UseStaticFiles(); // Pour les fichiers statiques (comme CSS, JS, etc.)
+app.UseAntiforgery(); // Protection contre les attaques CSRF
 
-app.UseStaticFiles();
-app.UseAntiforgery();
-
+// Définir la carte pour les composants Razor et démarrer le rendu interactif côté serveur
 app.MapRazorComponents<App>()
 		.AddInteractiveServerRenderMode();
 
+// Lancer l'application
 app.Run();
