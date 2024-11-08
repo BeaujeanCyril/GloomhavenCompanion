@@ -4,14 +4,12 @@
 @inject ISnackbar Snackbar
 
 <MudGrid Class="text-align: center">
-<MudPaper Class="p-2 m-2" Style="border: none; height: 270px; text-align: center; background-color: #2D3748;" @onmouseover="() => showPopup = true" @onmouseout="() => showPopup = false">
-		<h2>@SelectedDeck.Name</h2>
+	<MudPaper Class="p-2 m-2" Style="text-align: center; background-color: #2D3748; max-width: 300px; margin: 0 auto;" @onmouseover="() => showPopup = true" @onmouseout="() => showPopup = false">
+		<h2 style="color:white">@SelectedDeck.Name</h2>
 		@if (SelectedDeck?.CardsList != null && SelectedDeck.CardsList.Any())
 		{
 			<CardMolecule Card="@(showingBackCard ? new CardViewModel { ImagePath = BackCardImagePath, Value = "" } : currentCard)" />
-			<MudButton Color="Color.Primary"
-								 @onclick="ShowNextCardAsync"
-								 Style="border: 2px solid groove; background-color: gray; color: white; font-size: 16px; padding: 10px 10px 10px 20px; margin-top: 2px; border-radius: 8px; transition: background-color 0.3s ease;">
+			<MudButton Color="Color.Primary" @onclick="ShowNextCardAsync" Style="border: 2px solid groove; background-color: gray; color: white; font-size: 16px; padding: 10px 10px 10px 20px; margin-top: 2px; border-radius: 8px; transition: background-color 0.3s ease;">
 				Suivant
 			</MudButton>
 			@if (DeckName != "MonsterDeck")
@@ -20,7 +18,7 @@
 					<img src="img/DeckModifier/Monsters/BenedictionCard.png" alt="Ajout bénédiction" style="width: 50px; height: 30px;" />
 				</MudButton>
 			}
-				<MudButton Color="Color.Secondary" @onclick="AddAnnulCard">
+			<MudButton Color="Color.Secondary" @onclick="AddAnnulCard">
 				<img src="img/DeckModifier/Monsters/gh-am-mm-01.png" alt="Ajout annuler" style="width: 60px; height: 40px;" />
 			</MudButton>
 		}
@@ -32,7 +30,7 @@
 		@if (SelectedDeck.CardsHistoric.Count != 0)
 		{
 			<MudPopover Open="@showPopup">
-				<MudPaper Class="p-">
+				<MudPaper Class="p-1">
 					<MudGrid>
 						@foreach (var card in SelectedDeck.CardsHistoric.TakeLast(5))
 						{
@@ -46,6 +44,7 @@
 		}
 	</MudPaper>
 </MudGrid>
+
 
 
 @code {

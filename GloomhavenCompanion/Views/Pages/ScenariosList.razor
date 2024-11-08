@@ -6,25 +6,26 @@
 <PageTitle>Scénarios de la Campagne</PageTitle>
 
 <MudGrid>
-	@if (AppState.CurrentCampaign != null && AppState.CurrentCampaign.Scenarios.Count > 0)
-	{
-		@foreach (var scenario in AppState.CurrentCampaign.Scenarios.Values.OrderBy(s => s.Id))
-		{
-			<MudItem xs="6" sm="4" md="3" lg="2">
-				<MudCard @onclick="() => NavigateToGame(scenario.Id)" Style="max-width: 100%; height: auto;">
-					<MudCardMedia Image="@scenario.ImagePath" Title="@scenario.Name" Style="height: 150px; object-fit: cover;" />
-					<MudCardContent>
-						<MudText>Scénario @scenario.Id</MudText>
-					</MudCardContent>
-				</MudCard>
-			</MudItem>
-		}
-	}
-	else
-	{
-		<MudText>No scenarios found for the current campaign.</MudText>
-	}
+  @if (AppState.CurrentCampaign != null && AppState.CurrentCampaign.Scenarios.Count > 0)
+  {
+    @foreach (var scenario in AppState.CurrentCampaign.Scenarios.Values.OrderBy(s => s.Id))
+    {
+      <MudItem xs="6" sm="4" md="3" lg="2" Style="margin: 20px;">
+        <MudCard @onclick="() => NavigateToGame(scenario.Id)" Style="max-width: 100%; height: auto;">
+          <MudCardMedia Image="@scenario.ImagePath" Title="@scenario.Name" Style="height: 150px; object-fit: cover;" />
+          <MudCardContent>
+            <MudText>Scénario @scenario.Id</MudText>
+          </MudCardContent>
+        </MudCard>
+      </MudItem>
+    }
+  }
+  else
+  {
+    <MudText>No scenarios found for the current campaign.</MudText>
+  }
 </MudGrid>
+
 
 @code {
 	private async Task NavigateToGame(int scenarioId)

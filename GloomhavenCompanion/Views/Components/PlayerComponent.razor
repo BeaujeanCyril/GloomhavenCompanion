@@ -3,23 +3,23 @@
 
 <div style="position: relative; display: inline-block; transform-origin: top left;">
 	<!-- Boutons HP + et HP - sur une ligne -->
-	<div style="position: absolute; top: 16%; left: 13%; color: whitesmoke; display: flex; flex-direction:column; gap: 40px; z-index: 2;">
+	<div style="position: absolute; top: 16%; left: 4%; color: whitesmoke; display: flex; flex-direction:column; gap: 40px; z-index: 2;">
 		<MudButton OnClick="IncreaseHP" Size="Size.Large" Color="Color.Dark" Style="width: 40px; height: 30px; font-size: 50px;">+</MudButton>
 		<MudButton OnClick="DecreaseHP" Size="Size.Large" Color="Color.Dark" Style="width: 40px; height: 30px; font-size: 50px;">-</MudButton>
 	</div>
 
 	<!-- Nom du joueur, avec pointer-events: none pour que ce div ne bloque pas les clics -->
-	<div style="position: absolute; top: 18%; left: 5%; font-size: 17px; color: whitesmoke; font-weight: bold; width: 300px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0; pointer-events: none;">
-		@Player.Name (@Player.HealthPointsMax HP Max)
+	<div style="position: absolute; top: 18%; font-size: 17px; color: whitesmoke; font-weight: bold; width: 300px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0; pointer-events: none;">
+		@Player.Name: @Player.HealthPointsMax HP Max
 	</div>
 
 	<img src="img\General\Dials.png" alt="Description de l'image" />
 
-	<div style="position: absolute; top: 43%; left: 36%; font-size: 20px; background-color: black; color: whitesmoke; font-weight: bold; width: 40px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0;">
+	<div style="position: absolute; top: 40%; left: 35%; font-size: 20px; background-color: black; color: whitesmoke; font-weight: bold; width: 35px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0;">
 		@Player.HealthPoints
 	</div>
 
-	<div style="position: absolute; top: 43%; left: 54%; font-size: 20px; background-color: black; color: whitesmoke; font-weight: bold; width: 40px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0;">
+	<div style="position: absolute; top: 40%; left: 53%; font-size: 20px; background-color: black; color: whitesmoke; font-weight: bold; width: 35px; height: 30px; text-align: center; line-height: 30px; border-radius: 8px; padding: 0;">
 		@Player.Xp
 	</div>
 
@@ -35,7 +35,7 @@
 
 	</div>
 
-	<div style="position: absolute; top: 66%; left: 46%; font-size: 20px; background-color: black; color: whitesmoke; font-weight: bold; width: 30px; height: 25px; text-align: center; line-height: 23px; border-radius: 8px; padding: 0;">
+	<div style="position: absolute; top: 67%; left: 46%; font-size: 20px; background-color: black; color: whitesmoke; font-weight: bold; width: 30px; height: 25px; text-align: center; line-height: 23px; border-radius: 8px; padding: 0;">
 		@Player.Coins
 	</div>
 
