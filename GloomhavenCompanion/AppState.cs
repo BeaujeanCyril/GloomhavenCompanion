@@ -125,7 +125,7 @@ public class AppState
 					existingPlayer.HealthPoints = player.HealthPoints;
 
 					// Sauvegarder l'état de la campagne complète, incluant les modifications de Game
-					await _appStateStorage.SaveCampaignsAsync(Campaigns);
+					await _appStateStorage.SaveCampaignAsync(CurrentCampaign);
 
 					// Notifier les abonnés des changements
 					NotifyStateChanged();
