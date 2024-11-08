@@ -22,6 +22,10 @@ builder.Services.AddScoped<IAppStateStorage, LocalStorageAppStateStorage>();
 // Enregistrer les services de l'application
 builder.Services.AddScoped<AppStateService>();
 builder.Services.AddScoped<AppState>();
+builder.Services.AddLogging(logging =>
+{
+	logging.AddConsole();  // Affiche les logs dans la console pour le développement
+});
 
 // Configuration de la connexion à la base de données avec Entity Framework Core et MySQL
 builder.Services.AddDbContext<GloomhavenCompanionDbContext>(options =>

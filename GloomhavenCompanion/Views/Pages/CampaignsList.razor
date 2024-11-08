@@ -93,9 +93,9 @@ else
 		StateHasChanged();
 	}
 
-	private void SetCurrentTeamAndNavigate(CampaignSummary ChosenCampaign)
+	private async void SetCurrentTeamAndNavigate(CampaignSummary ChosenCampaign)
 	{
-		AppState.LoadCampaignByCampaignSummaryAsync(ChosenCampaign);
+		await AppState.LoadCampaignByCampaignSummaryAsync(ChosenCampaign);
 		//	AppState.CurrentCampaign = ChoseCampaign;
 		NavigationManager.NavigateTo("/scenarios");
 	}

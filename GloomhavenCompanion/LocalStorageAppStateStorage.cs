@@ -2,7 +2,6 @@
 
 using Blazored.LocalStorage;
 using GloomhavenCompanion.ViewModels;
-using Microsoft.AspNetCore.Components;
 using System.Text.Json;
 
 
@@ -36,7 +35,7 @@ public class LocalStorageAppStateStorage : IAppStateStorage
 
 		if (string.IsNullOrEmpty(savedCampaignsJson))
 		{
-			return new List<CampaignViewModel>(); // Retourne une liste vide si aucun état n'est trouvé
+			return []; // Retourne une liste vide si aucun état n'est trouvé
 		}
 
 		try
@@ -47,15 +46,15 @@ public class LocalStorageAppStateStorage : IAppStateStorage
 		catch (JsonException ex)
 		{
 			Console.WriteLine($"Erreur de désérialisation : {ex.Message}");
-			return new List<CampaignViewModel>(); // Retourne une liste vide si la désérialisation échoue
+			return []; // Retourne une liste vide si la désérialisation échoue
 		}
 		catch (Exception ex)
 		{
 			Console.WriteLine($"Erreur générale : {ex.Message}");
-			return new List<CampaignViewModel>(); // Retourne une liste vide en cas d'erreur
+			return []; // Retourne une liste vide en cas d'erreur
 		}
-
 	}
+
 	public async Task<List<CampaignSummary>> LoadAllCampaignNamesAsync()
 	{
 		var campaignSummaries = new List<CampaignSummary>();
@@ -93,6 +92,6 @@ public class LocalStorageAppStateStorage : IAppStateStorage
 	{
 		// Recherche dans le localStorage la campagne avec le nom spécifié
 		var serializedCampaign = await _localStorageService.GetItemAsync<string>($"Campaign_{companyName}");
-			return JsonSerializer.Deserialize<CampaignViewModel>(serializedCampaign);	
+		return JsonSerializer.Deserialize<CampaignViewModel>(serializedCampaign);
 	}
 }
