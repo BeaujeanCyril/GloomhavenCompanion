@@ -4,7 +4,7 @@
 @inject ISnackbar Snackbar
 
 <MudGrid Class="text-align: center">
-	<MudPaper Class="p-2 m-2" Style="border: none; height: 270px; text-align: center;" @onmouseover="() => showPopup = true" @onmouseout="() => showPopup = false">
+<MudPaper Class="p-2 m-2" Style="border: none; height: 270px; text-align: center; background-color: #2D3748;" @onmouseover="() => showPopup = true" @onmouseout="() => showPopup = false">
 		<h2>@SelectedDeck.Name</h2>
 		@if (SelectedDeck?.CardsList != null && SelectedDeck.CardsList.Any())
 		{

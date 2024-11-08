@@ -1,0 +1,18 @@
+﻿html, body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden; /* Empêcher le défilement horizontal */
+}
+
+.mud-main-content {
+	width: 100%;
+	height: 100%;
+}
+
+.mud-container {
+	width: 100%;
+	margin: 0 auto;
+	padding: 0;
+}

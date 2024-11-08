@@ -2,15 +2,29 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <base href="/" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base href="/" />
   <link href="_Content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="./bootstrap/bootstrap.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="css/app.css" rel="stylesheet" />
+
   <link rel="icon" type="image/png" href="~/img/General/gh.png" />
-    <HeadOutlet />
+
+  <style>
+    /* Supprimer les marges et paddings par défaut */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <HeadOutlet />
 </head>
+
 
 <body>
     <Routes />

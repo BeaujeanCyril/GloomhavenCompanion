@@ -3,67 +3,95 @@
 @inject AppState AppState
 
 <PageTitle>Jeu - Scénario @(AppState.CurrentScenario?.Name ?? "Scénario non chargé")</PageTitle>
-<MudGrid Style="background-color:gray;">
-	<MudGrid Class="mt-sm-1 d-flex" Style="margin-left: 6px; ">
-		<!-- Image -->
-		<MudItem xs="12" md="2" Class="d-flex">
-			<img src="@AppState.CurrentScenario.ImagePath" alt="Description de l'image" style="width: 120px; height:110px;" />
-		</MudItem>
-		<!-- RoundComponent -->
-		<MudItem xs="12" md="1" Class="d-flex">
-			<MudPaper>
-				<RoundComponent Round="@AppState.CurrentGame.CurrentRound()" OnNextRound="NextRound" />
-			</MudPaper>
-		</MudItem>
-		<!-- ElementComponent -->
-		<MudItem xs="12" md="9" Class="d-flex justify-content-end">
-			<MudPaper Class="p-4 mb-2">
-				<ElementComponent OnUseElement="@((id) => UseElement(id))" OnSetElementStrong="@((id) => SetElementStrong(id))" />
-			</MudPaper>
-		</MudItem>
-	</MudGrid>
+
+<div class="bg-gray-800 flex flex-col min-h-screen">
+  <!-- En-tête avec image, round, et éléments -->
+  <div class="flex p-2 bg-gradient-to-r from-slate-700 rounded-lg h-[120px]">
+    <!-- Image -->
+    <div class="flex items-center bg-gradient-to-r from-slate-700 rounded-lg w-1/6">
+      <img src="@AppState.CurrentScenario.ImagePath" alt="Description de l'image" class="max-w-[120px] h-auto" />
+    </div>
+
+    <!-- Round Component -->
+    <div class="flex items-center bg-gradient-to-r from-slate-700 rounded-lg w-1/6">
+      <div class="bg-gray-600 rounded-lg">
+        <RoundComponent Round="@AppState.CurrentGame.CurrentRound()" OnNextRound="NextRound" />
+      </div>
+    </div>
+
+    <!-- ElementComponent -->
+    <div class="flex items-center bg-gradient-to-r from-slate-700 rounded-lg w-4/6">
+      <div class="bg-gray-600 rounded-lg">
+        <ElementComponent OnUseElement="@((id) => UseElement(id))" OnSetElementStrong="@((id) => SetElementStrong(id))" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Section avec les decks et joueurs -->
+  <div class="p-2 flex flex-wrap gap-4 bg-gray-800">
+    <!-- Decks -->
+    <div class="w-full md:w-1/3 lg:w-full">
+      <div class="p-4 bg-gradient-to-r from-slate-700 rounded-lg">
+        <div class="flex gap-4">
+            @foreach (var deck in AppState.Decks)
+            {
+              <div class="flex-1 min-w-[180px] mb-4">
+                <DeckComponent DeckName=@deck.Name />
+              </div>         
+          }
+        </div>
+      </div>
+    </div>
+    <!-- Players -->
+    @if (AppState.CurrentCampaign != null && AppState.CurrentCampaign.Players.Count > 0)
+    {
+      <div class="w-full bg-gradient-to-r from-slate-700 rounded-lg">
+        <div class="flex flex-wrap gap-4">
+          @foreach (var player in AppState.CurrentGame.Players)
+          {
+            <div class="flex-1 min-w-[180px] max-w-[calc(25%_-_16px)] mb-4">
+              <PlayerComponent Player=@player />
+            </div>
+          }
+        </div>
+      </div>
+    }
 
 
-	<MudGrid Style="margin-left: 22px; margin-top: 4px; margin-right:10px;">
-		<MudItem md="3">
-			@foreach (var deck in AppState.Decks)
-			{
-				<DeckComponent DeckName=@deck.Name />
-			}
-		</MudItem>
-		@if (AppState.CurrentCampaign != null && AppState.CurrentCampaign.Players.Count > 0)
-		{
-			<MudItem md="9">
-				<MudPaper Class="p-4">
-					<MudGrid>
-						@foreach (var player in AppState.CurrentGame.Players)
-						{
-							<MudItem xs="6" sm="6" md="6" lg="6" Style="display: flex; ">
-								<PlayerComponent Player=@player />
-							</MudItem>
-						}
-					</MudGrid>
-				</MudPaper>
-			</MudItem>
-		}
-	</MudGrid>
-			<MudItem md="1">
-		<MudPaper>
-			<MudButton Class="my-button" Size="Size.Large" StartIcon="@Icons.Material.Filled.QueryStats" OnClick="TogglePopup" />
-			</MudPaper>
-		</MudItem>
-</MudGrid>
 
-<MudPopover Open="@showPopup">
-	<MudPaper Class="p-4">
-		<MudGrid>
-			@foreach (var round in AppState.CurrentGame.Rounds)
-			{
-				<MudItem xs="12">
-					Round @round.RoundNumber: @round.DateTime
-				</MudItem>
-			}
-		</MudGrid>
-	</MudPaper>
-</MudPopover>
 
+
+  </div>
+
+
+
+  <!-- Section Popup -->
+  <div class="flex justify-center items-center">
+    <div class="p-4">
+      <button class="bg-blue-500 text-white py-2 px-4 rounded-lg text-lg" @onclick="TogglePopup">
+        <span class="material-icons">Statistiques</span> Stats
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Popover pour afficher les rounds -->
+@if (showPopup)
+{
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-gray-800 p-6 rounded-lg max-w-lg">
+      <div class="text-white">
+        <h3 class="text-xl font-bold mb-4">Rounds</h3>
+        <div>
+          @foreach (var round in AppState.CurrentGame.Rounds)
+          {
+            <div class="mb-2">
+              Round @round.RoundNumber: @round.DateTime
+            </div>
+          }
+        </div>
+      </div>
+      <button class="bg-red-500 text-white py-2 px-4 rounded-lg mt-4" @onclick="TogglePopup">Close</button>
+    </div>
+  </div>
+}
