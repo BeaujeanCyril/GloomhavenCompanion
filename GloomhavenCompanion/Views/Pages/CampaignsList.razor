@@ -8,8 +8,8 @@
 
 @if (AppState.CampainSummary == null || AppState.CampainSummary.Count == 0)
 {
-	<MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center">
-		<MudItem>
+	<MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center" >
+		<MudItem Style="margin-top: 20px; margin-left:20px">
 			<MudText Align="Align.Center">Aucun groupe de héros n'a encore répondu à l'appel…</MudText>
 			<MudButton Class="my-2" Variant="Variant.Filled" Size="Size.Large" OnClick="() => CreateNewCampaignNavigate()">Soyez les premiers!</MudButton>
 		</MudItem>
