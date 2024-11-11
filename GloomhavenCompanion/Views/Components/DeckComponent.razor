@@ -67,7 +67,7 @@
 	protected override void OnParametersSet()
 	{
 		// Récupérer le deck sélectionné
-		SelectedDeck = AppState.Decks.FirstOrDefault(deck => deck.Name.Equals(DeckName, StringComparison.OrdinalIgnoreCase));
+		SelectedDeck = AppState.CurrentGame.MonsterDeck;
 
 		CurrentPlayer = AppState.CurrentPlayer;
 		// Si le deck existe et que la carte est visible, on affiche la première carte
@@ -133,9 +133,9 @@
 
 	private async Task AddAnnulCard()
 	{
-		CurrentPlayer.Deck.AddAnnulCard();
-		CurrentPlayer.Deck.ShuffleDeck();
-		Snackbar.Add("Carte annulée ajoutée au deck" + CurrentPlayer.Name + "!", Severity.Success);
+		AppState.CurrentGame.MonsterDeck.AddAnnulCard();
+		AppState.CurrentGame.MonsterDeck.ShuffleDeck();
+		Snackbar.Add("Carte annulée ajoutée au deck" + AppState.CurrentGame.MonsterDeck.Name + "!", Severity.Success);
 		StateHasChanged();
 	}
 
@@ -143,7 +143,7 @@
 	{
 		CurrentPlayer.Deck.AddX2Card();
 		CurrentPlayer.Deck.ShuffleDeck();
-		Snackbar.Add("Carte bénédiction ajoutée au deck" + CurrentPlayer.Name + "!", Severity.Success);
+		Snackbar.Add("Carte bénédiction ajoutée au deck" + AppState.CurrentGame.MonsterDeck.Name + "!", Severity.Success);
 
 		StateHasChanged();
 	}

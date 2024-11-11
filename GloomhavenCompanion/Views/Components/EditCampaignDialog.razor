@@ -1,0 +1,105 @@
+﻿@using GloomhavenCompanion.ViewModels
+@using MudBlazor
+@inject AppState AppState
+
+<MudDialog>
+  <DialogContent>
+    <MudPaper Elevation="2" Class="p-6">
+      <MudText Typo="Typo.h5">Éditer la Compagnie</MudText>
+
+      <MudForm @ref="form" Class="space-y-4">
+        <!-- Champ de nom de la compagnie -->
+        <MudTextField @bind-Value="EditableTeam.CompanyName" Label="Nom de la compagnie" Required="true" Variant="Variant.Outlined" />
+
+        <!-- Table des joueurs -->
+        <MudTable Items="EditableTeam.Players" Dense="true" Striped="true" Bordered="true">
+          <HeaderContent>
+            <MudTh>Nom</MudTh>
+            <MudTh>XP</MudTh>
+            <MudTh>PO</MudTh>
+            <MudTh>HP</MudTh>
+          </HeaderContent>
+          <RowTemplate>
+            <MudTd>
+              <MudTextField @bind-Value="context.Name" Required="true" Variant="Variant.Outlined" />
+            </MudTd>
+            <MudTd>
+              <MudNumericField T="int" @bind-Value="context.Xp" Required="true" Min="0" Variant="Variant.Outlined" />
+            </MudTd>
+            <MudTd>
+              <MudNumericField T="int" @bind-Value="context.Coins" Required="true" Min="0" Variant="Variant.Outlined" />
+            </MudTd>
+            <MudTd>
+              <MudNumericField T="int" @bind-Value="context.HealthPointsMax" Required="true" Min="0" Variant="Variant.Outlined" />
+            </MudTd>
+          </RowTemplate>
+        </MudTable>
+
+        <!-- Bouton Ajouter Joueur -->
+        <MudButton OnClick="AddPlayer" Color="Color.Primary" Variant="Variant.Filled">
+          Ajouter Joueur
+        </MudButton>
+      </MudForm>
+    </MudPaper>
+  </DialogContent>
+
+  <!-- Boutons d'action -->
+  <DialogActions>
+    <MudButton Color="Color.Default" OnClick="Cancel">Annuler</MudButton>
+    <MudButton Color="Color.Primary" OnClick="Save">Sauvegarder</MudButton>
+  </DialogActions>
+</MudDialog>
+
+@code {
+  [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+  [Parameter] public CampaignSummary Team { get; set; }
+
+  private CampaignSummary EditableTeam { get; set; }
+  private MudForm form;
+
+  protected override void OnInitialized()
+  {
+    // Créer une copie pour éviter de modifier directement l'état global avant sauvegarde
+    EditableTeam = new CampaignSummary
+      {
+        CompanyName = Team.CompanyName,
+        Players = Team.Players.Select(p => new PlayerViewModel
+        {
+          Name = p.Name,
+          Xp = p.Xp,
+          Coins = p.Coins,
+          HealthPointsMax = p.HealthPointsMax
+        }).ToList()
+      };
+  }
+
+  private void AddPlayer()
+  {
+    EditableTeam.Players.Add(new PlayerViewModel { Name = "Nouveau Joueur", Xp = 0, Coins = 0, HealthPointsMax = 10 });
+  }
+
+  private async Task Save()
+  {
+    await form.Validate();
+
+    if (form.IsValid)
+    {
+      // Mettre à jour l'équipe dans l'état global
+      var originalTeam = AppState.CampainSummary.FirstOrDefault(t => t.CompanyName == EditableTeam.CompanyName);
+      if (originalTeam != null)
+      {
+        originalTeam.CompanyName = EditableTeam.CompanyName;
+        originalTeam.Players = EditableTeam.Players;
+        await AppState.UpdateCampaignAsync(originalTeam);
+      }
+
+      MudDialog.Close(DialogResult.Ok(true));
+    }
+  }
+
+  private void Cancel()
+  {
+    MudDialog.Cancel();
+  }
+}

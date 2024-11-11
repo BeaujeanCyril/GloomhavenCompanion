@@ -4,7 +4,7 @@ public class GameViewModel
 	public DateTime DateTimeStarted { get; set; } = DateTime.Now;
 	public List<PlayerGameViewModel> Players { get; set; } = [];
 	public List<RoundViewModel> Rounds { get; set; } = [];
-
+	public DeckViewModel MonsterDeck { get; set; }
 
 	public void AddNewRound()
 	{
@@ -19,7 +19,7 @@ public class GameViewModel
 	{
 		if (Rounds.Count == 0)
 		{
-			Rounds.Add(new RoundViewModel { RoundNumber = 1 });
+			Rounds.Add(new RoundViewModel { RoundNumber = 1, DateTime = DateTime.Now });
 		}
 		return Rounds.Last();
 	}

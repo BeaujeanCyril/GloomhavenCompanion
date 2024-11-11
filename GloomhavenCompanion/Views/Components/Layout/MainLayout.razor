@@ -34,7 +34,7 @@
 	<MudPopover Open="@showPopup">
 		<MudPaper Class="p-">
 			<MudGrid>
-				@foreach (var card in AppState.CurrentPlayer.Deck.CardsList)
+				@foreach (var card in AppState.CurrentGame.MonsterDeck.CardsList)
 				{
 					<MudItem xs="15">
 						<img src="@card.ImagePath" alt="Card image" style="width: 50px; height: 30px;" />

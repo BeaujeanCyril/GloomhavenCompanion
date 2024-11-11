@@ -94,4 +94,34 @@ public class LocalStorageAppStateStorage : IAppStateStorage
 		var serializedCampaign = await _localStorageService.GetItemAsync<string>($"Campaign_{companyName}");
 		return JsonSerializer.Deserialize<CampaignViewModel>(serializedCampaign);
 	}
+
+  public async Task UpdateCampaign(CampaignSummary updatedCampaign)
+  {
+    // Récupérez la campagne existante par son nom
+    string campaignKey = $"Campaign_{updatedCampaign.CompanyName}";
+    var existingCampaignJson = await _localStorageService.GetItemAsync<string>(campaignKey);
+
+    if (!string.IsNullOrEmpty(existingCampaignJson))
+    {
+      // Désérialisez la campagne existante
+      var existingCampaign = JsonSerializer.Deserialize<CampaignViewModel>(existingCampaignJson);
+
+      // Mettez à jour les informations de la campagne existante avec les nouvelles données
+      if (existingCampaign != null)
+      {
+        existingCampaign.CompanyName = updatedCampaign.CompanyName;
+        existingCampaign.Players = updatedCampaign.Players;
+
+        // Sérialisez et enregistrez la campagne mise à jour
+        var updatedCampaignJson = JsonSerializer.Serialize(existingCampaign);
+        await _localStorageService.SetItemAsync(campaignKey, updatedCampaignJson);
+      }
+    }
+    else
+    {
+      Console.WriteLine("Campagne non trouvée pour la mise à jour.");
+    }
+  }
+
+
 }

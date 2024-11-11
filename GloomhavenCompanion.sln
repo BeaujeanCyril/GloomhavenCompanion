@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloomhavenCompanion.API", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloomhavenCompanion.Data", "GloomhavenCompanion.Data\GloomhavenCompanion.Data.csproj", "{2463A4A5-942D-4E1A-9386-3DDAEB0236D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloomhavenCompanion.Infrastructure", "GloomhavenCompanion.Infrastructure\GloomhavenCompanion.Infrastructure.csproj", "{899539FE-776C-4840-8CC2-3E970DFA3879}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloomhavenCompanion.Infrastructure", "GloomhavenCompanion.Infrastructure\GloomhavenCompanion.Infrastructure.csproj", "{899539FE-776C-4840-8CC2-3E970DFA3879}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2463A4A5-942D-4E1A-9386-3DDAEB0236D6} = {2463A4A5-942D-4E1A-9386-3DDAEB0236D6}
 	EndProjectSection

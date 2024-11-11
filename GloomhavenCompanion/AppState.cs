@@ -6,8 +6,6 @@ public class AppState
 	public List<ElementViewModel> Elements { get; private set; }
 	public List<CampaignViewModel> Campaigns { get; private set; } = [];
 
-	public List<DeckViewModel> Decks { get; set; } = [];
-	public DeckViewModel MonsterDeck { get; set; }
 	public PlayerViewModel CurrentPlayer { get; set; }
 	public CampaignViewModel CurrentCampaign { get; set; }
 	public ScenarioViewModel CurrentScenario { get; set; }
@@ -22,11 +20,7 @@ public class AppState
 	public AppState(IAppStateStorage appStateStorage)
 	{
 		_appStateStorage = appStateStorage;
-		// CurrentGame = new GameViewModel();
-		// CurrentGame.AddNewRound();
 		GenerateElements();
-		CreateDeck("MonsterDeck");
-		CurrentPlayer = new PlayerViewModel() { Name = "Monster", Deck = MonsterDeck };
 	}
 
 
@@ -76,6 +70,21 @@ public class AppState
 		CurrentCampaign = await _appStateStorage.LoadCampaignByCampaignSummary(campaign.CompanyName);
 		//Campaigns = await _appStateStorage.LoadCampaignsAsync();
 		//CurrentCampaign = Campaigns[0];
+	}
+	public async Task UpdateCampaignAsync(CampaignSummary updatedCampaign)
+	{
+		// Logique pour mettre à jour la campagne, par exemple en appelant une API ou en mettant à jour une base de données.
+		// Exemple simplifié :
+		var existingCampaign = CampainSummary.FirstOrDefault(c => c.CompanyName == updatedCampaign.CompanyName);
+		if (existingCampaign != null)
+		{
+			existingCampaign.CompanyName = updatedCampaign.CompanyName;
+			existingCampaign.Players = updatedCampaign.Players;
+			await _appStateStorage.UpdateCampaign(existingCampaign);
+			// Notifiez les abonnés que l'état a changé
+			NotifyStateChanged();
+		}
+		await Task.CompletedTask;
 	}
 
 
@@ -138,16 +147,16 @@ public class AppState
 
 	#region Deck
 
-	public void CreateDeck(string name)
+	public DeckViewModel CreateDeck(string name)
 	{
-		MonsterDeck = new DeckViewModel { Id = GenerateDeckId(), Name = name };
+		var MonsterDeck = new DeckViewModel { Id = CurrentCampaign.Players.Count+1, Name = name };
 		InitializeDeckCards(MonsterDeck);
 		if (!MonsterDeck.IsShuffled)
 		{
 			MonsterDeck.ShuffleDeck();
 			MonsterDeck.IsShuffled = true;
 		}
-		Decks.Add(MonsterDeck);
+		return MonsterDeck ;
 	}
 
 	private void InitializeDeckCards(DeckViewModel deck)
@@ -172,11 +181,11 @@ public class AppState
 		}
 	}
 
-	private int GenerateDeckId()
+/*	private int GenerateDeckId()
 	{
 		// Logique pour générer un ID unique pour le deck
 		return Decks.Count + 1; // Exemple simple d'ID
-	}
+	}*/
 	#endregion Deck
 
 	#region Scenario
@@ -238,6 +247,7 @@ public class AppState
 				else
 				{
 					CurrentGame = new GameViewModel();
+					CurrentGame.MonsterDeck = CreateDeck("MonsterDeck");
 					CurrentGame.InitializePlayersForGame(CurrentCampaign.Players);
 					CurrentScenario.Game = CurrentGame;
 				}

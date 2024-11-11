@@ -6,6 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="Views\EditCampaignDialog.razor" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
@@ -24,6 +28,7 @@
 
   <ItemGroup>
     <None Include="Views\Components\RoundComponent.razor" />
+    <None Include="Views\Components\EditCampaignDialog.razor" />
   </ItemGroup>
 
 
@@ -34,6 +39,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GloomhavenCompanion.Infrastructure\GloomhavenCompanion.Infrastructure.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\EditCampaignDialog.razor" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\EditCampaignDialog.razor" />
   </ItemGroup>
 
 </Project>

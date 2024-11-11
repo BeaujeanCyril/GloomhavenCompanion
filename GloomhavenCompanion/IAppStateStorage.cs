@@ -9,6 +9,7 @@ namespace GloomhavenCompanion
 		Task<List<CampaignSummary>> LoadAllCampaignNamesAsync();
 		Task<CampaignViewModel> LoadCampaignByCampaignSummary(string companyName);
 		Task<List<CampaignViewModel>> LoadCampaignsAsync();
-	}
+    Task UpdateCampaign(CampaignSummary existingCampaign);
+  }
 
 }
