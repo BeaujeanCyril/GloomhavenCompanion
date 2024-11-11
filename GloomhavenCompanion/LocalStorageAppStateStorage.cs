@@ -1,7 +1,7 @@
 ﻿namespace GloomhavenCompanion;
 
 using Blazored.LocalStorage;
-using GloomhavenCompanion.ViewModels;
+using GloomhavenCompanion.Application.ViewModels;
 using System.Text.Json;
 
 
@@ -123,5 +123,8 @@ public class LocalStorageAppStateStorage : IAppStateStorage
     }
   }
 
-
+  public Task<CampaignViewModel> LoadCampaignByCampaignSummary(int id)
+  {
+    throw new NotImplementedException();
+  }
 }

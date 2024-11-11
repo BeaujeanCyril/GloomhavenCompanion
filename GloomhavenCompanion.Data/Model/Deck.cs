@@ -1,10 +1,24 @@
-﻿namespace GloomhavenCompanion.Data.Model;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace GloomhavenCompanion.Data.Model;
 
 public class Deck
 {
+
+  [NotMapped]
+  public List<Card> CardsHistoric { get; set; } = [];
+[Key]
   public int Id { get; set; }
   public string Name { get; set; }
   public List<Card> CardsList { get; set; } = [];
+  public bool IsShowingBackCard { get; set; } // Pour savoir si on montre le dos de la carte
+  public bool IsShuffled { get; set; } = false;
+
+
+
+
+
 
   public void ShuffleDeck()
   {
@@ -35,7 +49,8 @@ public class Deck
     {
       Id = GenerateUniqueId(),
       Value = "Annulé",
-      NeedShuffle = true
+      NeedShuffle = false,
+      ImagePath = $@"\img\DeckModifier\Monsters\gh-am-mm-01.png"
     };
 
     CardsList.Add(annulCard);
@@ -47,8 +62,9 @@ public class Deck
     var x2Card = new Card
     {
       Id = GenerateUniqueId(),
-      Value = "X2",
-      NeedShuffle = true
+      Value = "x2",
+      NeedShuffle = false,
+      ImagePath = $@"\img\DeckModifier\Monsters\BenedictionCard.png"
     };
 
     CardsList.Add(x2Card);
@@ -62,7 +78,7 @@ public class Deck
 
     // Récupérer la première carte
     var firstCard = CardsList.First();
-
+    CardsHistoric.Add(firstCard);
     // Retirer la carte du début et l'ajouter à la fin
     CardsList.RemoveAt(0);
     CardsList.Add(firstCard);
@@ -71,4 +87,3 @@ public class Deck
     return firstCard.Value;
   }
 }
-

@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GloomhavenCompagnion.Application\GloomhavenCompagnion.Application.csproj" />
     <ProjectReference Include="..\GloomhavenCompanion.Data\GloomhavenCompanion.Data.csproj" />
   </ItemGroup>
 

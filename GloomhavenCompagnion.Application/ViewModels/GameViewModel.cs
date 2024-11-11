@@ -1,6 +1,7 @@
-﻿namespace GloomhavenCompanion.ViewModels;
+﻿namespace GloomhavenCompanion.Application.ViewModels;
 public class GameViewModel
 {
+public int Id { get; set; }
 	public DateTime DateTimeStarted { get; set; } = DateTime.Now;
 	public List<PlayerGameViewModel> Players { get; set; } = [];
 	public List<RoundViewModel> Rounds { get; set; } = [];

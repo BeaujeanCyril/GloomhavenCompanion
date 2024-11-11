@@ -4,6 +4,7 @@ using GloomhavenCompanion.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GloomhavenCompanion.Infrastructure.Migrations
 {
     [DbContext(typeof(GloomhavenCompanionDbContext))]
-    partial class GloomhavenCompanionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241111224752_ajoutManyToMany")]
+    partial class ajoutManyToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,5 +1,5 @@
 ﻿@page "/scenarios"
-@using GloomhavenCompanion.ViewModels
+@using GloomhavenCompanion.Application.ViewModels
 @inject AppState AppState
 @inject NavigationManager Navigation
 
@@ -8,7 +8,7 @@
 <MudGrid>
   @if (AppState.CurrentCampaign != null && AppState.CurrentCampaign.Scenarios.Count > 0)
   {
-    @foreach (var scenario in AppState.CurrentCampaign.Scenarios.Values.OrderBy(s => s.Id))
+    @foreach (var scenario in AppState.CurrentCampaign.Scenarios.OrderBy(s => s.Id))
     {
       <MudItem xs="6" sm="4" md="3" lg="2" Style="margin: 20px;">
         <MudCard @onclick="() => NavigateToGame(scenario.Id)" Style="max-width: 100%; height: auto;">
@@ -25,6 +25,7 @@
     <MudText>No scenarios found for the current campaign.</MudText>
   }
 </MudGrid>
+
 
 
 @code {

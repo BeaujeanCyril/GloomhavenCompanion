@@ -38,6 +38,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\GloomhavenCompagnion.Application\GloomhavenCompagnion.Application.csproj" />
     <ProjectReference Include="..\GloomhavenCompanion.Infrastructure\GloomhavenCompanion.Infrastructure.csproj" />
   </ItemGroup>
 

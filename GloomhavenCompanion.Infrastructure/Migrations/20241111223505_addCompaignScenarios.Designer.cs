@@ -4,6 +4,7 @@ using GloomhavenCompanion.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GloomhavenCompanion.Infrastructure.Migrations
 {
     [DbContext(typeof(GloomhavenCompanionDbContext))]
-    partial class GloomhavenCompanionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241111223505_addCompaignScenarios")]
+    partial class addCompaignScenarios
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -906,13 +909,13 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
             modelBuilder.Entity("GloomhavenCompanion.Data.Model.CampaignScenario", b =>
                 {
                     b.HasOne("GloomhavenCompanion.Data.Model.Campaign", "Campaign")
-                        .WithMany("CampaignScenarios")
+                        .WithMany()
                         .HasForeignKey("CampaignId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GloomhavenCompanion.Data.Model.Scenario", "Scenario")
-                        .WithMany("CampaignScenarios")
+                        .WithMany()
                         .HasForeignKey("ScenarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -990,8 +993,6 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
 
             modelBuilder.Entity("GloomhavenCompanion.Data.Model.Campaign", b =>
                 {
-                    b.Navigation("CampaignScenarios");
-
                     b.Navigation("Players");
 
                     b.Navigation("Scenarios");
@@ -1012,11 +1013,6 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
             modelBuilder.Entity("GloomhavenCompanion.Data.Model.Player", b =>
                 {
                     b.Navigation("Effects");
-                });
-
-            modelBuilder.Entity("GloomhavenCompanion.Data.Model.Scenario", b =>
-                {
-                    b.Navigation("CampaignScenarios");
                 });
 #pragma warning restore 612, 618
         }

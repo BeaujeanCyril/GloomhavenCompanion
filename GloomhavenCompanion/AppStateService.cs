@@ -1,6 +1,6 @@
 ﻿namespace GloomhavenCompanion;
 
-using GloomhavenCompanion.ViewModels;
+using GloomhavenCompanion.Application.ViewModels;
 using System.Threading.Tasks;
 
 public class AppStateService

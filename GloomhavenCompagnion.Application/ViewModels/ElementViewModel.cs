@@ -1,4 +1,4 @@
-﻿namespace GloomhavenCompanion.ViewModels
+﻿namespace GloomhavenCompanion.Application.ViewModels
 {
 	public class ElementViewModel
 	{

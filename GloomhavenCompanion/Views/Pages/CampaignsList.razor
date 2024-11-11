@@ -3,33 +3,33 @@
 @inject AppState AppState
 @inject NavigationManager NavigationManager
 @inject MudBlazor.IDialogService DialogService
-@using GloomhavenCompanion.ViewModels
+@using GloomhavenCompanion.Application.ViewModels
 @using MudBlazor
 
 <PageTitle>Liste des équipes</PageTitle>
 
-@if (AppState.CampainSummary == null || AppState.CampainSummary.Count == 0)
+@if (AppState.Campaigns == null || AppState.Campaigns.Count == 0)
 {
-    <MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center">
-        <MudItem Style="margin-top: 20px; margin-left:20px">
-            <MudText Align="Align.Center">Aucun groupe de héros n'a encore répondu à l'appel…</MudText>
-            <MudButton Class="my-2" Variant="Variant.Filled" Size="Size.Large" OnClick="CreateNewCampaignNavigate">Soyez les premiers!</MudButton>
-        </MudItem>
-    </MudGrid>
+  <MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center">
+    <MudItem Style="margin-top: 20px; margin-left:20px">
+      <MudText Align="Align.Center">Aucun groupe de héros n'a encore répondu à l'appel…</MudText>
+      <MudButton Class="my-2" Variant="Variant.Filled" Size="Size.Large" OnClick="CreateNewCampaignNavigate">Soyez les premiers!</MudButton>
+    </MudItem>
+  </MudGrid>
 }
 else
 {
-    <MudTable Items="AppState.CampainSummary" Hover="true" Striped="true" Bordered="true" Class="mt-4 ml-4">
-        <HeaderContent>
-            <MudTh>Nom de la compagnie</MudTh>
-            <MudTh>Aventuriers</MudTh>
-            <MudTh>Actions</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd>@context.CompanyName</MudTd>
-            <MudTd>
-                @if (context.Players != null && context.Players.Any())
-                {
+  <MudTable Items="AppState.Campaigns" Hover="true" Striped="true" Bordered="true" Class="mt-4 ml-4">
+    <HeaderContent>
+      <MudTh>Nom de la compagnie</MudTh>
+      <MudTh>Aventuriers</MudTh>
+      <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+      <MudTd>@context.CompanyName</MudTd>
+      <MudTd>
+        @if (context.Players != null && context.Players.Any())
+        {
           <MudTable Items="context.Players" Dense="true" Striped="true" Bordered="true">
             <HeaderContent>
               <MudTh>Nom</MudTh>
@@ -44,65 +44,64 @@ else
               <MudTd>@player.HealthPointsMax</MudTd>
             </RowTemplate>
           </MudTable>
-
-                }
-                else
-                {
-                    <MudText>Pas de joueurs</MudText>
-                }
-            </MudTd>
-            <MudTd>
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" OnClick="() => OpenEditDialog(context)">Éditer</MudButton>
-                <MudButton Variant="Variant.Outlined" Color="Color.Success" Size="Size.Small" OnClick="() => SetCurrentTeamAndNavigate(context)">Jouer</MudButton>
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
+        }
+        else
+        {
+          <MudText>Pas de joueurs</MudText>
+        }
+      </MudTd>
+      <MudTd>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" OnClick="() => OpenEditDialog(context)">Éditer</MudButton>
+        <MudButton Variant="Variant.Outlined" Color="Color.Success" Size="Size.Small" OnClick="() => SetCurrentTeamAndNavigate(context)">Jouer</MudButton>
+      </MudTd>
+    </RowTemplate>
+  </MudTable>
 }
 
 @code {
-    protected override void OnInitialized()
-    {
-        AppState.OnChange += StateHasChanged;
-    }
+  protected override void OnInitialized()
+  {
+    AppState.OnChange += StateHasChanged;
+  }
 
-    public void Dispose()
-    {
-        AppState.OnChange -= StateHasChanged; // Désabonner pour éviter les fuites de mémoire
-    }
+  public void Dispose()
+  {
+    AppState.OnChange -= StateHasChanged; // Désabonner pour éviter les fuites de mémoire
+  }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await AppState.LoadCampaignSummariesAsync();
-    }
+  protected override async Task OnInitializedAsync()
+  {
+    await AppState.LoadCampaignsAsync(); // Charger les campagnes depuis la base de données
+  }
 
-    private void RefreshTeamsList()
-    {
-        StateHasChanged();
-    }
+  private void RefreshTeamsList()
+  {
+    StateHasChanged();
+  }
 
-    private async void SetCurrentTeamAndNavigate(CampaignSummary chosenCampaign)
-    {
-        await AppState.LoadCampaignByCampaignSummaryAsync(chosenCampaign);
-        NavigationManager.NavigateTo("/scenarios");
-    }
+  private void SetCurrentTeamAndNavigate(CampaignViewModel chosenCampaign)
+  {
+    AppState.ResumeGame(chosenCampaign);
+    NavigationManager.NavigateTo("/scenarios");
+  }
 
-    private void CreateNewCampaignNavigate()
-    {
-        NavigationManager.NavigateTo("/create-campaign");
-    }
+  private void CreateNewCampaignNavigate()
+  {
+    NavigationManager.NavigateTo("/create-campaign");
+  }
 
-    private async void OpenEditDialog(CampaignSummary team)
-    {
-        var parameters = new DialogParameters { ["Team"] = team };
-        var options = new DialogOptions { CloseOnEscapeKey= true, CloseButton = true, MaxWidth = MaxWidth.Small,FullScreen= true, FullWidth = true };
-        var dialog = DialogService.Show<EditCampaignDialog>("Éditer la compagnie", parameters, options);
-        var result = await dialog.Result;
+  private async void OpenEditDialog(CampaignViewModel campaign)
+  {
+    var parameters = new DialogParameters { ["Campaign"] = campaign };
+    var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true, MaxWidth = MaxWidth.Small, FullScreen = true, FullWidth = true };
+    var dialog = DialogService.Show<EditCampaignDialog>("Éditer la compagnie", parameters, options);
+    var result = await dialog.Result;
 
-        if (!result.Canceled)
-        {
-            // Suppose que l'équipe a été mise à jour dans le dialog
-            await AppState.LoadCampaignSummariesAsync();
-            StateHasChanged();
-        }
+    if (!result.Canceled)
+    {
+      // Suppose que l'équipe a été mise à jour dans le dialog
+      await AppState.LoadCampaignsAsync();  // Recharger les campagnes après modification
+      StateHasChanged();
     }
+  }
 }

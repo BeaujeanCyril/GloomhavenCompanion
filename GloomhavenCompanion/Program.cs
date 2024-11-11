@@ -17,7 +17,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // A
 builder.Services.AddBlazoredLocalStorage(); // Pour utiliser localStorage
 
 // Enregistrer ton service personnalisé pour l'état de l'application
-builder.Services.AddScoped<IAppStateStorage, LocalStorageAppStateStorage>();
+builder.Services.AddScoped<IAppStateStorage, DBAppStateStorage>();
 
 // Enregistrer les services de l'application
 builder.Services.AddScoped<AppStateService>();

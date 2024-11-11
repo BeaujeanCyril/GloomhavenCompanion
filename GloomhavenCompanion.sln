@@ -5,6 +5,7 @@ VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloomhavenCompanion", "GloomhavenCompanion\GloomhavenCompanion.csproj", "{60010BE3-3A47-40D3-8804-1D8B31E9D512}"
 	ProjectSection(ProjectDependencies) = postProject
+		{38A1C5E1-4E13-4C54-9DEA-A4C76577DE3E} = {38A1C5E1-4E13-4C54-9DEA-A4C76577DE3E}
 		{899539FE-776C-4840-8CC2-3E970DFA3879} = {899539FE-776C-4840-8CC2-3E970DFA3879}
 	EndProjectSection
 EndProject
@@ -15,7 +16,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloomhavenCompanion.Infrastructure", "GloomhavenCompanion.Infrastructure\GloomhavenCompanion.Infrastructure.csproj", "{899539FE-776C-4840-8CC2-3E970DFA3879}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2463A4A5-942D-4E1A-9386-3DDAEB0236D6} = {2463A4A5-942D-4E1A-9386-3DDAEB0236D6}
+		{38A1C5E1-4E13-4C54-9DEA-A4C76577DE3E} = {38A1C5E1-4E13-4C54-9DEA-A4C76577DE3E}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloomhavenCompagnion.Application", "GloomhavenCompagnion.Application\GloomhavenCompagnion.Application.csproj", "{38A1C5E1-4E13-4C54-9DEA-A4C76577DE3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,10 @@ Global
 		{899539FE-776C-4840-8CC2-3E970DFA3879}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{899539FE-776C-4840-8CC2-3E970DFA3879}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{899539FE-776C-4840-8CC2-3E970DFA3879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38A1C5E1-4E13-4C54-9DEA-A4C76577DE3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38A1C5E1-4E13-4C54-9DEA-A4C76577DE3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38A1C5E1-4E13-4C54-9DEA-A4C76577DE3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38A1C5E1-4E13-4C54-9DEA-A4C76577DE3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

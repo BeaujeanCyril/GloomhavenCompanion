@@ -1,7 +1,8 @@
-﻿namespace GloomhavenCompanion.ViewModels
+﻿namespace GloomhavenCompanion.Application.ViewModels
 {
   public class PlayerViewModel
   {
+public int Id { get; set; }
     public string Name { get; set; }
     public int HealthPointsMax { get; set; }
     public int Coins { get; set; } = 0;
