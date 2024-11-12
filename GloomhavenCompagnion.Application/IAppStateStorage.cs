@@ -9,7 +9,7 @@ namespace GloomhavenCompanion
 		Task<List<CampaignSummary>> LoadAllCampaignNamesAsync();
 		Task<CampaignViewModel> LoadCampaignByCampaignSummary(int id);
 		Task<List<CampaignViewModel>> LoadCampaignsAsync();
-    Task UpdateCampaign(CampaignSummary existingCampaign);
+    Task UpdateCampaign(CampaignViewModel existingCampaign);
     Task<ScenarioViewModel> GetScenarioByIdAsync(int campaignId, int scenarioId);
 
   }

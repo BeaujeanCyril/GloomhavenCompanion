@@ -84,19 +84,11 @@ public class AppState
     //Campaigns = await _appStateStorage.LoadCampaignsAsync();
     //CurrentCampaign = Campaigns[0];
   }
-  public async Task UpdateCampaignAsync(CampaignSummary updatedCampaign)
+  public async Task UpdateCampaignAsync(CampaignViewModel updatedCampaign)
   {
-    // Logique pour mettre à jour la campagne, par exemple en appelant une API ou en mettant à jour une base de données.
-    // Exemple simplifié :
-    var existingCampaign = CampainSummary.FirstOrDefault(c => c.CompanyName == updatedCampaign.CompanyName);
-    if (existingCampaign != null)
-    {
-      existingCampaign.CompanyName = updatedCampaign.CompanyName;
-      existingCampaign.Players = updatedCampaign.Players;
-      await _appStateStorage.UpdateCampaign(existingCampaign);
-      // Notifiez les abonnés que l'état a changé
+      await _appStateStorage.UpdateCampaign(updatedCampaign);
       NotifyStateChanged();
-    }
+    
     await Task.CompletedTask;
   }
 

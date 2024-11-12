@@ -53,19 +53,21 @@
 @code {
   [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-  [Parameter] public CampaignSummary Team { get; set; }
+  [Parameter] public CampaignViewModel Team { get; set; }
 
-  private CampaignSummary EditableTeam { get; set; }
+  private CampaignViewModel EditableTeam { get; set; }
   private MudForm form;
 
   protected override void OnInitialized()
   {
     // Créer une copie pour éviter de modifier directement l'état global avant sauvegarde
-    EditableTeam = new CampaignSummary
+    EditableTeam = new CampaignViewModel
       {
+        Id = Team.Id,
         CompanyName = Team.CompanyName,
         Players = Team.Players.Select(p => new PlayerViewModel
         {
+          Id = p.Id,
           Name = p.Name,
           Xp = p.Xp,
           Coins = p.Coins,
@@ -83,18 +85,17 @@
   {
     await form.Validate();
 
-    if (form.IsValid)
-    {
-      // Mettre à jour l'équipe dans l'état global
-      var originalTeam = AppState.CampainSummary.FirstOrDefault(t => t.CompanyName == EditableTeam.CompanyName);
-      if (originalTeam != null)
-      {
-        originalTeam.CompanyName = EditableTeam.CompanyName;
-        originalTeam.Players = EditableTeam.Players;
-        await AppState.UpdateCampaignAsync(originalTeam);
-      }
 
-      MudDialog.Close(DialogResult.Ok(true));
+      if (form.IsValid)
+      {
+  
+          // Appel à une méthode pour sauvegarder les changements en base
+          await AppState.UpdateCampaignAsync(EditableTeam);
+       
+
+        // Fermer le dialogue avec un résultat positif
+        MudDialog.Close(DialogResult.Ok(true));
+      
     }
   }
 

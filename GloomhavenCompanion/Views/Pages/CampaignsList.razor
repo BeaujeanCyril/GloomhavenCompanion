@@ -92,7 +92,7 @@ else
 
   private async void OpenEditDialog(CampaignViewModel campaign)
   {
-    var parameters = new DialogParameters { ["Campaign"] = campaign };
+    var parameters = new DialogParameters { ["Team"] = campaign };
     var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true, MaxWidth = MaxWidth.Small, FullScreen = true, FullWidth = true };
     var dialog = DialogService.Show<EditCampaignDialog>("Éditer la compagnie", parameters, options);
     var result = await dialog.Result;

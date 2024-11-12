@@ -137,4 +137,9 @@ public class LocalStorageAppStateStorage : IAppStateStorage
   {
     throw new NotImplementedException();
   }
+
+  public Task UpdateCampaign(CampaignViewModel existingCampaign)
+  {
+    throw new NotImplementedException();
+  }
 }

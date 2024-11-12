@@ -72,7 +72,7 @@ public class DBAppStateStorage : IAppStateStorage
             {
               CampaignId = campaignId,  // Associe la campagne existante
               ScenarioId = scenarioId,  // Associe le scénario existant
-            GameId = newGameId,
+              GameId = newGameId,
             };
 
             // Ajouter le CampaignScenario au DbContext pour qu'il soit persisté
@@ -80,7 +80,7 @@ public class DBAppStateStorage : IAppStateStorage
             await _dbContext.SaveChangesAsync(); // Sauvegarder le CampaignScenario et la liaison avec Game
 
             // Charger les joueurs existants de la base de données
-            var players = await _dbContext.Players.ToListAsync();
+            var players = await _dbContext.Players.Where(a => a.CampaignId == campaignId).ToListAsync();
 
             // Ajouter chaque joueur au jeu (via PlayerGame)
             foreach (var player in players)
@@ -116,10 +116,13 @@ public class DBAppStateStorage : IAppStateStorage
       }
 
       // Inclure les PlayerGame et leurs informations sur Player dans Game
+      // Charger le jeu avec les joueurs associés uniquement à la campagne actuelle
       var gameWithPlayers = await _dbContext.Games
-          .Include(g => g.PlayerGames)
-          .ThenInclude(pg => pg.Player)
+          .Include(g => g.PlayerGames
+              .Where(pg => pg.Player.CampaignId == campaignScenario.CampaignId)) // Filtrer par l'ID de la campagne
+          .ThenInclude(pg => pg.Player) // Inclure uniquement les joueurs associés au bon CampaignId
           .FirstOrDefaultAsync(g => g.Id == campaignScenario.GameId);
+
 
       // Retourner le ScenarioViewModel avec le Game associé, les Players, et les autres détails
       var scenarioViewModel = new ScenarioViewModel
@@ -133,6 +136,7 @@ public class DBAppStateStorage : IAppStateStorage
           MonsterDeck = new DeckViewModel { }, // Remplir avec les informations nécessaires
           Players = gameWithPlayers.PlayerGames.Select(pg => new PlayerGameViewModel
           {
+            Id = pg.Player.Id,
             Name = pg.Player.Name,
             HealthPoints = pg.HealthPoints,
             HealthPointsMax = pg.HealthPointsMax,
@@ -200,6 +204,7 @@ public class DBAppStateStorage : IAppStateStorage
       CompanyName = campaign.CompanyName,
       Players = campaign.Players.Select(player => new PlayerViewModel
       {
+        Id = player.Id,
         Name = player.Name,
         HealthPointsMax = player.HealthPointsMax,
         Coins = player.Coins,
@@ -247,8 +252,40 @@ public class DBAppStateStorage : IAppStateStorage
     throw new NotImplementedException();
   }
 
-  public Task UpdateCampaign(CampaignSummary existingCampaign)
+  public async Task UpdateCampaign(CampaignViewModel existingCampaign)
   {
-    throw new NotImplementedException();
+    var campaign = await _dbContext.Campaigns
+        .Include(c => c.Players) // Inclure les joueurs pour gérer les modifications
+        .FirstOrDefaultAsync(c => c.Id == existingCampaign.Id);
+    if (campaign == null)
+    {
+      throw new InvalidOperationException($"La campagne avec l'ID {existingCampaign.Id} n'a pas été trouvée.");
+    }
+    campaign.CompanyName = existingCampaign.CompanyName;
+    foreach (var playerVm in existingCampaign.Players)
+    {
+      var player = campaign.Players.FirstOrDefault(p => p.Id == playerVm.Id);
+      if (player != null)
+      {
+        player.Id = playerVm.Id;
+        player.Name = playerVm.Name;
+        player.Xp = playerVm.Xp;
+        player.Coins = playerVm.Coins;
+        player.HealthPointsMax = playerVm.HealthPointsMax;
+      }
+      else
+      {
+        player = new Player
+        {
+
+          Name = playerVm.Name,
+          Xp = playerVm.Xp,
+          Coins = playerVm.Coins,
+          HealthPointsMax = playerVm.HealthPointsMax
+        };
+        campaign.Players.Add(player);
+      }
+    }
+    await _dbContext.SaveChangesAsync();
   }
 }
