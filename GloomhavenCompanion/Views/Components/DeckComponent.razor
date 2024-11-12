@@ -66,10 +66,15 @@
 
 	protected override void OnParametersSet()
 	{
-		// Récupérer le deck sélectionné
-		SelectedDeck = AppState.CurrentGame.MonsterDeck;
+		CurrentPlayer = new PlayerViewModel()
+			{
+				Name = "Monster",
+				Deck = AppState.CurrentGame.MonsterDeck
+			};
 
-		CurrentPlayer = AppState.CurrentPlayer;
+		// Récupérer le deck sélectionné
+		SelectedDeck = CurrentPlayer.Deck;
+
 		// Si le deck existe et que la carte est visible, on affiche la première carte
 		if (SelectedDeck != null && SelectedDeck.IsShowingBackCard)
 		{
