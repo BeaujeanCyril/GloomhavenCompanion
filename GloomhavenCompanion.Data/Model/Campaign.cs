@@ -12,8 +12,8 @@ namespace GloomhavenCompanion.Data.Model
 
     [Required(ErrorMessage = "Le nombre de joueurs est requis")]
     [Range(1, int.MaxValue, ErrorMessage = "Une équipe doit être constituée de 1 à 4 joueurs max")]
-    public List<Player> Players { get; set; }
-    public List<Scenario> Scenarios { get; set; }
+    public List<Player> Players { get; set; } = new List<Player>();  // Initialisation des Players
+
 
 
     // Propriété de navigation

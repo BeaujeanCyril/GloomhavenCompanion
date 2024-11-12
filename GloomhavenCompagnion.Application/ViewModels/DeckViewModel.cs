@@ -8,7 +8,37 @@
 		public List<CardViewModel> CardsList { get; set; } = [];
 		public bool IsShowingBackCard { get; set; } // Pour savoir si on montre le dos de la carte
 		public bool IsShuffled { get; set; } = false;
-		public void ShuffleDeck()
+
+
+    public DeckViewModel()
+    {
+      InitializeDeckCards(); // Appeler la méthode d'initialisation lors de la création de l'objet
+    }
+
+    private void InitializeDeckCards()
+    {
+      var imageNumbers = Enumerable.Range(1, 20).ToList(); // Générez une liste de 1 à 20
+
+      foreach (var number in imageNumbers)
+      {
+        bool NeedShuffle = false;
+        var imagePath = $@"/img/DeckModifier/Monsters/gh-am-m-{number:D2}.png"; // Format 2 chiffres
+        if (number == 19 || number == 20)
+        {
+          NeedShuffle = true;
+        }
+        this.CardsList.Add(new CardViewModel
+        {
+          Id = number, // Utilise le numéro comme ID
+          Value = $"Card {number}", // La valeur peut être personnalisée selon tes besoins
+          ImagePath = imagePath, // Chemin dynamique de l'image
+          NeedShuffle = NeedShuffle
+        });
+      }
+    }
+
+
+    public void ShuffleDeck()
 		{
 			Random rng = new();
 			int n = CardsList.Count;

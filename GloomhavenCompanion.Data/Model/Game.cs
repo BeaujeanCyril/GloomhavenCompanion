@@ -7,9 +7,13 @@ public class Game
 [Key]
 public int Id { get; set; }
   public DateTime DateTimeStarted { get; set; } = DateTime.Now;
-  public List<Player> Players { get; set; } = [];
-  public List<Round> Rounds { get; set; } = [];
+  public List<Round> Rounds { get; set; } = new List<Round>();
   public Deck MonsterDeck { get; set; }
+  public string GameState { get; set; } // Ex: "En cours", "Terminé", "Échec", etc.
+  // Propriété de navigation pour représenter la relation inverse avec CampaignScenario
+  public CampaignScenario CampaignScenario { get; set; }
+  // Relation plusieurs-à-plusieurs avec Player
+  public List<PlayerGame> PlayerGames { get; set; } = new List<PlayerGame>();
 
   public void AddNewRound()
   {

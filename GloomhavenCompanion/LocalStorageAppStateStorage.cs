@@ -127,4 +127,14 @@ public class LocalStorageAppStateStorage : IAppStateStorage
   {
     throw new NotImplementedException();
   }
+
+  public Task<ScenarioViewModel> GetScenarioByIdAsync(int scenarioId)
+  {
+    throw new NotImplementedException();
+  }
+
+  public Task<ScenarioViewModel> GetScenarioByIdAsync(int campaignId, int scenarioId)
+  {
+    throw new NotImplementedException();
+  }
 }

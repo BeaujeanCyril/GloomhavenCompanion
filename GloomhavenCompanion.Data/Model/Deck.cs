@@ -8,7 +8,7 @@ public class Deck
 
   [NotMapped]
   public List<Card> CardsHistoric { get; set; } = [];
-[Key]
+  [Key]
   public int Id { get; set; }
   public string Name { get; set; }
   public List<Card> CardsList { get; set; } = [];
@@ -16,8 +16,31 @@ public class Deck
   public bool IsShuffled { get; set; } = false;
 
 
+  public Deck()
+  {
+    InitializeDeckCards(); // Appeler la méthode d'initialisation lors de la création de l'objet
+  }
 
+  private void InitializeDeckCards()
+  {
+    var imageNumbers = Enumerable.Range(1, 20).ToList(); // Générez une liste de 1 à 20
 
+    foreach (var number in imageNumbers)
+    {
+      bool NeedShuffle = false;
+      var imagePath = $@"/img/DeckModifier/Monsters/gh-am-m-{number:D2}.png"; // Format 2 chiffres
+      if (number == 19 || number == 20)
+      {
+        NeedShuffle = true;
+      }
+      this.CardsList.Add(new Card
+      {
+        Value = $"Card {number}", // La valeur peut être personnalisée selon tes besoins
+        ImagePath = imagePath, // Chemin dynamique de l'image
+        NeedShuffle = NeedShuffle
+      });
+    }
+  }
 
 
   public void ShuffleDeck()

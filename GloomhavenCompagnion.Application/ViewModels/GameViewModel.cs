@@ -6,8 +6,11 @@ public int Id { get; set; }
 	public List<PlayerGameViewModel> Players { get; set; } = [];
 	public List<RoundViewModel> Rounds { get; set; } = [];
 	public DeckViewModel MonsterDeck { get; set; }
+  public string GameState { get; set; } // Ex: "En cours", "Terminé", "Échec", etc.
+                                        // Propriété de navigation pour représenter la relation inverse avec CampaignScenario
 
-	public void AddNewRound()
+
+  public void AddNewRound()
 	{
 		Rounds.Add(new RoundViewModel
 		{

@@ -1,5 +1,6 @@
 ﻿using GloomhavenCompanion.Application.ViewModels;
 using GloomhavenCompanion.Data.Model;
+using Microsoft.EntityFrameworkCore;
 namespace GloomhavenCompanion;
 
 public class AppState
@@ -12,6 +13,8 @@ public class AppState
   public ScenarioViewModel CurrentScenario { get; set; }
   public event Action OnRoundChanged;
   public GameViewModel CurrentGame { get; set; }
+  public List<ScenarioViewModel> scenarios { get; private set; }
+
   public List<CampaignSummary> CampainSummary { get; private set; }
 
   private readonly IAppStateStorage _appStateStorage;
@@ -22,6 +25,7 @@ public class AppState
   {
     _appStateStorage = appStateStorage;
     GenerateElements();
+    GenerateScenarios();
   }
 
 
@@ -52,7 +56,6 @@ public class AppState
   #region Campaign
   public async Task AddCampaign(CampaignViewModel NewCampaign)
   {
-    NewCampaign.Scenarios = GenerateScenarios();
     Campaigns.Add(NewCampaign);
 
     CurrentCampaign = NewCampaign;
@@ -200,11 +203,11 @@ public class AppState
   #endregion Deck
 
   #region Scenario
-  private List<ScenarioViewModel> GenerateScenarios()
+  private void GenerateScenarios()
   {
     string folderPath = Path.Combine("wwwroot", "img", "Scenarios");
 
-    List<ScenarioViewModel> scenarios = new List<ScenarioViewModel>();
+    scenarios = new List<ScenarioViewModel>();
 
     if (Directory.Exists(folderPath))
     {
@@ -241,38 +244,56 @@ public class AppState
       Console.WriteLine("Le dossier des images de scénario n'existe pas.");
     }
 
-    return scenarios;
   }
 
 
   public async Task LoadScenario(int scenarioId)
   {
-    // Logique existante...
-    if (CurrentCampaign != null)
+    // Vérifie si une campagne est en cours
+    if (CurrentCampaign == null)
+      return;
+
+    // Recherche le scénario dans la liste de la campagne actuelle
+    var scenario = CurrentCampaign.Scenarios.FirstOrDefault(s => s.Id == scenarioId);
+
+    // Si le scénario n'est pas encore chargé dans la campagne, on le récupère
+    if (scenario == null)
     {
-      // Recherche du scénario dans la liste
-      var scenario = CurrentCampaign.Scenarios.FirstOrDefault(s => s.Id == scenarioId);
+      // Charger le scénario depuis la base de données
+      scenario = await _appStateStorage.GetScenarioByIdAsync(CurrentCampaign.Id, scenarioId);
 
-      if (scenario != null)
+      if (scenario == null)
       {
-        CurrentScenario = scenario;
-
-        if (CurrentScenario.Game != null)
-        {
-          CurrentGame = CurrentScenario.Game;
-        }
-        else
-        {
-          CurrentGame = new GameViewModel();
-          CurrentGame.MonsterDeck = CreateDeck("MonsterDeck");
-          CurrentGame.InitializePlayersForGame(CurrentCampaign.Players);
-          CurrentScenario.Game = CurrentGame;
-        }
+        // Le scénario n'existe pas en base de données
+        Console.WriteLine($"Scénario {scenarioId} introuvable.");
+        return;
       }
+
+      // Ajoute le scénario chargé à la campagne
+      CurrentCampaign.Scenarios.Add(scenario);
     }
-    // Tu peux ajouter un délai ou un appel asynchrone ici si nécessaire
-    await Task.CompletedTask; // Cela permet de respecter la signature async sans réellement être asynchrone
+
+    // Assigne le scénario actuel
+    CurrentScenario = scenario;
+
+    // Initialise le jeu si nécessaire
+    if (CurrentScenario.Game != null)
+    {
+      CurrentGame = CurrentScenario.Game;
+    }
+    else
+    {
+      CurrentGame = new GameViewModel
+      {
+        MonsterDeck = CreateDeck("MonsterDeck")
+      };
+      CurrentGame.InitializePlayersForGame(CurrentCampaign.Players);
+      CurrentScenario.Game = CurrentGame;
+    }
+
+    await Task.CompletedTask; // Conserve la signature asynchrone
   }
+
 
 
 

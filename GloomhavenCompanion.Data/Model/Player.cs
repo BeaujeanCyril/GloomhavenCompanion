@@ -9,7 +9,7 @@ public class Player
   public int HealthPointsMax { get; set; }
   public int Coins { get; set; } = 0;
   public int Xp { get; set; } = 0;
-  public Deck Deck { get; set; } = new Deck();
+  public Deck Deck { get; set; }
 
   public List<Effect> Effects { get; set; } = [];
 
@@ -20,4 +20,8 @@ public class Player
   // Relation avec campaign
   public int CampaignId { get; set; }
   public Campaign Campaign { get; set; }
+
+
+  // Relation avec Game (relation plusieurs-à-plusieurs via une table de jonction)
+  public List<PlayerGame> PlayerGames { get; set; } = new List<PlayerGame>();
 }

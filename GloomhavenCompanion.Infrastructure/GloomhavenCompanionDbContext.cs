@@ -16,6 +16,8 @@ namespace GloomhavenCompanion.Infrastructure
     public DbSet<Effect> Effects { get; set; }
     public DbSet<Scenario> Scenarios { get; set; }
     public DbSet<CampaignScenario> CampaignScenarios { get; set; }
+    public DbSet<PlayerGame> PlayerGames { get; set; }
+
     public DbSet<Game> Games { get; set; }
     public DbSet<Round> Rounds { get; set; }
     public DbSet<Deck> Decks { get; set; }
@@ -36,6 +38,13 @@ namespace GloomhavenCompanion.Infrastructure
           .HasOne(cs => cs.Scenario)
           .WithMany(s => s.CampaignScenarios) // Assurez-vous que Scenario a une collection CampaignScenarios
           .HasForeignKey(cs => cs.ScenarioId);
+
+      // Définir une clé composite pour PlayerGame
+      modelBuilder.Entity<PlayerGame>()
+          .HasKey(pg => new { pg.PlayerId, pg.GameId });
+
+
+
 
       // Ajouter des données fixes pour Elements si elles n'existent pas déjà
       AddElementIfNotExists(modelBuilder);

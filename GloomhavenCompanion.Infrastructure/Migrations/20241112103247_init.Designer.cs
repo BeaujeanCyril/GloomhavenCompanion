@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GloomhavenCompanion.Infrastructure.Migrations
 {
     [DbContext(typeof(GloomhavenCompanionDbContext))]
-    [Migration("20241111223505_addCompaignScenarios")]
-    partial class addCompaignScenarios
+    [Migration("20241112103247_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,12 +53,8 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
                     b.Property<int>("CampaignId")
                         .HasColumnType("int");
 
-                    b.Property<string>("GameState")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("IsFinished")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ScenarioId")
                         .HasColumnType("int");
@@ -66,6 +62,9 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CampaignId");
+
+                    b.HasIndex("GameId")
+                        .IsUnique();
 
                     b.HasIndex("ScenarioId");
 
@@ -233,6 +232,10 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
                     b.Property<DateTime>("DateTimeStarted")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("GameState")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("MonsterDeckId")
                         .HasColumnType("int");
 
@@ -260,9 +263,6 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
                     b.Property<int>("DeckId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("GameId")
-                        .HasColumnType("int");
-
                     b.Property<int>("HealthPointsMax")
                         .HasColumnType("int");
 
@@ -279,9 +279,22 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
 
                     b.HasIndex("DeckId");
 
+                    b.ToTable("Players");
+                });
+
+            modelBuilder.Entity("GloomhavenCompanion.Data.Model.PlayerGame", b =>
+                {
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlayerId", "GameId");
+
                     b.HasIndex("GameId");
 
-                    b.ToTable("Players");
+                    b.ToTable("PlayerGame");
                 });
 
             modelBuilder.Entity("GloomhavenCompanion.Data.Model.Round", b =>
@@ -909,18 +922,26 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
             modelBuilder.Entity("GloomhavenCompanion.Data.Model.CampaignScenario", b =>
                 {
                     b.HasOne("GloomhavenCompanion.Data.Model.Campaign", "Campaign")
-                        .WithMany()
+                        .WithMany("CampaignScenarios")
                         .HasForeignKey("CampaignId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GloomhavenCompanion.Data.Model.Game", "Game")
+                        .WithOne("CampaignScenario")
+                        .HasForeignKey("GloomhavenCompanion.Data.Model.CampaignScenario", "GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GloomhavenCompanion.Data.Model.Scenario", "Scenario")
-                        .WithMany()
+                        .WithMany("CampaignScenarios")
                         .HasForeignKey("ScenarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Campaign");
+
+                    b.Navigation("Game");
 
                     b.Navigation("Scenario");
                 });
@@ -968,13 +989,28 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GloomhavenCompanion.Data.Model.Game", null)
-                        .WithMany("Players")
-                        .HasForeignKey("GameId");
-
                     b.Navigation("Campaign");
 
                     b.Navigation("Deck");
+                });
+
+            modelBuilder.Entity("GloomhavenCompanion.Data.Model.PlayerGame", b =>
+                {
+                    b.HasOne("GloomhavenCompanion.Data.Model.Game", "Game")
+                        .WithMany("PlayerGames")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GloomhavenCompanion.Data.Model.Player", "Player")
+                        .WithMany("PlayerGames")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("GloomhavenCompanion.Data.Model.Round", b =>
@@ -993,6 +1029,8 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
 
             modelBuilder.Entity("GloomhavenCompanion.Data.Model.Campaign", b =>
                 {
+                    b.Navigation("CampaignScenarios");
+
                     b.Navigation("Players");
 
                     b.Navigation("Scenarios");
@@ -1005,7 +1043,10 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
 
             modelBuilder.Entity("GloomhavenCompanion.Data.Model.Game", b =>
                 {
-                    b.Navigation("Players");
+                    b.Navigation("CampaignScenario")
+                        .IsRequired();
+
+                    b.Navigation("PlayerGames");
 
                     b.Navigation("Rounds");
                 });
@@ -1013,6 +1054,13 @@ namespace GloomhavenCompanion.Infrastructure.Migrations
             modelBuilder.Entity("GloomhavenCompanion.Data.Model.Player", b =>
                 {
                     b.Navigation("Effects");
+
+                    b.Navigation("PlayerGames");
+                });
+
+            modelBuilder.Entity("GloomhavenCompanion.Data.Model.Scenario", b =>
+                {
+                    b.Navigation("CampaignScenarios");
                 });
 #pragma warning restore 612, 618
         }
