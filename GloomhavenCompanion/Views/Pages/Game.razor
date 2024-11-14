@@ -10,7 +10,9 @@
   <div class="flex bg-gradient-to-r from-slate-700 rounded-lg h-[120px]">
     <!-- Image -->
     <div class="flex pl-2 items-center bg-gradient-to-r from-slate-700 rounded-lg w-1/6">
-      <img src="@AppState.CurrentScenario.ImagePath" alt="Description de l'image" class="max-w-[120px] h-auto" />
+      <button class="py-2 px-4 rounded-lg text-lg" @onclick="TogglePopup">
+        <img src="@AppState.CurrentScenario.ImagePath" alt="Description de l'image" class="max-w-[120px] h-auto" />
+      </button>
     </div>
 
     <!-- Round Component -->
@@ -92,14 +94,5 @@
         </div>
       </div>
     }
-  </div>
-
-  <!-- Section Popup -->
-  <div class="flex justify-center items-center">
-    <div class="p-4">
-      <button class="bg-blue-500 text-white py-2 px-4 rounded-lg text-lg" @onclick="TogglePopup">
-        <span class="material-icons">Statistiques</span> Stats
-      </button>
-    </div>
   </div>
 </div>
