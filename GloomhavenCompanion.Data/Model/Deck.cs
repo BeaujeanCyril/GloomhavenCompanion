@@ -73,10 +73,12 @@ public class Deck
       Id = GenerateUniqueId(),
       Value = "Annulé",
       NeedShuffle = false,
-      ImagePath = $@"\img\DeckModifier\Monsters\gh-am-mm-01.png"
+      ImagePath = $@"\img\DeckModifier\Monsters\gh-am-mm-01.png",
+      IsTemporary = true,
     };
 
     CardsList.Add(annulCard);
+    ShuffleDeck();
   }
 
   // Méthode pour ajouter une carte "X2" dans le deck
@@ -87,10 +89,12 @@ public class Deck
       Id = GenerateUniqueId(),
       Value = "x2",
       NeedShuffle = false,
-      ImagePath = $@"\img\DeckModifier\Monsters\BenedictionCard.png"
+      ImagePath = $@"\img\DeckModifier\Monsters\BenedictionCard.png",
+      IsTemporary = true,
     };
 
     CardsList.Add(x2Card);
+    ShuffleDeck();
   }
 
   // Méthode pour afficher la première carte et la déplacer à la fin du deck
@@ -104,8 +108,10 @@ public class Deck
     CardsHistoric.Add(firstCard);
     // Retirer la carte du début et l'ajouter à la fin
     CardsList.RemoveAt(0);
-    CardsList.Add(firstCard);
-
+    if (!firstCard.IsTemporary)
+    {
+      CardsList.Add(firstCard);
+    }
     // Retourner la valeur de la carte pour affichage
     return firstCard.Value;
   }

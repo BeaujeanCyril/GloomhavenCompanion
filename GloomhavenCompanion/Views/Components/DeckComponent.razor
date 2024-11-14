@@ -139,7 +139,6 @@
 	private async Task AddAnnulCard()
 	{
 		AppState.CurrentGame.MonsterDeck.AddAnnulCard();
-		AppState.CurrentGame.MonsterDeck.ShuffleDeck();
 		Snackbar.Add("Carte annulée ajoutée au deck" + AppState.CurrentGame.MonsterDeck.Name + "!", Severity.Success);
 		StateHasChanged();
 	}
@@ -147,9 +146,7 @@
 	private async Task AddBenedictionCard()
 	{
 		CurrentPlayer.Deck.AddX2Card();
-		CurrentPlayer.Deck.ShuffleDeck();
 		Snackbar.Add("Carte bénédiction ajoutée au deck" + AppState.CurrentGame.MonsterDeck.Name + "!", Severity.Success);
-
 		StateHasChanged();
 	}
 }
